@@ -95,3 +95,123 @@ A.staticfoo(1)
 # print(gr)  #<generator object <genexpr> at 0x000002A04FC21ED0>
 
 # 通过列表生成式，可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。而且，创建一个包含百万元素的列表，不仅是占用很大的内存空间，如：我们只需要访问前面的几个元素，后面大部分元素所占的空间都是浪费的。因此，没有必要创建完整的列表（节省大量内存空间）。在Python中，我们可以采用生成器：边循环，边计算的机制—>generator
+
+# from collections import Iterable
+
+# str = '12345'
+# ls = [1,2,3,4,5]
+# tu = (1,2,3,4,5)
+# dc = {1:2,3:4}
+# st = {1,2,3,4,5}
+
+# # 判断一个对象是否可以迭代,上述都是可迭代的对象
+# print(isinstance(str,Iterable))  #True
+# print(isinstance(ls,Iterable))  #True
+# print(isinstance(tu,Iterable))  #True
+# print(isinstance(dc,Iterable))  #True
+# print(isinstance(st,Iterable))  #True
+
+# # 可迭代协议
+# # dir监测数据对象所拥有的内置函数
+# print(dir('12'))
+# print(dir([1,2]))
+# print(dir((1,2)))
+# print(dir({1:2}))
+# print(dir({1,2}))
+
+# # __iter__方法存在于这5种数据类型
+
+# print([1,2].__iter__())  #<list_iterator object at 0x0000017CFC908320>
+
+# # iterator(迭代器)
+# print(set(dir([1,2].__iter__()))-set(dir([1,2])))  #{'__setstate__', '__length_hint__', '__next__'}
+
+# iter = [1,2,3,4,5].__iter__()  #<list_iterator object at 0x0000017CFC908320>
+
+# # 获取迭代器中元素长度
+# print(iter.__length_hint__())
+
+# # 根据索引值指定从哪里开始迭代
+# print(iter.__setstate__(0))
+
+# # 一个一个取值
+# print(iter.__next__())  #1
+# print(iter.__next__())  #2
+
+# 不使用for循环遍历列表
+
+lst = [1,2,3,4,5]
+
+lstiter = lst.__iter__()
+
+while True:
+    try:
+        item = lstiter.__next__()
+        print(item)
+    except StopIteration:
+        break
+
+# 迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
+
+from collections import Iterator
+
+print('__iter__' in dir(range(5)))  #True
+print('__next__' in dir(range(5)))  #False
+
+print(isinstance(range(5),Iterator))  #False
+
+# range()是可迭代的,但不是迭代器
+
+
+# for循环可迭代的对象(iterable) 字符串、列表、元祖、字典、集合
+# for i in ls:
+#     print(i)
+
+# for j in 12345:
+#     print(j)  #TypeError: 'int' object is not iterable
+
+# 迭代器好处节省内存
+
+# 生成器 文本监听
+# 本质就是一个迭代器
+
+# 1.生成器函数
+
+def produce():
+    # 下面条
+    for i in range(200):
+        yield f'做了第{i}碗面'
+
+g = produce()
+print(g)  #<generator object produce at 0x000002161AD45570>
+print(g.__next__())
+print(g.__next__())
+print(g.__next__())
+
+# 2. 生成器表达式
+ls = [f'第{x}个梦' for x in range(10)]
+print(ls)  #['第0个梦', '第1个梦', '第2个梦', '第3个梦', '第4个梦', '第5个梦', '第6个梦', '第7个梦', '第8个梦', '第9个梦']
+
+gt = (f'第{x}个梦' for x in range(10))
+print(gt)  #<generator object <genexpr> at 0x000001E10E8A65E8>
+print(gt.__next__())
+print(next(gt))
+
+# 面试题
+
+# 生成器的函数
+def demo():
+    for i in range(4):
+        yield i
+
+g = demo()
+
+# 生成器表达式
+g1 = (i for i in g)
+print(g1)  #<generator object <genexpr> at 0x000002AC16D16570>
+
+g2 = (i for i in g)  #<generator object <genexpr> at 0x000002AC16D166D8>
+print(g2)
+
+print(list(g1))  #[0, 1, 2, 3]
+print(list(g2))  #[]
