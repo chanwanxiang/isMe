@@ -9,7 +9,7 @@ class Stundet():
         self.phone = phone
 
     def __str__(self):
-        return f'学员姓名{self.name},性别{self.sex},手机号{self.phone}'
+        return f'学员姓名{self.name},性别{self.sex},手机号为{self.phone}'
 
 if __name__ == '__main__':
     stu = Stundet('ms','男',12345678910)

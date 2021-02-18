@@ -149,11 +149,12 @@ class mangerSystem():
     def showStu(self):
         print('showstu')
         # 1. 打印表头
-        print('NAME \t SEX \t PHONE')
+        A,B,C = 'NAME','SEX','PHONE'
+        print(f'{A:15} | {B:15} | {C:15}')
  
         # 2. 打印学员信息
         for i in self.stulist:
-            print(f'{i.name} \t {i.sex} \t {i.phone}')
+            print(f'{i.name:15} | {i.sex:15} | {i.phone:15}')
     
     # 2.7 保存学员信息
     def saveStu(self):
@@ -184,8 +185,12 @@ class mangerSystem():
 
         # 2. 读取数据,文件读取出的数据是字符串还原列表类型:[{}] 转换 [学员对象]
         else:
-            data = f.read()  #字符串
-            newlist = eval(data)
+            data = f.read()  #返回从字符串中读取的字节,返回值类型是字符串
+            print(data)
+            print(type(data))  #<class 'str'>
+            newlist = eval(data)  #eval() 函数用来执行一个字符串表达式,并返回表达式的值,此处是将字符串类型转换为list类型
+            print(newlist)
+            print(type(newlist))  #<class 'list'>
             self.stulist = [Stundet(i['name'],i['sex'],i['phone']) for i in newlist]
 
         # 3. 关闭文件
