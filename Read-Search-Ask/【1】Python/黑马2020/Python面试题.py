@@ -151,7 +151,7 @@ while True:
     except StopIteration:
         break
 
-# 迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
+# TODO:迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
 
 from collections import Iterator
 
@@ -202,7 +202,7 @@ print(next(gt))
 # 生成器的函数
 def demo():
     for i in range(4):
-        yield i
+        yield i  #在python中,使用了yeild的函数被称为生成器
 
 g = demo()
 
@@ -210,8 +210,185 @@ g = demo()
 g1 = (i for i in g)
 print(g1)  #<generator object <genexpr> at 0x000002AC16D16570>
 
-g2 = (i for i in g)  #<generator object <genexpr> at 0x000002AC16D166D8>
+g2 = (i for i in g1)  #<generator object <genexpr> at 0x000002AC16D166D8>
 print(g2)
 
 print(list(g1))  #[0, 1, 2, 3]
 print(list(g2))  #[]
+
+# 四. __new__和__init__的区别
+# 这个__new__确实很少见到,先做了解吧.
+
+# __new__是一个静态方法,而__init__是一个实例方法.
+# __new__方法会返回一个创建的实例,而__init__什么都不返回.
+# 只有在__new__返回一个cls的实例时后面的__init__才能被调用.
+# 当创建一个新实例时调用__new__,初始化一个实例时用__init__.
+
+# 五. 单例模式
+#     单例模式是一种常用的软件设计模式。在它的核心结构中只包含一个被称为单例类的特殊类。
+#     通过单例模式可以保证系统中一个类只有一个实例而且该实例易于外界访问，从而方便对实例个数的控制并节约系统资源。
+#     如果希望在系统中某个类的对象只能存在一个，单例模式是最好的解决方案。
+
+# __new__()在__init__()之前被调用，用于生成实例对象。利用这个方法和类的属性的特点可以实现设计模式的单例模式。
+# 单例模式是指创建唯一对象，单例模式设计的类只能实例
+
+# 1 使用__new__方法
+class Singleton(object):
+    def __new__(cls, *args, **kw):
+        if not hasattr(cls, '_instance'):
+            orig = super(Singleton, cls)
+            cls._instance = orig.__new__(cls, *args, **kw)
+        return cls._instance
+
+class MyClass(Singleton):
+    a = 1
+
+# 2 共享属性
+# 创建实例时把所有实例的__dict__指向同一个字典,这样它们具有相同的属性和方法.
+
+class Borg(object):
+    _state = {}
+    def __new__(cls, *args, **kw):
+        ob = super(Borg, cls).__new__(cls, *args, **kw)
+        ob.__dict__ = cls._state
+        return ob
+
+class MyClass2(Borg):
+    a = 1
+
+# 3 装饰器版本
+def singleton(cls):
+    instances = {}
+    def getinstance(*args, **kw):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kw)
+        return instances[cls]
+    return getinstance
+
+@singleton
+class MyClass:
+  pass
+
+# 4 import方法
+# 作为python的模块是天然的单例模式
+
+# # mysingleton.py
+# class MySingleton(object):
+#     def foo(self):
+#         pass
+
+# mysingleton = MySingleton()
+
+# # to use
+# from mysingleton import mysingleton
+
+# mysingleton.foo()
+
+# 六. 匿名函数
+
+lab = lambda x : x*x
+# 冒号前x为参数,冒号后x*x为表达式,返回值是该表达式的结果
+
+print(lab)  #<function <lambda> at 0x000002A646DFA840>
+
+# lambda配合sorted使用
+dc = {1:'c',2:'b',3:'a'}
+newdc = sorted(dc.items(),key=lambda x:x[1])
+
+print(newdc)  #[(3, 'a'), (2, 'b'), (1, 'c')]
+
+# 七. Python函数式编程
+# 这个需要适当的了解一下吧,毕竟函数式编程在Python中也做了引用.
+
+# python中函数式编程支持:
+
+# filter 函数的功能相当于过滤器。调用一个布尔函数bool_func来迭代遍历每个seq中的元素；返回一个使bool_seq返回值为true的元素的序列。
+# filter() 函数用于过滤序列，过滤掉不符合条件的元素，返回一个迭代器对象，如果要转换为列表，可以使用 list() 来转换。
+# 该接收两个参数，第一个为函数，第二个为序列，序列的每个元素作为参数传递给函数进行判断，然后返回 True 或 False，最后将返回 True 的元素放到新列表中。
+
+a = [1,2,3,4,5,6,7]
+b = filter(lambda x: x > 5, a)
+print(b)
+
+# map函数是对一个序列的每个项依次执行函数，下面是对一个序列每个项都乘以2：
+# map() 会根据提供的函数对指定序列做映射。
+# 第一个参数 function 以参数序列中的每一个元素调用 function 函数，返回包含每次 function 函数返回值的新列表。
+
+
+a = map(lambda x:x*2,[1,2,3])
+list(a)  #[2, 4, 6]
+
+# reduce函数是对一个序列的每个项迭代调用函数，下面是求3的阶乘：
+# reduce() 函数会对参数序列中元素进行累积。
+# 函数将一个数据集合（链表，元组等）中的所有数据进行下列操作：用传给 reduce 中的函数 function（有两个参数）先对集合中的第 1、2 个元素进行操作，得到的结果再与第三个数据用 function 函数运算，最后得到一个结果。
+
+from functools import reduce
+
+fact = reduce(lambda x,y:x*y,range(1,4))
+print(fact)
+
+# 八. Python里的拷贝
+
+# 引用和copy(),deepcopy()的区别
+# https://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html
+
+import copy
+a = [1, 2, 3, 4, ['a', 'b']]  #原始对象
+
+b = a  #赋值，传对象的引用  #  赋值引用,a和b都指向同一个对象
+c = copy.copy(a)  #对象拷贝，浅拷贝  #  浅拷贝,a和c是一个独立的对象,但他们的子对象还是指向统一对象(是引用)
+d = copy.deepcopy(a)  #对象拷贝，深拷贝  #  深拷贝,a和b完全拷贝了父对象及其子对象,两者是完全独立的
+
+a.append(5)  #修改对象a  #a = [1, 2, 3, 4, ['a', 'b'],5]
+a[4].append('c')  #修改对象a中的['a', 'b']数组对象  #a = [1, 2, 3, 4, ['a', 'b','c'],5]
+
+print('a = ', a)
+print('b = ', b)
+print('c = ', c)
+print('d = ', d)
+
+# 输出结果：
+a =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
+b =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
+c =  [1, 2, 3, 4, ['a', 'b', 'c']]
+d =  [1, 2, 3, 4, ['a', 'b']]
+
+# 九. Python垃圾回收机制
+# Python GC(garbage collection)主要使用引用计数（reference counting）来跟踪和回收垃圾。
+# 在引用计数的基础上，通过“标记-清除”（mark and sweep）解决容器对象可能产生的循环引用问题，
+# 通过“分代回收”（generation collection）以空间换时间的方法提高垃圾回收效率。
+
+# 1 引用计数
+# PyObject是每个对象必有的内容，其中ob_refcnt就是做为引用计数。
+# 当一个对象有新的引用时，它的ob_refcnt就会增加，
+# 当引用它的对象被删除，它的ob_refcnt就会减少.引用计数为0时，该对象生命就结束了。
+
+# 优点:
+    # 1. 简单
+    # 2. 实时性
+# 缺点:
+    # 1. 维护引用计数消耗资源
+    # 2. 循环引用
+
+# 2 标记-清除机制
+# 基本思路是先按需分配，等到没有空闲内存的时候从寄存器和程序栈上的引用出发，
+# 遍历以对象为节点、以引用为边构成的图，把所有可以访问到的对象打上标记，然后清扫一遍内存空间，把所有没标记的对象释放。
+
+# 3 分代回收
+# 分代回收的整体思想是：将系统中的所有内存块根据其存活时间划分为不同的集合，
+# 每个集合就成为一个“代”，垃圾收集频率随着“代”的存活时间的增大而减小，存活时间通常利用经过几次垃圾回收来度量。
+
+# Python默认定义了三代对象集合，索引数越大，对象存活时间越长。
+
+# 举例： 当某些内存块M经过了3次垃圾收集的清洗之后还存活时，我们就将内存块M划到一个集合A中去，而新分配的内存都划分到集合B中去。
+# 当垃圾收集开始工作时，大多数情况都只对集合B进行垃圾回收，而对集合A进行垃圾回收要隔相当长一段时间后才进行，这就使得垃圾收集机制需要处理的内存少了，效率自然就提高了。
+# 在这个过程中，集合B中的某些内存块由于存活时间长而会被转移到集合A中，当然，集合A中实际上也存在一些垃圾，这些垃圾的回收会因为这种分代的机制而被延迟。
+
+# 十. Python中的is和==
+
+# is是对比地址(id),==是对比值
+
+# 十一. read,readline,readlines
+#     read读取整个文件
+#     readline读取下一行,使用生成器方法
+#     readlines读取这个文件到一个迭代器以供我们遍历
