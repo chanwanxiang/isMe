@@ -42,12 +42,51 @@ def imgdow(url,path):
         except Exception as msg:
             print(f'下载失败,{msg}')
 
+# 创建多线程类
+class DownloadImg(Thread):
+    # 重新__init__方法
+    def __init__(self,queue,path):
+        Thread.__init__(self)
+        self.queue = queue
+        self.path = path
+
+        if not os.path.exists(path):
+            os.mkdir(path)
+    
+    # 重写run方法
+    def run(self):
+        while True:
+            # queue.get([block[,timeout]]) 获取队列,timeout等待时间
+            url = self.queue.get()
+            try:
+                imgdow(url,self.path)
+            except Exception as msg:
+                print(f'下载失败,{msg}')
+            finally:
+                # 线程在队列中取完元素之后后者退出之后发送一个结束限号
+                self.queue.task_done()
+
 if __name__ == '__main__':
     urlName = 'https://fabiaoqing.com/biaoqing/lists/page/{pageNum}.html'
     urls = [urlName.format(pageNum = pageNum) for pageNum in range(1,2)]
     # print(urls)
 
+    queue = Queue()
     path = 'D:/wxchans/imgdow/'
 
+    # 创建线程
+    for x in range(3):
+        rookie = DownloadImg(queue,path)
+
+        # 创建守护线程
+        # 如果子线程为守护线程的话,主线程结束时不会监测子线程是否结束任务直接退出
+        rookie.daemon = True
+        rookie.start()
+
+    # 将url压入队列
     for url in urls:
-        imgdow(url,path)
+        queue.put(url)
+
+    # 等队列为空,则退出所有线程
+    queue.join()
+    print('下载完毕')
