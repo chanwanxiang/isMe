@@ -258,6 +258,69 @@
 
 ## ABd1234@1,a F1#,2w3E*,2We3345
 ## 然后，程序的输出应该是：
-## ABd1234 @ 1
+## ABd1234@1
 
-psw = input('请输入密码序列->').split(',')
+# import re
+
+# pwd = input('请输入密码序列->').split(',')
+
+# ls = []
+
+# for i in pwd:
+#     # break语句在循环结构中终止本层循环体,从而提前结束本层循环
+#     # continue语句是跳过本次循环体中余下尚未执行的语句,立即进行下一次的循环条件判定,仅仅结束本次循环
+#     if len(i) < 6 or len(i) >12:
+#         continue
+#     elif not re.search('[a-z]',i):
+#         continue
+#     elif not re.search('[A-Z]',i):
+#         continue
+#     elif not re.search('[0-9]',i):
+#         continue
+#     elif not re.search('[$＃@]',i):
+#         continue
+#     # \s表示空白,包括空格换行TAB缩进等所有的空白
+#     elif re.search('\s',i):
+#         continue
+#     else:
+#         pass
+#     ls.append(i)
+
+# print(','.join(ls))
+
+## 您需要编写一个程序，按升序对（名称，年龄，高度）元组进行排序，其中name是字符串，age和height是数字。 元组由控制台输入。 排序标准是：
+## 1：根据名称排序;
+## 2：然后根据年龄排序;
+## 3：然后按分数排序。
+## 优先级是name> age>得分。
+## 如果给出以下元组作为程序的输入：
+## Tom,19,80
+## John,20,90
+## Jony,17,91
+## Jony,17,93
+## Json,21,85
+## 然后，程序的输出应该是：
+## [（'John'，'20'，'90'），（'Jony'，'17'，'91'），（'Jony'，'17'，'93'），（'Json'，'21 '，'85'），（'Tom'，'19'，'80'）]
+
+# ls = []
+
+# while True:
+#     seq = input('请输入序列->')
+#     if seq:
+#         ls.append(tuple(seq.split(',')))
+#     else:
+#         break
+
+# newls = sorted(ls,key=lambda x : x[0])
+# print(newls)
+
+# 使用生成器定义一个类，该生成器可以在给定范围0和n之间迭代可被7整除的数字。
+# 提示：考虑使用yield。
+
+# def getNum(n):
+#     for i in range(n+1):
+#         if i % 7 == 0:
+#             yield i
+
+# for j in getNum(100):
+#     print(j)
