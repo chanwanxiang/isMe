@@ -150,17 +150,114 @@
 ## 字母10
 ## 数字3
 
-import re
+# import re
 
-str = input('请输入字符串->')
-dt = dict.fromkeys(['char','number'],0)
+# str = input('请输入字符串->')
+# dt = dict.fromkeys(['char','number'],0)
 
-print(dt)
+# print(dt)
 
-for x in str:
-    if re.findall('[a-z]|[A-Z]',x):
-        dt['char'] += 1
-    elif re.findall('[0-9]',x):
-        dt['number'] += 1
-print('字母{}'.format(dt['char']))
-print('数字{}'.format(dt['number']))
+# for x in str:
+#     if re.findall('[a-z]|[A-Z]',x):
+#         dt['char'] += 1
+#     elif re.findall('[0-9]',x):
+#         dt['number'] += 1
+# print('字母{}'.format(dt['char']))
+# print('数字{}'.format(dt['number']))
+
+## 编写一个接受句子的程序，并计算大写字母和小写字母的数量。
+## 假设为程序提供了以下输入：
+## Hello world!
+## 然后，输出应该是：
+## 大写实例 1
+## 小写实例 9
+
+# import re
+
+# str = input('请输入字符串->')
+
+# dt = dict.fromkeys(['Uchar','Lchar'],0)
+
+# for i in str:
+#     # 判断字母大小写也可使用方法 i.isupper() and i.islower()
+#     if re.findall('[A-Z]',i):
+#         dt['Uchar'] += 1
+#     elif re.findall('[a-z]',i):
+#         dt['Lchar'] += 1
+
+# print('大写实例 {}'.format(dt['Uchar']))
+# print('小写实例 {}'.format(dt['Lchar']))
+
+## 编写一个程序，计算a + aa + aaa + aaaa的值，给定的数字作为a的值。假设为程序提供了以下输入：
+## 9     然后，输出应该是： 11106
+
+# i = input('请输入个数字->')
+
+# sum = 0
+
+# for j in range(1,5):
+#     sum += int(i*j)
+
+# print(sum)
+
+## 使用列表推导来对列表中的每个奇数。 该列表由一系列逗号分隔的数字输入。
+## 假设为程序提供了以下输入：
+## 1,2,3,4,5,6,7,8,9
+## 然后，输出应该是：
+## 1,3,5,7,9
+
+## 方法一 python函数式编程
+# seq = map(int,input('请输入序列->').split(','))
+
+# seqfil = map(str,filter(lambda x : x%2!=0,seq))
+
+# print(','.join(seqfil))
+
+## 方法二 列表推导式
+# seq = input('请输入序列->').split(',')
+
+# seqfil = [x for x in seq if int(x)%2 != 0]
+
+# print(','.join(seqfil))
+
+## 编写一个程序，根据控制台输入的事务日志计算银行帐户的净金额。 事务日志格式如下所示：
+## D 100
+## W 200
+
+## D表示存款，而W表示提款。
+## 假设为程序提供了以下输入：
+## D 300
+## D 300
+## W 200
+## D 100
+## 然后，输出应该是：
+## 500
+
+# sum = 0
+
+# while True:
+#     seq = input('请输入序列->').split(' ')
+#     if seq[0] == 'D':
+#         sum += int(seq[1])
+#     elif seq[0] == 'W':
+#         sum -= int(seq[1])
+#     else:
+#         print(sum)
+#         break
+
+## 网站要求用户输入用户名和密码进行注册。编写程序以检查用户输入的密码的有效性。
+## 以下是检查密码的标准：
+## 1. [a-z]之间至少有1个字母
+## 2. [0-9]之间至少有1个数字
+## 1. [A-Z]之间至少有一个字母
+## 3. [$＃@]中至少有1个字符
+## 4.最短交易密码长度：6
+## 5.交易密码的最大长度：12
+## 您的程序应接受一系列逗号分隔的密码，并将根据上述标准进行检查。将打印符合条件的密码，每个密码用逗号分隔。
+## 例：如果以下密码作为程序的输入：
+
+## ABd1234@1,a F1#,2w3E*,2We3345
+## 然后，程序的输出应该是：
+## ABd1234 @ 1
+
+psw = input('请输入密码序列->').split(',')
