@@ -1,5 +1,8 @@
+import sys
+import os.path as op
 import jieba,parsel
-import requests,imageio,wordcloud
+import requests,imageio
+from wordcloud import WordCloud
 
 class MovieWordCloud():
 
@@ -20,7 +23,7 @@ class MovieWordCloud():
         commentlist = selector.xpath('//span[@class="short"]/text()').getall()
 
         try:
-            with open('你好,李焕英.txt','a',encoding='utf-8') as f:
+            with open(op.join(sys.path[0],'你好,李焕英.txt'),'a',encoding='utf-8') as f:
                 for comment in commentlist:
                     f.write(comment.replace('\n',''))
                     f.write('\n')
@@ -29,27 +32,28 @@ class MovieWordCloud():
             print(f'影评爬取失败{msg}')
 
     def makeWord(self):
-        with open('你好,李焕英.txt','r',encoding='utf-8') as f:
+        with open(op.join(sys.path[0],'你好,李焕英.txt'),'r',encoding='utf-8') as f:
             details = f.read()
         detailslist = jieba.lcut(details)
         detailstring = ' '.join(detailslist)
 
-        img = imageio.imread('D:/Coding-Always/Read-Search-Ask/【1】Python/爬虫/你好,李焕英影评爬取词云图制作/贾玲.png')  #词云图的轮廓
+        # op.join 把目录和文件名合成一个路径
+        img = imageio.imread(op.join(sys.path[0],'贾玲.png'))  #词云图的轮廓
 
         # 词云图的设置
-        wc = wordcloud.WordCloud(
+        wc = WordCloud(
             width = 1000,  #图片宽度
             height = 800,  #图片高度
             font_path = 'msyh.ttc',  #微软雅黑 系统自带
             mask = img,  #词云图所用的图片
             scale = 15,
-            stopwords = set([line.strip() for line in open('cnStopwords.txt','r',encoding='utf-8')])
+            stopwords = set([line.strip() for line in open(op.join(sys.path[0],'cnStopwords.txt'),'r',encoding='utf-8')])
         )
 
         wc.generate(detailstring)
-        wc.to_file('wordcloud.png')
+        wc.to_file(op.join(sys.path[0],'wordcloud.png'))
         
 if __name__ == '__main__':
     mwc = MovieWordCloud()
-    mwc.getData()
+    # mwc.getData()  #爬虫,需要时候才爬
     mwc.makeWord()
