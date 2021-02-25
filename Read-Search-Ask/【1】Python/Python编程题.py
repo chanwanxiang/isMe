@@ -324,3 +324,72 @@
 
 # for j in getNum(100):
 #     print(j)
+
+## 机器人从原点（0,0）开始在平面中移动。 机器人可以通过给定的步骤向上，向下，向左和向右移动。 机器人运动的痕迹如下所示：
+## UP 5
+## DOWN 3
+## LETF 3
+## RIGHT 2
+## 方向之后的数字是步骤。 请编写一个程序来计算一系列运动和原点之后距当前位置的距离。如果距离是浮点数，则只打印最接近的整数。
+## 例：如果给出以下元组作为程序的输入：
+## UP 5
+## DOWN 3
+## LETF 3
+## RIGHT 2
+## 然后，程序的输出应该是：2
+
+# import math
+
+# oriadr = [0,0]
+
+# while True:
+#     s = input('请输入轨迹->')
+
+#     if not s:
+#         break
+    
+#     x,y = s.split(' ')
+#     dir = x  #方向
+#     stp = int(y)  #位移
+#     if dir == 'LEFT':
+#         oriadr[0] -= stp
+#     elif dir == 'RIGHT':
+#         oriadr[0] += stp
+#     elif dir == 'UP':
+#         oriadr[1] += stp
+#     elif dir == 'DOWN':
+#         oriadr[1] -= stp
+
+# print(round(math.sqrt(oriadr[0]**2+oriadr[1]**2)))
+
+## 编写一个程序来计算输入中单词的频率。 按字母顺序对键进行排序后输出。
+## 假设为程序提供了以下输入：
+
+## New to Python or choosing between Python 2 and Python 3? Read Python 2 or Python 3.
+
+## 然后，输出应该是：
+
+## 2:2
+## 3.:1
+## 3?:1
+## New:1
+## Python:5
+## Read:1
+## and:1
+## between:1
+## choosing:1
+## or:2
+## to:1
+
+seq = input('请输入序列->').split(' ')
+
+dt = {}
+
+for i in seq:
+    if i not in dt.keys():
+        dt[i] = 1
+    else:
+        dt[i] += 1
+
+for x,y in dt.items():
+    print(f'{x}:{y}')
