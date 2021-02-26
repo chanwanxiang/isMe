@@ -1,25 +1,86 @@
-# Python语言特性
+## TODO: 简述解释型和编译型编程语言?
 
-# 一. Python的函数参数传递
-# 两个例子:
-# 例1
-a = 1
-def funA(a):
-    print('函数执行之前a内存地址->'+str(id(a)))  #函数执行之前a内存地址->140735206810256
-    a = 2
-    print('函数执行之后a内存地址->'+str(id(a)))  #函数执行之后a内存地址->140735206810288
+# 解释型语言编写程序不需要编译,在执行的时候,专门有一个解释器能够将VB语言翻译成机器语言,每个语句都是执行的时候才翻译.
+# 这样解释型语言每执行一次就要翻译一次,效率比较低.
 
-funA(a)
-print(a,id(a))  #1 140735206810256
+# 用编译型语言写的程序执行之前,需要一个专门的编译过程,通过编译系统,把源高级程序编译成为机器语言文件.
+# 运行时不需要翻译,所以编译型语言的程序执行效率较高.
 
-# 例2
-a = []
-def funB(a):
-    print('函数执行之前a内存地址->'+str(id(a)))  #函数执行之前a内存地址->2481546879624
-    a.append(1)
-    print('函数执行之后a内存地址->'+str(id(a)))  #函数执行之后a内存地址->2481546879624
-funB(a)
-print(a,id(a))  #[1] 2481546879624
+## TODO: 位和字节的关系?
+
+# bit就是位,也叫比特位,是计算机表示数据最小的单位
+# byte就是字节,1byte=8bit,1byte就是1B,一个字符=2字节,1KB=1024B
+# 字节就是Byte,也是B.位就是bit也是b
+# 转换关系如下:1KB=1024B 1B= 8b
+
+## TODO: (二|八|十六)进制转换成十进制:
+
+# 先将其转换为字符串,再使用int函数,指定进制转换为二进制 
+print(int('0b1111011',2))  #123
+print(int('011',8))  #9
+print(int('0x12',16))  #18
+
+## TODO: 十进制转化为(二|八|十六)进制
+
+print(bin(10))  #0b1010  # Binary
+print(oct(20))  #0o24    # Octal
+print(hex(30))  #0x1e    # Hexadecimal
+
+## TODO: 可变对象和不可变对象
+
+# 可变 list,dict,set
+# 不可变 number,string,tuple
+
+# 切片适用于所有序列,包括列表,字符串,元祖
+
+## TODO: Python最大递归深度
+
+# def fact(n):
+#     if n == 1:
+#         return 1
+#     else:
+#         return n + fact(n-1)
+    
+# print(fact(998))  #498501
+## print(fact(999))  #maximum recursion depth exceeded in comparison 比较中超过了最大递归深度
+
+## TODO: Ascii,Unicode,UTF-8,GBK区别?
+
+# Ascii编码,最早只有127个字母被编码到计算机中,大小写英文字母,数字和一些符号
+# Unicode把所有的语言统一到一套编码之中,解决不同语言出现乱码问题,常用两个字节表示一个字符
+# UTF-8编码是可变长编码的Unicode编码(节省空间),UTF-8把一个Unicode编码根据不同的数字大小编码成1-6个字节,英文字母被编码成1个字节,汉字通常是3个字节
+ 
+## TODO: 机器码和字节码?
+
+# 机器码就是计算机可以直接执行,并且执行速度最快的代码
+# 字节码是一种中间状态(中间码)的二进制代码(文件),需要直译器转译后才能成为机器码
+
+## TODO: 列举布尔值为False的常见值?
+
+# False None 0 '' () [] {}
+# 除了标准值False和None,所以类型的数字0,空序列(空字符,空元祖,空列表,空字典)都为假
+
+
+## TODO: Python的函数参数传递
+
+# # 例1
+# a = 1
+# def funA(a):
+#     print('函数执行之前a内存地址->'+str(id(a)))  #函数执行之前a内存地址->140735206810256
+#     a = 2
+#     print('函数执行之后a内存地址->'+str(id(a)))  #函数执行之后a内存地址->140735206810288
+
+# funA(a)
+# print(a,id(a))  #1 140735206810256
+
+# # 例2
+# a = []
+# def funB(a):
+#     print('函数执行之前a内存地址->'+str(id(a)))  #函数执行之前a内存地址->2481546879624
+#     a.append(1)
+#     print('函数执行之后a内存地址->'+str(id(a)))  #函数执行之后a内存地址->2481546879624
+# funB(a)
+# print(a,id(a))  #[1] 2481546879624
 
 # 所有的变量都可以理解是内存中一个对象的`引用`
 
@@ -35,33 +96,34 @@ print(a,id(a))  #[1] 2481546879624
 
 # 如果还不明白的话,这里有更好的解释: http://stackoverflow.com/questions/986006/how-do-i-pass-a-variable-by-reference
 
-# 二. @staticmethod 和 @classmethod
+## TODO: @staticmethod 和 @classmethod
+
 # Python其实有3个方法,即静态方法(staticmethod),类方法(classmethod)和实例方法,如下:
 
-def foo(x):
-    print('executing foo(%s)'%(x))
+# def foo(x):
+#     print('executing foo(%s)'%(x))
 
-class A(object):
-    def foo(self,x):
-        print('executing foo(%s,%s)'%(self,x))
-    @classmethod
-    def classfoo(cls,x):
-        print('executing classfoo(%s,%s)'%(cls,x))
+# class A(object):
+#     def foo(self,x):
+#         print('executing foo(%s,%s)'%(self,x))
+#     @classmethod
+#     def classfoo(cls,x):
+#         print('executing classfoo(%s,%s)'%(cls,x))
 
-    @staticmethod
-    def staticfoo(x):
-        print('executing staticfoo(%s)'%x)
+#     @staticmethod
+#     def staticfoo(x):
+#         print('executing staticfoo(%s)'%x)
 
-a=A()
+# a=A()
 # 实例方法
-a.foo(1)
+# a.foo(1)
 # A.foo(1) #TypeError: foo() missing 1 required positional argument: 'x' 实例方法用 类.方法 不可以用
-# 类方法
-a.classfoo(1)
-A.classfoo(1)
-# 静态方法
-a.staticfoo(1)
-A.staticfoo(1)
+## 类方法
+# a.classfoo(1)
+# A.classfoo(1)
+## 静态方法
+# a.staticfoo(1)
+# A.staticfoo(1)
 
 # 这里先理解下方法参数里面的self和cls.这个self和cls是对类或者实例的绑定,对于一般的函数来说我们可以这么调用foo(x),这个函数就是最常用的,它的工作跟任何东西(类,实例)无关.对于实例方法,我们知道在类里每次定义方法的时候都需要绑定这个实例,就是foo(self, x),为什么要这么做呢?因为实例方法的调用离不开实例,我们需要把实例自己传给方法,调用的时候是这样的a.foo(x)(其实是foo(a, x)).类方法一样,只不过它传递的是类而不是实例,A.classfoo(x).注意这里的self和cls可以替换别的参数,但是python的约定是这俩,还是不要改的好.
 # 对于静态方法其实和普通的函数一样,不需要对谁进行绑定,唯一的区别是调用的时候需要使用a.staticfoo(x)或者A.static_foo(x)来调用.
@@ -74,9 +136,9 @@ A.staticfoo(1)
 # http://stackoverflow.com/questions/136097/what-is-the-difference-between-staticmethod-and-classmethod-in-python
 # https://realpython.com/blog/python/instance-class-and-static-methods-demystified/
 
-# 三. 迭代器和生成器
-# 这个是stackoverflow里python排名第一的问题,值得一看: http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
+## TODO: 迭代器和生成器
 
+# 这个是stackoverflow里python排名第一的问题,值得一看: http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
 # 这是中文版: http://taizilongxu.gitbooks.io/stackoverflow-about-python/content/1/README.html
 
 # iterables(迭代器)
@@ -86,7 +148,7 @@ A.staticfoo(1)
 # generator(生成器)
 #     生成器也是迭代器的一种,但是你只能迭代它们一次,原因很简单,因为它们不是全部存在内存里,它们只在要调用的时候在内存里生成,生成器和迭代器的区别就是用()代替[],还有你不能用for i in generator第二次调用生成器,首先计算0,然后会在内存里丢掉0去计算1,直到计算完4
 
-# 这里有个关于生成器的创建问题面试官有考: 问: 将列表生成式中[]改成() 之后数据结构是否改变？ 答案:是,从列表变为生成器
+# 这里有个关于生成器的创建问题面试官有考: 问: 将列表生成式中[]改成() 之后数据结构是否改变? 答案:是,从列表变为生成器
 
 # ls = [x*x for x in range(10)]
 # print(ls,type(ls))  #[0, 1, 4, 9, 16, 25, 36, 49, 64, 81] <class 'list'>
@@ -140,25 +202,25 @@ A.staticfoo(1)
 
 # 不使用for循环遍历列表
 
-lst = [1,2,3,4,5]
+# lst = [1,2,3,4,5]
 
-lstiter = lst.__iter__()
+# lstiter = lst.__iter__()
 
-while True:
-    try:
-        item = lstiter.__next__()
-        print(item)
-    except StopIteration:
-        break
+# while True:
+#     try:
+#         item = lstiter.__next__()
+#         print(item)
+#     except StopIteration:
+#         break
 
-# TODO:迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
+## TODO: 迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
 
-from collections import Iterator
+# from collections import Iterator
 
-print('__iter__' in dir(range(5)))  #True
-print('__next__' in dir(range(5)))  #False
+# print('__iter__' in dir(range(5)))  #True
+# print('__next__' in dir(range(5)))  #False
 
-print(isinstance(range(5),Iterator))  #False
+# print(isinstance(range(5),Iterator))  #False
 
 # range()是可迭代的,但不是迭代器
 
@@ -216,15 +278,14 @@ print(g2)
 print(list(g1))  #[0, 1, 2, 3]
 print(list(g2))  #[]
 
-# 四. __new__和__init__的区别
-# 这个__new__确实很少见到,先做了解吧.
+## TODO: __new__和__init__的区别
 
 # __new__是一个静态方法,而__init__是一个实例方法.
 # __new__方法会返回一个创建的实例,而__init__什么都不返回.
 # 只有在__new__返回一个cls的实例时后面的__init__才能被调用.
 # 当创建一个新实例时调用__new__,初始化一个实例时用__init__.
 
-# 五. 单例模式
+## TODO: 单例模式
 #     单例模式是一种常用的软件设计模式.在它的核心结构中只包含一个被称为单例类的特殊类.
 #     通过单例模式可以保证系统中一个类只有一个实例而且该实例易于外界访问,从而方便对实例个数的控制并节约系统资源.
 #     如果希望在系统中某个类的对象只能存在一个,单例模式是最好的解决方案.
@@ -284,7 +345,7 @@ class MyClass:
 
 # mysingleton.foo()
 
-# 六. 匿名函数
+## TODO: 匿名函数
 
 lab = lambda x : x*x
 # 冒号前x为参数,冒号后x*x为表达式,返回值是该表达式的结果
@@ -297,7 +358,7 @@ newdc = sorted(dc.items(),key=lambda x:x[1])
 
 print(newdc)  #[(3, 'a'), (2, 'b'), (1, 'c')]
 
-# 七. Python函数式编程
+## TODO: Python函数式编程
 # 这个需要适当的了解一下吧,毕竟函数式编程在Python中也做了引用
 
 # python中函数式编程支持:
@@ -327,7 +388,15 @@ from functools import reduce
 fact = reduce(lambda x,y:x*y,range(1,4))
 print(fact)
 
-# 八. Python里的拷贝
+# zip函数
+# zip() 函数用于将可迭代的对象作为参数,将对象中对应的元素打包成一个个元组,然后返回由这些元组组成的列表.
+# 如果各个迭代器的元素个数不一致,则返回列表长度与最短的对象相同,利用 * 号操作符,可以将元组解压为列表.
+
+a,b = [1,2,3],[4,5,6]
+ziped = zip(a,b)
+print(list(ziped))
+
+## TODO: Python里的拷贝
 
 # 引用和copy(),deepcopy()的区别
 # https://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html
@@ -336,8 +405,8 @@ import copy
 a = [1, 2, 3, 4, ['a', 'b']]  #原始对象
 
 b = a  #赋值,传对象的引用  #  赋值引用,a和b都指向同一个对象
-c = copy.copy(a)  #对象拷贝,浅拷贝  #  浅拷贝,a和c是一个独立的对象,但他们的子对象还是指向统一对象(是引用)
-d = copy.deepcopy(a)  #对象拷贝,深拷贝  #  深拷贝,a和b完全拷贝了父对象及其子对象,两者是完全独立的
+c = copy.copy(a)  #对象拷贝,浅拷贝  #  浅拷贝,a和c是一个独立的对象,但他们的子对象还是指向统一对象(是引用),只拷贝顶级对象,或者说父级对象
+d = copy.deepcopy(a)  #对象拷贝,深拷贝  #  深拷贝,a和b完全拷贝了父对象及其子对象,两者是完全独立的 ,拷贝所以对象,顶级对象及其嵌套对象
 
 a.append(5)  #修改对象a  #a = [1, 2, 3, 4, ['a', 'b'],5]
 a[4].append('c')  #修改对象a中的['a', 'b']数组对象  #a = [1, 2, 3, 4, ['a', 'b','c'],5]
@@ -353,7 +422,8 @@ b =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
 c =  [1, 2, 3, 4, ['a', 'b', 'c']]
 d =  [1, 2, 3, 4, ['a', 'b']]
 
-# 九. Python垃圾回收机制
+## TODO: Python垃圾回收机制
+
 # Python GC(garbage collection)主要使用引用计数（reference counting）来跟踪和回收垃圾
 # 在引用计数的基础上,通过“标记-清除”（mark and sweep）解决容器对象可能产生的循环引用问题
 # 通过“分代回收”（generation collection）以空间换时间的方法提高垃圾回收效率
@@ -362,6 +432,10 @@ d =  [1, 2, 3, 4, ['a', 'b']]
 # PyObject是每个对象必有的内容,其中ob_refcnt就是做为引用计数
 # 当一个对象有新的引用时,它的ob_refcnt就会增加
 # 当引用它的对象被删除,它的ob_refcnt就会减少.引用计数为0时,该对象生命就结束了
+
+# import sys
+
+# sys.getrefcount(a)  #查看对象引用计数
 
 # 优点:
 #     1. 简单
@@ -384,10 +458,23 @@ d =  [1, 2, 3, 4, ['a', 'b']]
 # 当垃圾收集开始工作时,大多数情况都只对集合B进行垃圾回收,而对集合A进行垃圾回收要隔相当长一段时间后才进行,这就使得垃圾收集机制需要处理的内存少了,效率自然就提高了
 # 在这个过程中,集合B中的某些内存块由于存活时间长而会被转移到集合A中,当然,集合A中实际上也存在一些垃圾,这些垃圾的回收会因为这种分代的机制而被延迟
 
-# 十. Python中的is和==
+## TODO: Python中的 is 和 ==
+
 #   is是对比地址(id),==是对比值
 
-# 十一. read,readline,readlines
-#     read读取整个文件
-#     readline读取下一行,使用生成器方法
-#     readlines读取这个文件到一个迭代器以供我们遍历
+## TODO: read,readline,readlines
+
+# import os,sys
+
+# with open(os.path.join(sys.path[0],'sample.txt'),'w+') as f:
+#     details = f.readlines()
+#     print(type(details))
+
+#     read(size)
+#       读取整个文件,指定大小内容,以byte为单位,size为读入的字符数,返回str类型
+#     readline
+#       读取下一行,使用生成器方法,放到一个字符串变量,返回str类型
+#     readlines
+#       读取文件所有内容,按行为单位放到一个列表中,返回list类型
+#     xreadlines
+#       读取文件所有内容,返回一个生成器,Python3中已经没有这个方法
