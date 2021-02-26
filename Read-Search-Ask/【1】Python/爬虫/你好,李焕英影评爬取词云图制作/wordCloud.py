@@ -1,3 +1,4 @@
+import os
 import sys
 import os.path as op
 import jieba,parsel
@@ -57,3 +58,8 @@ if __name__ == '__main__':
     mwc = MovieWordCloud()
     # mwc.getData()  #爬虫,需要时候才爬
     mwc.makeWord()
+
+## 引申:os.path和sys.path的区别
+
+# os.path    主要适用于对系统路径文件的操作
+# sys.path   主要是对Python解释器的系统环境参数的操作(动态的改变Python解释器搜索路径)
