@@ -57,9 +57,10 @@ class MovieWordCloud():
 if __name__ == '__main__':
     mwc = MovieWordCloud()
     # mwc.getData()  #爬虫,需要时候才爬
-    mwc.makeWord()
+    # mwc.makeWord()
 
 ## 引申:os.path和sys.path的区别
-
 # os.path    主要适用于对系统路径文件的操作
 # sys.path   主要是对Python解释器的系统环境参数的操作(动态的改变Python解释器搜索路径)
+
+# print(sys.path)  #['d:\\wxchans\\isMe\\Read-Search-Ask\\【1】Python\\爬虫\\你好,李焕英影评爬取词云图制作', 'D:\\python\\python37.zip', 'D:\\python\\DLLs', 'D:\\python\\lib', 'D:\\python', 'C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python37\\site-packages', 'D:\\python\\lib\\site-packages', 'D:\\python\\lib\\site-packages\\pip-21.0-py3.7.egg']
