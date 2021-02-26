@@ -381,15 +381,22 @@
 ## or:2
 ## to:1
 
-seq = input('请输入序列->').split(' ')
+# seq = input('请输入序列->').split(' ')
 
-dt = {}
+# dt = {}
 
-for i in seq:
-    if i not in dt.keys():
-        dt[i] = 1
-    else:
-        dt[i] += 1
+# ## 方法一
+# # for i in seq:
+# #     if i not in dt.keys():
+# #         dt[i] = 1
+# #     else:
+# #         dt[i] += 1
 
-for x,y in dt.items():
-    print(f'{x}:{y}')
+# ## 方法二
+# for i in seq:
+#     dt[i] = dt.get(i,0)+1
+
+# ndt = sorted(dt.items(),key = lambda x:x[0])
+
+# for x,y in ndt:
+#     print(f'{x}:{y}')
