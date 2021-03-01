@@ -51,6 +51,8 @@ for i,j in enumerate(nums):
 
 ## 字典函数
 
+# dict.get(Key,default=None),返回指定键的值,如果键不在字典中范湖默认值为None或者设置的默认值
+
 # 输出一个序列中字符的个数
 seq = 'LIFE IS SHORT I USE PYHOTN'
 
