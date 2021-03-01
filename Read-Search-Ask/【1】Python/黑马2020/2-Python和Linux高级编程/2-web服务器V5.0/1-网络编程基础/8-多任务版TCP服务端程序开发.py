@@ -7,10 +7,12 @@ import socket,threading
 
 
 # 处理客户端请求数据
-def handleClientRequest():
+def handleClientRequest(newClient,ipPort):
     # 5. 循环接受客户端的数据
     while True:
         recvdata = newClient.recv(1024)
+        # 容器类型判断是否可以直接使用if语句进行判断,如果容器类型里面有数据表示条件成立,否则条件失败
+        # 容器类型:列表,字典,元祖,字符串,set,range,二进制数据
         if recvdata:
             recvdetail = recvdata.decode('gbk')
             print(f'接收客户端数据为{recvdetail},{ipPort}')
@@ -22,11 +24,10 @@ def handleClientRequest():
         else:
             print(f'客户端已下线{ipPort}')
             break
-    # 关闭
+    # 关闭和客户端通信
     newClient.close()
 
 if __name__ == '__main__':
-
     # 1. 创建TCP服务端套接字,serverSocket只复制等待接收客户端的连接请求,收发消息不使用该套接字
     serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     # 设置端口号复用,表示服务端程序退出端口号立即释放
@@ -53,9 +54,10 @@ if __name__ == '__main__':
         print(f'客户端IP和端口号为{ipPort}')
 
         # 当客户端与服务端建立连接成功,创建子线程,让子线程专门负责接受客户端的消息
-        subThread  = threading.Thread(target = handleClientRequest,args=(ipPort,newClient))
+        subThread  = threading.Thread(target = handleClientRequest,args=(newClient,ipPort))
         # 设置守护主线程,主线程退出子线程销毁
         subThread.setDaemon(True)
+        # 启动子线程
         subThread.start()
 
     # 7. 关闭服务端套接字,表示服务端以后不再等待接受客户端的连接请求
