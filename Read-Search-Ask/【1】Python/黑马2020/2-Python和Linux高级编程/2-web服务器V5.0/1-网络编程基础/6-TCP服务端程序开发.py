@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # 128:表示最大等待建立连接的个数
     serverSocket.listen(128)
     
-    # 4. 等待接受客户端的连接请求
+    # 4. 等待接收客户端的连接请求
     # TODO: 当客户端和服务端建立连接成功,会返回一个新的套接字
     newClient,ipPort = serverSocket.accept()
     print(f'客户端IP和端口号为{ipPort}')
