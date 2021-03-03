@@ -237,46 +237,47 @@ print(hex(30))  #0x1e    # Hexadecimal
 # 生成器 文本监听
 # 本质就是一个迭代器
 
-# 1.生成器函数
+## 1.生成器函数
 
-def produce():
-    # 下面条
-    for i in range(200):
-        yield f'做了第{i}碗面'
+# def produce():
+#     # 下面条
+#     for i in range(200):
+#         yield f'做了第{i}碗面'
 
-g = produce()
-print(g)  #<generator object produce at 0x000002161AD45570>
-print(g.__next__())
-print(g.__next__())
-print(g.__next__())
+# g = produce()
+# print(g)  #<generator object produce at 0x000002161AD45570>
+# print(g.__next__())
+# print(g.__next__())
+# print(g.__next__())
 
-# 2. 生成器表达式
-ls = [f'第{x}个梦' for x in range(10)]
-print(ls)  #['第0个梦', '第1个梦', '第2个梦', '第3个梦', '第4个梦', '第5个梦', '第6个梦', '第7个梦', '第8个梦', '第9个梦']
+## 2. 生成器表达式
 
-gt = (f'第{x}个梦' for x in range(10))
-print(gt)  #<generator object <genexpr> at 0x000001E10E8A65E8>
-print(gt.__next__())
-print(next(gt))
+# ls = [f'第{x}个梦' for x in range(10)]
+# print(ls)  #['第0个梦', '第1个梦', '第2个梦', '第3个梦', '第4个梦', '第5个梦', '第6个梦', '第7个梦', '第8个梦', '第9个梦']
 
-# 面试题
+# gt = (f'第{x}个梦' for x in range(10))
+# print(gt)  #<generator object <genexpr> at 0x000001E10E8A65E8>
+# print(gt.__next__())
+# print(next(gt))
+
+## 面试题
 
 # 生成器的函数
-def demo():
-    for i in range(4):
-        yield i  #在python中,使用了yeild的函数被称为生成器
+# def demo():
+#     for i in range(4):
+#         yield i  #在python中,使用了yeild的函数被称为生成器
 
-g = demo()
+# g = demo()
 
-# 生成器表达式
-g1 = (i for i in g)
-print(g1)  #<generator object <genexpr> at 0x000002AC16D16570>
+# # 生成器表达式
+# g1 = (i for i in g)
+# print(g1)  #<generator object <genexpr> at 0x000002AC16D16570>
 
-g2 = (i for i in g1)  #<generator object <genexpr> at 0x000002AC16D166D8>
-print(g2)
+# g2 = (i for i in g1)  #<generator object <genexpr> at 0x000002AC16D166D8>
+# print(g2)
 
-print(list(g1))  #[0, 1, 2, 3]
-print(list(g2))  #[]
+# print(list(g1))  #[0, 1, 2, 3]
+# print(list(g2))  #[]
 
 ## TODO: __new__和__init__的区别
 
@@ -293,44 +294,48 @@ print(list(g2))  #[]
 # __new__()在__init__()之前被调用,用于生成实例对象.利用这个方法和类的属性的特点可以实现设计模式的单例模式.
 # 单例模式是指创建唯一对象,单例模式设计的类只能实例
 
-# 1 使用__new__方法
-class Singleton(object):
-    def __new__(cls, *args, **kw):
-        if not hasattr(cls, '_instance'):
-            orig = super(Singleton, cls)
-            cls._instance = orig.__new__(cls, *args, **kw)
-        return cls._instance
+## 1 使用__new__方法
 
-class MyClass(Singleton):
-    a = 1
+# class Singleton(object):
+#     def __new__(cls, *args, **kw):
+#         if not hasattr(cls, '_instance'):
+#             orig = super(Singleton, cls)
+#             cls._instance = orig.__new__(cls, *args, **kw)
+#         return cls._instance
 
-# 2 共享属性
+# class MyClass(Singleton):
+#     a = 1
+
+## 2 共享属性
+
 # 创建实例时把所有实例的__dict__指向同一个字典,这样它们具有相同的属性和方法.
 
-class Borg(object):
-    _state = {}
-    def __new__(cls, *args, **kw):
-        ob = super(Borg, cls).__new__(cls, *args, **kw)
-        ob.__dict__ = cls._state
-        return ob
+# class Borg(object):
+#     _state = {}
+#     def __new__(cls, *args, **kw):
+#         ob = super(Borg, cls).__new__(cls, *args, **kw)
+#         ob.__dict__ = cls._state
+#         return ob
 
-class MyClass2(Borg):
-    a = 1
+# class MyClass2(Borg):
+#     a = 1
 
-# 3 装饰器版本
-def singleton(cls):
-    instances = {}
-    def getinstance(*args, **kw):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kw)
-        return instances[cls]
-    return getinstance
+## 3 装饰器版本
 
-@singleton
-class MyClass:
-  pass
+# def singleton(cls):
+#     instances = {}
+#     def getinstance(*args, **kw):
+#         if cls not in instances:
+#             instances[cls] = cls(*args, **kw)
+#         return instances[cls]
+#     return getinstance
 
-# 4 import方法
+# @singleton
+# class MyClass:
+#   pass
+
+## 4 import方法
+
 # 作为python的模块是天然的单例模式
 
 # # mysingleton.py
@@ -347,7 +352,7 @@ class MyClass:
 
 ## TODO: 匿名函数
 
-lab = lambda x : x*x
+# lab = lambda x : x*x
 # 冒号前x为参数,冒号后x*x为表达式,返回值是该表达式的结果
 
 print(lab)  #<function <lambda> at 0x000002A646DFA840>
@@ -367,60 +372,60 @@ print(newdc)  #[(3, 'a'), (2, 'b'), (1, 'c')]
 # filter() 函数用于过滤序列,过滤掉不符合条件的元素,返回一个迭代器对象,如果要转换为列表,可以使用 list() 来转换
 # 该接收两个参数,第一个为函数,第二个为序列,序列的每个元素作为参数传递给函数进行判断,然后返回 True 或 False,最后将返回 True 的元素放到新列表中
 
-a = [1,2,3,4,5,6,7]
-b = filter(lambda x: x > 5, a)
-print(b)
+# a = [1,2,3,4,5,6,7]
+# b = filter(lambda x: x > 5, a)
+# print(b)
 
 # map函数是对一个序列的每个项依次执行函数,下面是对一个序列每个项都乘以2
 # map() 会根据提供的函数对指定序列做映射
 # 第一个参数 function 以参数序列中的每一个元素调用 function 函数,返回包含每次 function 函数返回值的新列表
 
 
-a = map(lambda x:x*2,[1,2,3])
-list(a)  #[2, 4, 6]
+# a = map(lambda x:x*2,[1,2,3])
+# list(a)  #[2, 4, 6]
 
 # reduce函数是对一个序列的每个项迭代调用函数,下面是求3的阶乘:
 # reduce() 函数会对参数序列中元素进行累积
 # 函数将一个数据集合（链表,元组等）中的所有数据进行下列操作:用传给 reduce 中的函数 function（有两个参数）先对集合中的第 1、2 个元素进行操作,得到的结果再与第三个数据用 function 函数运算,最后得到一个结果
 
-from functools import reduce
+# from functools import reduce
 
-fact = reduce(lambda x,y:x*y,range(1,4))
-print(fact)
+# fact = reduce(lambda x,y:x*y,range(1,4))
+# print(fact)
 
 # zip函数
 # zip() 函数用于将可迭代的对象作为参数,将对象中对应的元素打包成一个个元组,然后返回由这些元组组成的列表.
 # 如果各个迭代器的元素个数不一致,则返回列表长度与最短的对象相同,利用 * 号操作符,可以将元组解压为列表.
 
-a,b = [1,2,3],[4,5,6]
-ziped = zip(a,b)
-print(list(ziped))
+# a,b = [1,2,3],[4,5,6]
+# ziped = zip(a,b)
+# print(list(ziped))
 
 ## TODO: Python里的拷贝
 
 # 引用和copy(),deepcopy()的区别
 # https://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html
 
-import copy
-a = [1, 2, 3, 4, ['a', 'b']]  #原始对象
+# import copy
+# a = [1, 2, 3, 4, ['a', 'b']]  #原始对象
 
-b = a  #赋值,传对象的引用  #  赋值引用,a和b都指向同一个对象
-c = copy.copy(a)  #对象拷贝,浅拷贝  #  浅拷贝,a和c是一个独立的对象,但他们的子对象还是指向统一对象(是引用),只拷贝顶级对象,或者说父级对象
-d = copy.deepcopy(a)  #对象拷贝,深拷贝  #  深拷贝,a和b完全拷贝了父对象及其子对象,两者是完全独立的 ,拷贝所以对象,顶级对象及其嵌套对象
+# b = a  #赋值,传对象的引用  #  赋值引用,a和b都指向同一个对象
+# c = copy.copy(a)  #对象拷贝,浅拷贝  #  浅拷贝,a和c是一个独立的对象,但他们的子对象还是指向统一对象(是引用),只拷贝顶级对象,或者说父级对象
+# d = copy.deepcopy(a)  #对象拷贝,深拷贝  #  深拷贝,a和b完全拷贝了父对象及其子对象,两者是完全独立的 ,拷贝所以对象,顶级对象及其嵌套对象
 
-a.append(5)  #修改对象a  #a = [1, 2, 3, 4, ['a', 'b'],5]
-a[4].append('c')  #修改对象a中的['a', 'b']数组对象  #a = [1, 2, 3, 4, ['a', 'b','c'],5]
+# a.append(5)  #修改对象a  #a = [1, 2, 3, 4, ['a', 'b'],5]
+# a[4].append('c')  #修改对象a中的['a', 'b']数组对象  #a = [1, 2, 3, 4, ['a', 'b','c'],5]
 
-print('a = ', a)
-print('b = ', b)
-print('c = ', c)
-print('d = ', d)
+# print('a = ', a)
+# print('b = ', b)
+# print('c = ', c)
+# print('d = ', d)
 
-# 输出结果:
-a =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
-b =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
-c =  [1, 2, 3, 4, ['a', 'b', 'c']]
-d =  [1, 2, 3, 4, ['a', 'b']]
+# # 输出结果:
+# a =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
+# b =  [1, 2, 3, 4, ['a', 'b', 'c'], 5]
+# c =  [1, 2, 3, 4, ['a', 'b', 'c']]
+# d =  [1, 2, 3, 4, ['a', 'b']]
 
 ## TODO: Python垃圾回收机制
 
@@ -478,3 +483,13 @@ d =  [1, 2, 3, 4, ['a', 'b']]
 #       读取文件所有内容,按行为单位放到一个列表中,返回list类型
 #     xreadlines
 #       读取文件所有内容,返回一个生成器,Python3中已经没有这个方法
+
+## TODO: Pyhotn闭包和装饰器
+
+一. 闭包
+    如果在一个函数的内部定义了另外一个函数,外部的函数叫它外函数,内部的函数叫它内函数
+
+    1. 闭包条件
+        1. 在一个外函数中定义了一个内函数
+        2. 内函数里引用了外函数的临时变量
+        3. 外函数的返回值就是内函数的引用
