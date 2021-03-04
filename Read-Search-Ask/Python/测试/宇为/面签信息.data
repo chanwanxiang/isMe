@@ -1,0 +1,8 @@
+Addr : rm-bp15m1mb7pc9w6921so.mysql.rds.aliyuncs.com
+Act&Psw : fv_test  yw-fv@Test
+
+fv-dev : signtest环境
+    faceviewer_info             面签方的信息表
+    living_similarity_rule      面签活体验证指标
+    sys_config_group            系统个性化配置分组表
+
