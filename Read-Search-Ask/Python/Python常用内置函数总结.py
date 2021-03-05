@@ -54,11 +54,11 @@ for i,j in enumerate(nums):
 # dict.get(Key,default=None),返回指定键的值,如果键不在字典中范湖默认值为None或者设置的默认值
 
 # 输出一个序列中字符的个数
-seq = 'LIFE IS SHORT I USE PYHOTN'
+# seq = 'LIFE IS SHORT I USE PYHOTN'
 
-dc = dict()
+# dc = dict()
 
-for i in seq:
-    dc[i] = dc.get(i,0) + 1
+# for i in seq:
+#     dc[i] = dc.get(i,0) + 1
 
-print(dc)  #{'L': 1, 'I': 3, 'F': 1, 'E': 2, ' ': 5, 'S': 3, 'H': 2, 'O': 2, 'R': 1, 'T': 2, 'U': 1, 'P': 1, 'Y': 1, 'N': 1}
+# print(dc)  #{'L': 1, 'I': 3, 'F': 1, 'E': 2, ' ': 5, 'S': 3, 'H': 2, 'O': 2, 'R': 1, 'T': 2, 'U': 1, 'P': 1, 'Y': 1, 'N': 1}

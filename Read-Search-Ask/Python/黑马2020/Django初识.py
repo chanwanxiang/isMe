@@ -20,7 +20,7 @@
 #     标准MVC                     DjangoMVC
 #     Model           模型        Model 
 #     View            视图        Template
-#     Controller      控制器      View
+#     Controller      控制器       View
 
 # Django框架的MVC流程
 #     用户 -> 发出访问请求 -> (Nginx|Apatch)服务器 -> Django(Router-View(Controller)-Model-Template[渲染所有代码]) --> 浏览器展示的内容  --> 用户
@@ -35,4 +35,3 @@
 #     6. Django时间设置
 #     7. Django App添加
 #     8. Templates 目录设置(App目录下,需要单独创建)
-

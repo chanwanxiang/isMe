@@ -4,10 +4,12 @@ GET http://aquadev.iflytekauto.cn/athena/iss?ver=3.1&method=query&open.dialog=tr
 
 //查询相似度接口
 POST  https://signtest.yuuwei.com/test/check/similarity
+Content-Type: application/json
 
 {
-  "similarity": "70",  //正脸照与身份证相似度
-  "personPoliceSimilarity": "70",  //正脸照与公安网相似度
-  "cardPoliceSimilarity": "70",  //身份证与公安网相似度
-  "orderNumber":"1234567"
+  "similarity": "20",  //正脸照与身份证相似度
+  "personPoliceSimilarity": "0",  //正脸照与公安网相似度
+  "cardPoliceSimilarity": "21",  //身份证与公安网相似度
+  "orderNumber":"20210305093710517001"
 }
+
