@@ -1,5 +1,8 @@
 B站地址:https://www.bilibili.com/video/BV12b411K7Zu?from=search&seid=11400090157120907821
 
+# 书写顺序 select * from  * where * group by * having *  order by *
+# 执行顺序 from --> where --> group by --> having --> select --> order by -->
+
 #进阶1:基础查询
 /*
 语法:

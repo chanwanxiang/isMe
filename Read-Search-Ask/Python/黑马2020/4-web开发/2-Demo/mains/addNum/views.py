@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from models import cal
+from .models import cal
 
 # Create your views here.
 
@@ -15,6 +15,6 @@ def calc(request):
     valB = request.POST['valueB']
     result = int(valA) + int(valB)
 
-    cal.objects.create(valueA=valueA,valueB=valueB,result=result)
+    # cal.objects.create(valueA=valueA,valueB=valueB,result=result)
 
     return render(request,'rlt.html',context={'data':{result}})
