@@ -32,7 +32,7 @@ if __name__ == '__main__':
         responseheader = 'SERVER: PWS\r\n'
 
         # 打开文件读取文件中的数据
-        with open(os.path.join(sys.path[0],'static\index.html'),'r') as file:
+        with open('static\index.html','r') as file:
             filedata = file.read()
 
         # 响应体
