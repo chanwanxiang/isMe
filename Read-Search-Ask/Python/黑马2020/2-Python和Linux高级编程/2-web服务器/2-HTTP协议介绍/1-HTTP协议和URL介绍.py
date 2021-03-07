@@ -27,7 +27,7 @@
 #     URL(Uniform Resource Locator),统一资源定位符,即通俗理解的网络资源地址,简称网址,通过它可以找到网络中对应的资源数据
 
 # 2. URL的组成
-#     http://news.163.com/photo/?page=1&count=10
+#     http://news.163.com/photo?page=1&count=10
 #     1. 协议部分 http:// https:// ftp://
 #     2. 域名部分 news.163.com
 #     3. 资源路径部分 /photo/
