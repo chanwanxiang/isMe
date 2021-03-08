@@ -12,4 +12,23 @@ Content-Type: application/json
   "cardPoliceSimilarity": "21",  //身份证与公安网相似度
   "orderNumber":"20210305093710517001"
 }
+###
 
+//业务员登录接口
+POST https://signtest.yuuwei.com/user/v1.2/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "account": "ywceshi",
+  "password": "ab123456"
+}
+###
+
+//面签员登录接口
+POST https://signtest.yuuwei.com/app/signer/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "account": "sample",
+  "password": "AB123456"
+}

@@ -14,7 +14,7 @@ dt = dict()
 
 # 方法二
 for i in str:
-    dt[i] = dt.get(i,0) + 1
+    # dt.get(key,default=None) 返回指定键的值,如果键的值不存在是,返回该默认值
+    dt[i] = dt.get(i, 0) + 1
 
 print(dt)
- 
