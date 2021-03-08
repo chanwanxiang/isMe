@@ -16,7 +16,7 @@ import threading
 
 class HttpWebServer(object):
 
-    def __init__(self,port):
+    def __init__(self, port):
         # 创建TCP服务端套接字
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # 设置端口号复用
@@ -104,9 +104,10 @@ class HttpWebServer(object):
             # 启动子线程执行对应任务
             subthread.start()
 
+
 def main():
 
-    # 获取终端命令行参数
+    # 获取终端命令行参数,返回字符串类型
     params = sys.argv
     if len(params) != 2:
         print('执行命令格式:python fileName.py PortNum')
@@ -115,7 +116,7 @@ def main():
     # 代码执行到此,说明命令行参数是2个
     print(params)
 
-    # 判断第二个参数是由数字组成
+    # 判断第二个参数是由数字组成的字符串
     if not params[1].isdigit():
         print('执行命令格式:python fileName.py PortNum')
         return
@@ -127,6 +128,7 @@ def main():
     webServer = HttpWebServer(port)
     # 启动服务器
     webServer.start()
+
 
 if __name__ == '__main__':
     main()
