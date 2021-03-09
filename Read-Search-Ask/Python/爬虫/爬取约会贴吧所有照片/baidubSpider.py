@@ -1,5 +1,10 @@
+import os
 import parsel
 import requests
+
+
+
+os.makedirs('./imgs/')
 
 urlOri = r'https://tieba.baidu.com/f?kw=%D4%BC%BB%E1&fr=ala0&tpl=5'
 
@@ -23,15 +28,16 @@ for href in hreflist:
 
     selectorSecond = parsel.Selector(responseSecond)
 
-    imgslist = selectorSecond.xpath(
-        '//cc/div/img/@class="BDE_Image"/@src').getall()
+    # imgslist = selectorSecond.xpath('//cc/div/img/[@class="BDE_Image"]/@src').getall()
+
+    imgslist = selectorSecond.xpath('//cc/div//img[@class="BDE_Image"]/@src').getall()
 
     print(imgslist)
 
-    # for imgs in imgslist:
-    #     imgdata = requests.get(url=imgs,heasers=headers)
+    for imgs in imgslist:
+        imgdata = requests.get(url=imgs,headers=headers).content
 
-    # os.makedirs('./imgs/')
+        fileName = imgs.split('/')[-1]
+        with open('imgs\\' + fileName,'wb') as f:
+            f.write(imgdata)
 
-    # fileName = img.split('/')[-1]
-    # with open('imgs\\'+fileName)
