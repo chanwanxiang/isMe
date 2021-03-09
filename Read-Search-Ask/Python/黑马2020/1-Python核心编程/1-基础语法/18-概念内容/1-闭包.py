@@ -13,14 +13,16 @@
 def funcout():
     # 外部函数
     x = 10
+
     def funcinner(y):
         # 内部函数
         # 内部函数使用了外部函数的变量
         result = x + y
-        print('rlt',result)
+        print('rlt', result)
 
     # 外部函数返回内部函数,这个使用了外部函数变量的内部函数称为闭包
     return funcinner
+
 
 # 获取闭包对象
 # 这个newfunc就是闭包
@@ -48,23 +50,23 @@ newfunc(10)
 
 # 外部函数接收姓名参数
 def configName(name):
-# 内部函数保存外部函数参数,并且完成数据显示组成
+    # 内部函数保存外部函数参数,并且完成数据显示组成
     def inner(msg):
         print(name + ':' + msg)
 # 外部函数返回内部函数
     return inner
 
+
 # 创建mas闭包实例
 mas = configName('mas')
 # 创建zzs闭包实例
 zzs = configName('zzs')
-
 # 如果执行闭包,因为已经保存了name参数,以后在输入的时候都是name:XXXX
 mas('你爱我吗?')
 zzs('爱')
 
-# 修改闭包内使用的外部变量
 
+# 修改闭包内使用的外部变量
 def outfunc():
     i = 10
     def innerfunc():
@@ -74,16 +76,14 @@ def outfunc():
         nonlocal i
         i = 20
         rlt = i + 1
-        print('rlt',rlt)
-    
-    print('修改前外部变量值:',i)
+        print('rlt', rlt)
+        
+    print('修改前外部变量值:', i)
     innerfunc()
-    print('修改后外部变量值:',i)
-    
+    print('修改后外部变量值:', i)
+
     return innerfunc
 
 
 # 创建闭包对象
 newfuncs = outfunc()
-
-
