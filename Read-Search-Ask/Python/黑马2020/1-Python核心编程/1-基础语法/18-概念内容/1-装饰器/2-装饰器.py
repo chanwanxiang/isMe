@@ -18,7 +18,9 @@ def decorator(func):
     return inner
 
 # 如果闭包函数的参数有且只有一个并且是函数类型,那么这个闭包函数称为装饰器
-@decorator  # comment = decorator(comment)
+
+
+@decorator  # comment = decorator(comment) -> inner
 # 装饰器的语法糖写法 @装饰器名称
 def comment():
     print('发表评论')
