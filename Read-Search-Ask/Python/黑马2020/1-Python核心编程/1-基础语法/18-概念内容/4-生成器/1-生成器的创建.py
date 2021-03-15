@@ -41,6 +41,7 @@ def ownGenerator():
         yield i
         print('上次数据生成')
 
+
 rlt = ownGenerator()
 print(rlt)
 
@@ -61,6 +62,3 @@ print(rlt)
 
 for value in rlt:
     print(value)
-
-
-
