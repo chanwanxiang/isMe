@@ -13,9 +13,10 @@ def fibonacci(num):
     while curindex < num:
         rlt = a
         # 条件成立交换连个变量的值
-        a,b = b,a+b
+        a, b = b, a+b
         curindex += 1
         yield rlt
+
 
 # 创建生成器
 f = fibonacci(5)
