@@ -25,8 +25,11 @@ class Solution:
             # third iteration
             # a = 0
             # num = 321
+            # 取模,个位数向上取
             temp = a % 10
+            # 反转后的数字
             num = num * 10 + temp
+            # 整数除法,去除个位数之后的数
             a = int(a/10)
 
         if x > 0 and num < 2**31 - 1:
