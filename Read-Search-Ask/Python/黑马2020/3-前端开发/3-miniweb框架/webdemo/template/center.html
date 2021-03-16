@@ -10,59 +10,34 @@
     <script src="/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function(){
-            // 发送ajax请求 拿到数据进行拼装
-//            $.get("center_data.html",function (data) {
-//                // 拿到数据的回调函数，如果拿到数据的话数据将存在js对象data里面
-//                // 获取到table标签
-//                var $table = $(".table");
-//                // 循环data对象
-//                for(var i=0; i<data.length; i++){
-//                    // 根据下标获取到对象
-//                    var oCenterData = data[i];
-//                    // 封装后的每一个tr标签
-//                    var oTr = '<tr>' +
-//                                '<td>'+ oCenterData.code +'</td>' +
-//                                '<td>'+ oCenterData.short +'</td>' +
-//                                '<td>'+ oCenterData.chg +'</td>' +
-//                                '<td>'+ oCenterData.turnover +'</td>' +
-//                                '<td>'+ oCenterData.price +'</td>' +
-//                                '<td>'+ oCenterData.highs +'</td>' +
-//                                '<td>'+ oCenterData.note_info +'</td>' +
-//                                '<td><a type="button" class="btn btn-default btn-xs" href="/update/000007.html"> <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 修改 </a></td>' +
-//                                '<td><input type="button" value="删除" id="toDel" name="toDel" systemidvaule="000007"></td>' +
-//                                '</tr>';
-//                    // 没循环一次就给table标签追加没一行tr
-//                    $table.append(oTr)
-//                }
-//
-//
-//            }, "JSON");
-
-            $.get("center_data.html",function (data) {
-                // 执行成功执行的函数
-                // 选择到标签
+            // 发送ajax请求，获取个人中心数据
+            $.get("centerdata.html",function (data) {
+                // ajax 成功回调函数
+                // 获取table标签
                 var $table = $(".table");
+                // 如果指定了返回数据的解析方式是json，那么data就是一个js对象
+                for(var i = 0; i < data.length; i++){
+                    // 根据下标获取每一个个人中心数据js对象
+                    var oCenterData = data[i];
 
-                for(var i=0; i < data.length; i++){
-                    var oData = data[i];
-
+                    // 封装后的每一个tr标签
                     var oTr = '<tr>' +
-                                '<td>'+ oData.code +'</td>' +
-                                '<td>'+ oData.short +'</td>' +
-                                '<td>'+ oData.chg +'</td>' +
-                                '<td>'+ oData.turnover +'</td>' +
-                                '<td>'+ oData.price +'</td>' +
-                                '<td>'+ oData.highs +'</td>' +
-                                '<td>'+ oData.note_info +'</td>' +
+                                '<td>'+ oCenterData.code +'</td>' +
+                                '<td>'+ oCenterData.short +'</td>' +
+                                '<td>'+ oCenterData.chg +'</td>' +
+                                '<td>'+ oCenterData.turnover +'</td>' +
+                                '<td>'+ oCenterData.price +'</td>' +
+                                '<td>'+ oCenterData.highs +'</td>' +
+                                '<td>'+ oCenterData.note_info +'</td>' +
                                 '<td><a type="button" class="btn btn-default btn-xs" href="/update/000007.html"> <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 修改 </a></td>' +
                                 '<td><input type="button" value="删除" id="toDel" name="toDel" systemidvaule="000007"></td>' +
-                                '</tr>';
-                    $table.append(oTr);
+                                '</tr>'
+                    // 给table标签追加每一行tr标签
+                    $table.append(oTr)
+
                 }
 
-            }, "JSON");
-
-
+            }, "json");
             $("input[name='toDel']").each(function(){
                 var currentAdd = $(this);
                 currentAdd.click(function(){
