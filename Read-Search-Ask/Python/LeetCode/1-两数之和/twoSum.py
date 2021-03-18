@@ -22,8 +22,8 @@
 # s = Solution()
 # print(s.twoSum([1, 2, 3], 3))  # [0, 1]
 
-# 方式二:
-# class Solution:
+# 方式二
+# class Solution(object):
 #     def twoSum(self,nums,target):
 #         for i in nums:
 #             j = target - i
@@ -37,7 +37,7 @@
 # print(s.twoSum([1,2,3],4))
 
 # 方式三
-class Solution:
+class Solution(object):
     def twoSum(self, nums, target):
         dc = dict()
         for i in range(len(nums)):

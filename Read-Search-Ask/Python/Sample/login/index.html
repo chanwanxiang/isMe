@@ -1,0 +1,150 @@
+<!DOCTYPE html><html>
+<head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>统一认证平台</title>
+    <link rel="stylesheet" href="./css/layer.min.css" /><link rel="stylesheet" href="./css/iflytek.css" /><script type="text/javascript" src="./javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="./javascript/jbase64.min.js"></script>
+    <script type="text/javascript" src="./javascript/qrcode.js"></script>
+    <script type="text/javascript" src="./javascript/layer.js"></script>
+
+    <link rel="icon" href="./ifly-shortcut.png" type="image/x-icon"/></head>
+<div id="bgContainer" class="ifly-loginbox">
+</div>
+<form method="post" onsubmit="return checkLogin();" id="form">
+      <!-- 登录失败的次数，失败三次，就需要输入验证码了 --><input type="hidden" id="codeValid" value="false"/><div class="ifly-transform-img"></div>
+    <div class="ifly-loginbox-form">
+      <div class="ifly-loginbox">
+        <div class='ifly-loginbox-con'>
+          <dl class="ifly-loginbox-input">
+            <dt class="iflytopic">
+              <span class="ifly-login-by-password">
+                <a href="" title=""">密码登录</a>
+              </span>
+              <span class="ifly-login-by-checkkeyword">
+                <a href="" title=""">验证码登录</a>
+              </span>
+            </dt>
+            <dd class="ifly-username">
+              <i class="ifly-username">
+              	<img src="./htmlimg/user.png" width="16" height="16"/></i>
+                <input type="text" maxlength="25" id="username"
+                       class="ifly-input" placeholder="请输入域账号     例：sanzhang"
+                       accesskey="u" name="username" value=""/><div class='bottom-line'></div>
+            </dd>
+            <dd class="ifly-password">
+              <i class="ifly-password">
+              	<img src="./htmlimg/password.png" width="14" height="20"/></i>
+                <input name="password" type="password" maxlength="25" id="password"
+                       class="ifly-input" placeholder="请输入密码"
+                       accesskey="p" value=""/><div class='bottom-line'></div>
+
+              <!--点击明文显示密码--><div class="showPassw" id='showPassBtn'>
+                <i class='xiaoyanjing'></i>
+              </div>
+            </dd>
+            <dd id="divConfirm" class="ifly-vc ifly-code" style="display:none">
+              <i class="ifly-vc">
+              	<img src="./htmlimg/checkword.png" width="15" height="18"/></i>
+              <input type="text" maxlength="25" id="code" class="ifly-input" placeholder="请输入验证码"
+                     autocomplete="off"
+                     accesskey="n" name="checkword" value="" /><i class="question" id="question-tipone" title>
+              	<img src="./htmlimg/operatio-icon.png" width="18" height="18"/></i>
+               <button type="button"
+              class="layui-btn layui-btn-normal getCode" lay-filter="formDemo" id="getCode">获取验证码</button>
+              <div class='bottom-line'></div>
+              <span class="checktip1"></span>
+            </dd>
+            <!--切换为二维码登录--><div class="change-scanImg-login" >
+              <div class="login-byscanImg toogle" title="""></div>
+              <div class="login-tip">
+                <span>扫码登录</span>
+              </div>
+            </div>
+            <!-- 点击登录 --><dt class="ifly-loginbox-btn">
+                <input type="hidden" name="execution" value="c5ff2dfb-c7c2-44bc-b737-bed2c6d75628_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuVWl0MVVFSlBiVnBoTjFCa2VraEtZVEozU3psQlltUTFWVTl4S3paWFZFdEdiV2dyZFdsQlFYWndNamxtUlZBMlRsWXJaRmxQVkhWc1l6Rmhka1IxUzBWMGNISXpha1pZUm1vMmFFTllOMjB3WlVKVGRFRkpkRVZ4ZERRMWJXb3pTSFpWVDBOdmJXUkJNelF6TjFSTE9VVjFhbWRKYnpkblpWaDJaMDV0UVVoWGRDOTFiV1Z4VDBsUVJrVXdWVVpvTVhsMFUxQlpaVzVrVTNsSE5HOUNVRXR5Ynl0VFdWTjJSbWRxWkN0NlNVb3pjM1pIVEZGSGEwOVJaMmQwYTFjdmVtUkxiREI1YlhOd09HWmFRMVZTZG1WSEwwOXRhM0owWWpZd1NsaEVLM3B2Y0d0emJHc3JVamxQTVdVMGJXZGtiSEF5WjNaVmJrbGlVMm9yZFhoNmIwOXFWVXhxUkhwamMySnBRMnRNUzJkNU5YZFpXa1ZJUjJKMk5IRXJOSHB2VjFwWGNFZHdOMWRyWWxKTGQxaEtRelUzVDJwdlVrazFORlJEZGxSSU9FcDBkVkpVU0ZsMWNtTnBZMVo2Uldkb2NIaFhZbWMzYmtkTVYyeE5ZMFVyU0RNeWJIbzJLMjVKT0d0VGVuTjVXaXQwZDFoaVFrTldRbTkyUnpCcUsyMWlhVlpMUVU5MU1ESnZSWFJDTkVGTVVDOU1LMjByVlRSUkwwVm5ORTgwZWtablMwSmtUek12Y1RoS1lrNWtNRXgxUWtKeU5FNUhSSGhJUjBRelJFSlNjM1l5WVZoNVZEVXdRMkk1UTJnM05XZHNRV2xLYms5Wk5taFBiakpWVFdaVFR5czBNazF5Y2pSeVNsQnZUakpEYTJkMlFtZFRVV0pVVGl0R1l6Tm1hbGxXTUdOeldqRk1jMVI1U0had1ZHeFVhelExY3pKVWIxaEJaMWxSVEhkV1UxcDVaWFp1TWtKNlJHOU1RbEJSTWl0eWRYWkhiVkpOY3pCVlMyNUJTRmNyWVN0elExcHRRMVIwU2xSRFNsUjJOa2RMV2tWdk9FMUtVSFZIVjBWeVJWRXJTV2d4TkVOYWFFTXdZMWs1TjNNcmVreGFVMHRJYUdJMWVYb3ZSM0o1TlVsUVZHaHhOR2hEVTA4MlZrbzVjbTVDTTBoTVdYRlhlalZTWlhNdlpuQXdla2xHUld0SFJIUTFhMlpVTVZOcldUUnFiekYwY0ZCM1QwNTZkbTlaVEM5eU9HTkJOV2dyZUUwM1NVSkdZakl5Y0VKcmFEbHNVa3hZZEZwUVZUa3JhbFJNWld0SFNUSXhjRGxvYzJoaWJqQkNiM1JKUVRoNE5YQnFhbGxrVkdvMVYzcExZakF5YVdvclEwRTBZa1ZJV1RsRmF6QnpiRzUzTDBadU9GSmxUa2xrTDFCbFVtdFpVMXBQV1hKUlVVaHRaRTFxU1dWRVkydG9RaTg1TURGa2IzRXpTSFZqYURWUGJ6ZHlhMjl4YTA0MmRUUk1Ta014Y2psbVdrOU5PVXhGZEZSVVFYQkZhRFJ3T0dORlRrcHdXamhpYjJRNFkyUktZMWR6UzNCc1lsazVSR0ZMU21OTlZHeHVkalJ3UjNOV2VGbzNjVEpuTTB4WFdrTTBNRkJsY2taeFpscHRhV1Y1V21oVGQydFJORWRXUlhaWldVa3hUVk56Y3pGamVFRlJibXA1UTJwWlN6TXpLMVpVSzJFNWVESXZZMU4wTURaSU16ZFNka1ZTZURSTGQwVkhZMGR5U2xZMFMyMW9laTlNU2xKa2VHMWpVRGhYYzFKVk5XRktOR2hoVG1wR2JFUkZOV05SYUhOdVMycDJkR0ZaZEZSTGNVRlVLMDFtUjBOaWNGbFRXRFV2VWxkRFRETk9TMmxQTUZwa1lWSk9UalpEWmtoU0szQnBTR0pUZFhkQ05FNWpVa1JrZFVad01sZHdXR0YzYUc1UmVFSkdRbkpQVkhvNGRGTXdSakZsYjAxWk1pOWtSbUZSVm1KTVVIQlFPRmhvVVRselpHNDBhbkZRYTNGYVlWaGtXSFJ1V0ZoTkszSlNPRnBpTDNKSWNDOU1SVmhrWkd3MVUxaFdaekZhU0Zvd2IwUkJTVmx0UmxsSGJrbGhZblZ2ZG05UFMxVlZUMVJwZGpCWFVWZE9aM0ZrWVU5bVUyUklTM0pwSzFOemFVZEhXa1J4TVUxR01WZFZNMGxOWXk4NVJsbDJMMmMxUm1sS1ZFbFBjbFJtYld3dmQySjZjVFV3YUdGVWVUaFdSM1ZWU1d0cVpEaHhXbGxpUVhGdVVsUlNWMU5vYkZWRk5FUXZXRVJ6YlVzNE1VNHhZamxhY0ZKaVlqVnNkVnBHT1dONVNtNTRVUzg0Y3poaWNUVjZVRTV4T1M5WlVUbGhWMnREZG10MVRqRlNhVE51UTNsVVEyZHpkV2wyY1hsTmRGcDZVMUpwWkRaM2MxUkVTRlZGUlZWblNDdFpSRUV6WTNGVE1tYzNSRGt6WlN0YWRHbFFZbWR4WlhsTlkyYzRiamxvVDBFd2FFMHhibWxHVldGVWFrVjNWM1ZtUmtkNk4wMVJVV1p5TTBsTE1WbG5TMVJIVVVaNlpHNUlVeXRUWWpaRlJXTlhXbVZoVFV4V1EzRnVUa3BVVlRKVFZrMU9UVGR4TTJKWWFUWXlaMGg2V1cwdlJ6aEJjVnBSZUVOcldGbE5OQzl5UkdGalNISlBjbTFzYTBZdmVHcDRhV1YyVW5GNmJsZFRkRmxaTXl0aU0yMVBOMGN2VWxoV2MwNTFaa1oxYTNKRGJqaFRVRmxHTkU5WFFWRkNWV2QxYlc1dlRuUkVTbVZ3ZEVkYWNWVjNkVU1yUlhaUVlpdE1RVVJ4TUdkWWVXWlBUVUZoY1U1R09XTnROM2RDTDNwTmJVbFdPWFI0TW1WdmNVVk5hMDF2WTFoWlNIcEpjMDFJY3pnd2JGUkpObmcyWjFNeVpWcHpkRWhCYlhoTWJtMURTRGd6ZG05MFRDOUVia1pFU2xWQmRYbFdZM0Z3ZDI5WlNTODJTa0ZsYkU5U1ExUm5aVlZUUlVkV1EyaExkVE40Y21aWE1WcHRMMDFtYURjemQwaDNUREJ0YlhWU1ZHUk9ZekYyVmsxWE1EbFJhbTVwTkhCTlZFcGxORlV6WVZVdlMwVmpPVVpvTDJaNGNFWllSbTVWV2pGc1ZUVkJNVzVqTlVzd2NuTlBkVXN5TjNSdU9GWXlaa2hyV1U0d2JEaDFRa1J5T1d4RFptdFllRk1yUTJwdVJHZHViR1ZWYWs4ck1rZDRTa05FYW1vNFRqSTRXa3RJVWxCUWJWbEtUV3dyVGpOUmFVazNVV0oyUlZjMGNYVnhaWGRDU1RkM1ZpdEpaRzFZUlhWUmEwbDFjSFp6T0U5emFWQlZjMFkzYzI4M2VHZENPR1V4UjFKamRrbHVkbVJWVlhCWk5EWmpja2RKYUVWeFJuVkxWVWRLTUdSUU4wUnRRbEpFUXpnNUwxSjZkWEpVWVc0d1ZqSmxjMDg0VFVGbFUwbGpTekp4VWt4bUszRk5lbWhIWXpsQ1NIbzNaMFpIYkhkemEzSmpPVTVtWnpneU5HUkxTemx3YzNkTVpHbFNTR2hTYkRrNVJWWlpabGxYY25KbVYwaHVNR3B3WTFGblFrVlZlR2RCVnpoaGExZFVUbVZIUlZOVmMyRkVjVXRhTDB4a2IxQkVObmcwTlVGc1NIRXdZVE5WY1ZWM2RWZDRiSGc0ZVZocVNERXJhbnB1UW1wV1JtTkJiSGh4VkM4cmQxcFBabXB1WkVsUFpscG1UVU5MU2xWV1ZrMTBTRTFNUTB0dVJEZHhjRU5xYTI4eFdVeFBlbVF3YzNNMmFIUmFVRVZRVjNsTWNVRjVibFp3VGpaMEwxSm1SRWxVUldOUGRHeDRSVFZEVDA4dkwyaHdZVzg1VTNkMk0xcDBXWHAxU1dGeWNqaElSRmRJU0doM2N6TkJiVE56WldoMFNsbEVOMUYyVHpjME5HOUhWSGxFVm5CV1lrUnFPVmxwVlROb2ExUnRabkZoTUc5cFVFZ3dhVFJtVW1Zek0wNXVjRk5YWkhWWFNXcHZNVVZHVG5vNGFWcGxSU3R0TVhRcmFISlliVTVKYWpSaGRXZHlhVVJNV0c4eWQwTkJSM2h3WlVKb01GQmpWa1ZZT1hSeFVFRjVla2QyV0hnMk0yTlpTbXRuV1hwUWEyZGFhU3MzSzAxS1QySnJUa2hUU1dGSlRrbGpOVVZ1YW5CbU0yZE9VR1Z2UlZsc01uRldWVFJwVmtGVlJUQjNWVlpWWms0eWFHaG1PREpQZFUxWWJuQlBlazVpUjAwdk9XcDZWWGh3T1VwcFNGWkpNbkUyTm1sclJGZHNVak5VVVU1TmVUbEpWMkpoYW1rclRVZDRiVWs1Um1KclNGWmpkRE15YzFWS2NUY3JURlpxVTNSSU5tVkRXbTVJYWxSS1lrZ3lSMHQyTDBWbmNtSnRVVTlhWXpOU2QyODBkbVJSVW5oR01sRkpTVlowV0U5c1ZIbzJWRTFNVEc5WVRIbHRhMmRyYmtGdFJDOHlUbFZqTDFFeFIyUmFTVGRrUkd3eU5qWkVhWFZFVG1KSVZ6UlNVMXBLYzI4dk1VaE9NaTlXWmtSaFdXSk5UMlJVTjBaUWN6ZDRTMm95VjFZM1YwMUtSRVEwWjJkdEsxWTFURWhtUlVkeFZHNXRRV3BsTlZsREwwSkdUbXhOY0ZwMFMyYzJWRkV3ZDIxcE1reHBjMFpvYWxSRU9YRmtlVXgxZUdnNUwxbGlUMVp0VDBKVWVUQjBOVGMxU3k5UU5sSlhaR1paZFc5MmRuaEZOVmxrTVVZMVkycE1OSEFyVFVJeU0zbEdTVXB1TUdkUk1FVXhhVVo1YlVGR1QwYzJTV2w0VVVnMVdWVkdUbTUwUjIxV1VpdFNXbEV5Y1Zoak1rODVkRlJpTlZKbllUSjFWemxOUm10a2VEZDRSR1ZCY3pCclQzQlVVVGR3Y1VJeVMwbFpZMkpEZDI1SFVVeHdORVJ1WjFkSVptRnJRelZqWkN0R01sTm9aRmxLT1VKRmRWSnhVR2R6WmpKd1R6TlVkRXcwTXpWdk9IUmFXa3hNU0dwSGNtOU1RVFpCUlM5VlMzUmpkWEpOYjBodFlrVm1aMDVhWkhCVmJIcFBhWFY2Vm0xblpFcE5abXN2Y21oU0t6a3pja1kxTDAxa1p6ZFJNMFJIU0ROaWFFMUpTSGhuYm1aMGNsUlFSM2hYVGpSVFJISldPV28wV0hoUVNXbHpWbEprVlVsaVRsa3pOUzkyYTIxaWMyeEVhblZLUzJFcmFsaFFWa3h5Vm0xSFRVZ3ZiaTlaT0hSbVYxbHBTRmx0VDB0Sk1FMU9RM2R3VEdoeU9HbEJabkZuVlc1RFQwaFlSMHBMY1VwSmNHZE5OMDV4Tm13MWJFSTBPRVpQYldWaVFpOTNSMHRaV2paNVUyODFaSEpCY0ZJd1NFTTRWMHB0ZWpaNlJFczFlbWRJWXpObllrTXhTVWgwTUVWWGFtRnhiWE55U21weGNtbG5abVF4TDJkTk5IWlNZMnhpVmtsMlowRm1OVW80V1V4SVNrTkRSRnBMU0hoblNYUXhLMEk0TUVaalVITjBaR3R1V0dWa2JIZDBlQ3RHWjNrdlZGWk5lWGQxYlUwNFNHWklORGhNTWxFeWJVcEJPRTFGVGt0VmIwWXpTMEY1YzI1dk1FRTJiRFl6UjAxaVZYTnZibUoxTmtKaVEwSlFjalpUU0docFVUWkZVbmhwTnpOcGJWbGtSV1p2Wmtzd1YwbzVaR3REWVdGUldHNXhjR3QyUVhSek9YTnFheXRaUlhCaGFtMVlZWFY0ZFd0eVlsbHdUVWxyYVV4T2VVTTVTR2R5ZUdreEt6RnRXWHBsVnpReWNEUjVlVnBWZFUwM2VuRmFjelZMYlhsbmVFWldkSE54ZEhsSVVrdDVjVlZ5WTBJemVIY3lTV2g1TTJ0eWNqbEpVV1ZNZWxBeVIxWklNbGxUVjJGNVFYTnlaRzU2WVU4MlZqbG9kMmRhYkRCVFJrSTJOVzUyYkVVM1NWUlZkVms1VG5jdlRURjRRako2YjFOT1duWXljbXh0VUdJMGVHSlBhRFU0VDA5MlV6RlpTekJDVEM5alRHUjFRMVZ4VmtwVmEyRndheTlZVFhSRGMxUk5kMWhEUnpKSksxTkJZemRWWTFka2JGVmxTVlpXVEhVdmEyZFpZVVpZV0VaMWNUTmhNVE5pVTFWVFozQkxSVzlxZG1OTlZrRktZbFJIVEZwMGRGZFNRMWxxZERRM2RXVnNTM1FyZG1oSVRuTlRiVWhKUVhKWFpsVlhlQ3RQT0U1UVluaHBLMlJTZEZsYVN6ZHJNV3RPYzNOR2NscDBXRGx2Wldzck1FVnRXamt2YW5nMGJIWXZWbnB1YW1GVlV6bG9RekEuTGtQWkZuQ3p6YWNsSWtnMS1GZkhHX3plWVlVdzYwamZFNVpvUWdrOFZVQmNOdzAzWnh6T2lZVU1wNXJoeUJxMUpqM0ZhcTBrWjdSeDdsRzRmWjVweUE="/><input type="hidden" name="_eventId" value="submit"/><input type="hidden" name="geolocation"/><input value="登录" class="ifly-btn" type="submit" /></dt>
+            <dt style="padding: 0 70px">
+              <span class="ifly-changepwd" style="float:right">
+                <a href="" target="_blank" title=""">修改密码</a>
+              </span>
+              <span class="ifly-changepwd">
+                <a href="" target="_blank" title=""">忘记密码</a>
+              </span>
+            </dt>
+          </dl>
+          <!--验证码登录--><dl class="ifly-login-checkword">
+            <dt class="iflytopic">
+              <span class="ifly-login-by-password">
+                <a href="" title=""">密码登录</a>
+              </span>
+              <span class="ifly-login-by-checkkeyword">
+                <a href="" title=""">验证码登录</a>
+              </span>
+            </dt>
+            <dd class="ifly-username">
+              <i class="ifly-username">
+              	<img src="./htmlimg/user.png" width="16" height="16"/></i>
+                <input type="text" maxlength="25" id="username1" class="ifly-input" placeholder="请输入域账号     例：sanzhang"
+                       accesskey="n" name="username1" value="" /><div class='bottom-line'></div>
+            </dd>
+            <dd class='checkbox' style="position:relative">
+              <i class="icon-mima">
+               <img src="./htmlimg/checkword.png" width="15" height="18"/></i>
+                <input type="text" maxlength="25" id="checkword" class="ifly-input" placeholder="请输入验证码" autocomplete="off"
+                       accesskey="n" name="checkword" value="" /><i class="question" id='question-tiptwo' title>
+              	<img src="./htmlimg/operatio-icon.png" width="18" height="18"/></i>
+                 <button type="button"
+                class="layui-btn layui-btn-normal getcheckword" lay-filter="formDemo" id="getKeyword">获取验证码</button>
+              <div class='bottom-line'></div>
+              <span class="checktip"></span>
+            </dd>
+            <!-- 切换为二维码登录 --><div class="change-scanImg-login" >
+              <div class='login-byscanImg-incheckword toogle' title="""></div>
+              <div class='login-tip-checkword'>
+                <span>扫码登录</span>
+              </div>
+            </div>
+            <dt class="ifly-loginbox-btn">
+              <input value="登录" class="ifly-btn" type="submit" /></dt>
+            <dt style="padding: 0 70px;text-align: left;">
+              <span class="ifly-login-by-password">
+                <a href="" target="_blank" title=""">忘记密码</a>
+              </span>
+            </dt>
+          </dl>
+          <!-- 二维码登录 --><dl class='ifly-login-scanImg'>
+            <dt class="iflytopic">
+           	  <div class="open-ifly">
+           	  	<span>打开手机</span>
+              	<span class='mark-font'>i 讯飞</span>
+           	  </div>
+              <span>在右上角打开扫一扫</span>
+            </dt>
+            <dd style="padding-bottom:10px">
+              <div class='scanImgcon'>
+                <div id="qrcode"></div>
+                <div id='qrcode-invaild'>
+                  <span>二维码失效，请点击刷新</span>
+                </div>
+                <div class='qrcode-img'>
+                </div>
+              </div>
+            </dd>
+            <dt class="login-qrcode-invalid">
+              <span class="scanMeLogin">请扫描二维码登录</span>
+              <a href="" class='needRefresh' type="button">刷新</a>
+            </dt>
+            <!-- 切换为域账号+密码登录 --><div class="change-password-login" >
+              <div class='login-bypassword toogle' title="""></div>
+              <div class='login-tip-scanImg'>
+                <span>密码登录</span>
+              </div>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="ifly-copy">版权所有：科大讯飞股份有限公司</div>
+  </form>
+
+<script type="text/javascript" src="./javascript/login.js"></script>
+</body>
+</html>
