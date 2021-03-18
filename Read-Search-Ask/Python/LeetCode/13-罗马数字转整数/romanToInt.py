@@ -21,21 +21,23 @@
 # 链接：https://leetcode-cn.com/problems/roman-to-integer
 # 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
-class Solution():
-    def romanToInt(self,s):
-        # 字母数字映射
-        numMap = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
-        # 返回结果
-        result = 0
+# class Solution(object):
+#     def romanToInt(self, s):
+#         # 字母数字映射
+#         numMap = {'I': 1, 'V': 5, 'X': 10,
+#                   'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+#         # 返回结果
+#         result = 0
+#         # 遍历输入的字符串,i=0时直接加入result,i大于零开始判断与前位关系,如果大于前一位,在本身详相减规则的基础上还要把上次相加
+#         for i in range(len(s)):
+#             if i > 0 and numMap[s[i]] > numMap[s[i-1]]:
+#                 result += numMap[s[i]] - 2*numMap[s[i-1]]
+#             else:
+#                 result += numMap[s[i]]
+#         return result
 
-        # 遍历输入的字符串,i=0时直接加入result,i大于零开始判断与前位关系,如果大于前一位,在本身详相减规则的基础上还要把上次相加
-        for i in range(len(s)):
-            if i > 0 and numMap[s[i]] > numMap[s[i-1]]:
-                result += numMap[s[i]] - 2*numMap[s[i-1]]
-            else:
-                result += numMap[s[i]]
 
-        return result
+# s = Solution()
+# print(s.romanToInt('CMXCIX'))
 
-s = Solution()
-print(s.romanToInt('CMXCIX'))
+exec "print('hello world')"
