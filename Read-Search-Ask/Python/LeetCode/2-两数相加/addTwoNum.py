@@ -8,3 +8,9 @@
 #         dummy = listNode
 
 print(2**31)
+
+print(int(1.7))
+
+print(round(1.7))
+import sys
+print(sys.path)
