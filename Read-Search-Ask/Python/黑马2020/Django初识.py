@@ -18,7 +18,7 @@
 
 # Django框架的MVC
 #     标准MVC                     DjangoMVC
-#     Model           模型        Model 
+#     Model           模型        Model
 #     View            视图        Template
 #     Controller      控制器       View
 
