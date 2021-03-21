@@ -39,5 +39,3 @@
 
 # s = Solution()
 # print(s.romanToInt('CMXCIX'))
-
-exec "print('hello world')"
