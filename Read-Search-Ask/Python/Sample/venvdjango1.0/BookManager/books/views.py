@@ -1,0 +1,15 @@
+from django.shortcuts import render
+from django.http import HttpRequest,HttpResponse
+
+# Create your views here.
+
+def index(request):
+    # def render(request, template_name, context=None, content_type=None, status=None, using=None):
+    # 参数1 当前请求
+    # 参数2 模板文件
+    # 参数3 传递参数
+    name = 'Flask'
+    context = {
+        'name':name
+    }
+    return render(request,'books/index.html',context)
