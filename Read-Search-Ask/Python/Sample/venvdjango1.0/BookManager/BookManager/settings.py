@@ -86,10 +86,21 @@ WSGI_APPLICATION = 'BookManager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# sqlite主要是一个嵌入式的关系型数据库,主要在移动端使用,属于小型关系型数据库
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '127.0.0.1',
+        'PORT': '3333',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'NAME': 'bookmanager'
     }
 }
 

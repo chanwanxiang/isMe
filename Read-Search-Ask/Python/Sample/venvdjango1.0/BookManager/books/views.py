@@ -11,7 +11,12 @@ def index(request):
     # 参数3 传递参数
 
     # 实现业务逻辑
+    #     到数据库查询数据
+    #     组织数据
+    #     传递模板
+
     # 把所有书籍查询出来
+    # objects可以理解为模型的管理类,对模型的增删改查依赖于它
     books = BookInfo.objects.all()
     context = {
         'books':books
