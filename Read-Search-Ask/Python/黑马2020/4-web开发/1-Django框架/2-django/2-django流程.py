@@ -46,29 +46,54 @@
 #             mkdir
 #             $HOME/.virtualenvs
 
-#     windows
-#         安装虚拟环境命令
-#             virtaulenvwrapper是virtualenv的扩展包,用于更方便管理虚拟环境
-#                 - 将所有虚拟环境整合在一个目录下
-#                 - 管理(新增,删除,复制)虚拟环境
-#                 - 快速切换虚拟环境
-#             1)安装
-#                 pip install virtualenvwrapper-win
-#             2)修改创建圩您虚拟环境默认位置
-#                 python安装目录下的Scripts目录修改mkvirtualenv.bat文件,修改24行信息
-#             3)创建虚拟环境
-#                 mkvirtualenv name
-#             4)激活切换环境
-#                 workon  [vnev]
-#             5)安装指定版本django
-#                 pip install django==1.11.11
-#             6)创建django项目
-#                 django-admin startproject name
-#                 python manage.py runserver [127.0.0.1:8000]
-#             7)创建django子应用
-#                 python manager.py startapp name
-#             8)退出虚拟环境
-#                 deactivate
+#     windows(方法一)
+#     安装虚拟环境命令
+#         virtaulenvwrapper是virtualenv的扩展包,用于更方便管理虚拟环境
+#             - 将所有虚拟环境整合在一个目录下
+#             - 管理(新增,删除,复制)虚拟环境
+#             - 快速切换虚拟环境
+#         1)安装
+#             pip install virtualenvwrapper-win
+#         2)修改创建圩您虚拟环境默认位置
+#             python安装目录下的Scripts目录修改mkvirtualenv.bat文件,修改24行信息
+#         3)创建虚拟环境
+#             mkvirtualenv name
+#         4)激活切换环境
+#             workon  [vnev]
+#         5)安装指定版本django
+#             pip install django==1.11.11
+#         6)创建django项目
+#             django-admin startproject name
+#             python manage.py runserver [127.0.0.1:8000]
+#         7)创建django子应用
+#             python manager.py startapp name
+#         8)退出虚拟环境
+#             deactivate
+#         9)导出包依赖关系
+#             pip freeze >requirements.txt
+
+#     windows(方法二)
+#     安装虚拟环境命令
+#     pip install virtualenv
+#         运行where virtualenv验证安装情况
+#     virtualenv -p C:\Python36\python.exe --system-site-packages D:\PythonVirtualenvs\Sample
+#         -p                            用来指定虚拟python版本
+#         --system-site-packages        表示在建立虚拟环境时候不将原来的第三方库拷过来,获得一个纯净的python环境
+#         D:\PythonVirtualenvs\Sample   表示在该目录下建立了Sample的虚拟环境
+
+#     使用虚拟环境
+#         在cmd命令行下,进入要使用的虚拟环境目录下的Scripts文件夹,运行activate命令进入当前的虚拟环境内
+#         其中(appName)就表示当前是在该虚拟环境中,之后就可以随意操作,这里是进入了虚拟环境中的mysite项目
+#         退出虚拟环境时只要运行Scripts目录下的decativate命令即可
+#         如果要删除虚拟环境,直接删除虚拟环境所在的文件夹
+
+#         deactivate  退出当前的Python虚拟环境
+#         workon      列出可用的所有虚拟环境
+#         workon nameofenvironment         激活特定的Python虚拟环境
+#         rmvirtualenv nameofenvironment   移除特定的虚拟环境
+
+#     安装django
+#         一旦创建了虚拟环境,并且workon进入了它,就可以使用pip3来安装django
 
 # 创建django项目
 #     django-admin startproject 工程名称
