@@ -16,4 +16,4 @@ class PersonInfo(models.Model):
     # 性别
     gender = models.BooleanField()
     # 外键
-    book = models.ForeignKey(BookInfo)
+    book = models.ForeignKey('BookInfo',on_delete=models.PROTECT)
