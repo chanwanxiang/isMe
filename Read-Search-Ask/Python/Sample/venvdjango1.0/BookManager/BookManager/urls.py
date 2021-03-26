@@ -20,6 +20,7 @@ from django.conf.urls import url,include
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # 添加一项
+    # namespace命名空间,防止reverse路由名称和其他应用冲突
     url(r'^', include('books.urls')),
     url(r'^payment/', include('payment.urls')),
 ]
