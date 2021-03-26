@@ -30,7 +30,10 @@ SECRET_KEY = 'g$otf6x01uig-rzm13ad)*0_udbbb2h%l3jok*4*em-^skj017'
 # 开发调试使用
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 安全机制
+# 允许以哪个主机的形式访问
+# 如果改变允许方式,需要将允许的IP/域名添加
+ALLOWED_HOSTS = ['127.0.0.1','192.168.80.142']
 
 
 # Application definition
@@ -93,6 +96,7 @@ WSGI_APPLICATION = 'BookManager.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
