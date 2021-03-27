@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse
 from books.models import BookInfo
 from django.urls import reverse
+from django.shortcuts import redirect
 import json
 
 # Create your views here.
@@ -66,8 +67,9 @@ def detail(request,categoryid,bookid):
     # print(name,contenttype)
 
     # HttpResponse
-    # content           只传递字符串,不要传递对象字典数据
+    # content           只传递字符串,不要传递对象字典数据,可以使用jsonResonse直接传递字典
     # statue            HTTP statues code must be an integer frmo 100 to 599
     # content-type      语法形式为大类/小类的MIME类型,形如text/html,text/css,text/javascript,application/json,image/png,image/gif等
 
+    return redirect('http://www.baidu.com')
     return HttpResponse('deteail',status=200)
