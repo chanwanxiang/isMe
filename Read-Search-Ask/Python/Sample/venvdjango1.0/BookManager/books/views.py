@@ -62,7 +62,12 @@ def detail(request,categoryid,bookid):
     # 请求头
     contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
-    name = request.META['HTTP_NAME']
-    print(name,contenttype)
+    # name = request.META['HTTP_NAME']
+    # print(name,contenttype)
 
-    return HttpResponse('deteail')
+    # HttpResponse
+    # content           只传递字符串,不要传递对象字典数据
+    # statue            HTTP statues code must be an integer frmo 100 to 599
+    # content-type      语法形式为大类/小类的MIME类型,形如text/html,text/css,text/javascript,application/json,image/png,image/gif等
+
+    return HttpResponse('deteail',status=200)
