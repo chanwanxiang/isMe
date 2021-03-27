@@ -9,8 +9,8 @@
 #     DBMS:数据库管理系统(Database Management System)。数据库是通过DBMS创建和操作的容器。
 #     SQL:结构化查询语言(Structure Query Language),专门用来与数据库通信的语言。
 
-
 # mysql常用命令
+#     命令行登录数据库指定gbk格式防止命令行乱码:mysql -u root -p123456 --default-character-set=gbk
 #     查看当前所有的数据库:show databases;
 #     打开指定的库:use 库名;
 #     查看当前的所有表:show tables;
@@ -22,7 +22,6 @@
 #     ​ …
 #     );
 #     查看表结构:desc 表名;
-
 
 # mysql语法规范
 #     1.不区分大小写,建议关键字大写,表名、列名小写
