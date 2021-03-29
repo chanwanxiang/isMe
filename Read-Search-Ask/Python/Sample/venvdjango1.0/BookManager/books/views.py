@@ -73,3 +73,32 @@ def detail(request,categoryid,bookid):
 
     return redirect('http://www.baidu.com')
     return HttpResponse('deteail',status=200)
+
+def setCookie(request):
+    # 1)浏览器第一次请求服务器未携带任何cookie信息
+    # 2)服务器接收到没有cookie信息的请求,设置一个cookie携带在响应中
+    # 3)浏览器接收到携带cooike信息的响应,浏览器保存cookie信息到本地中
+
+
+    # 判断有无cookie信息
+
+    # 获取用户信息
+    username = request.GET.get('username')
+    # 服务器设置cookie信息
+    response = HttpResponse('setCookie')
+    response.set_cookie('username',username)
+
+    return response
+
+def getCookie(requeset):
+    # 4)浏览器再次向服务器发送携带cookie信息的请求
+    # 5)服务器接收到携带cookie信息的请求,实现状态保持
+
+    # 服务器接收和查看cookie信息
+    cookies = requeset.COOKIES
+    # cookies是一个字典
+    username = cookies.get('username')
+    # 得到用户信息进行其他操作
+    print(username)
+
+    return HttpResponse('getCookie')
