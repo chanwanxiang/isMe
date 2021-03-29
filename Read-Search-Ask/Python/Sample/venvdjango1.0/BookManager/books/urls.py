@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from books.views import index,detail
+from books.views import index,detail,setCookie,getCookie
 
 urlpatterns = [
     # name给url起名,可以通过name找到这个路由
@@ -10,4 +10,6 @@ urlpatterns = [
     # 分组获取正则数据,关键字参数
     # http:127.0.0.1/categoryid=?
     url(r'^(?P<categoryid>\d+)/(?P<bookid>\d+)/$',detail),
+    url(r'setCookie/$',setCookie),
+    url(r'getCookie/$',getCookie),
 ]
