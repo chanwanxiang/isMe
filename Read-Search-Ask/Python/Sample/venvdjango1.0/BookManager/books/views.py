@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpRequest,HttpResponse
+from django.http import HttpRequest,HttpResponse,JsonResponse
 from books.models import BookInfo
 from django.urls import reverse
 from django.shortcuts import redirect
@@ -61,7 +61,7 @@ def detail(request,categoryid,bookid):
     # print(data)
 
     # 请求头
-    contenttype = request.META['CONTENT_TYPE']
+    # contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
     # name = request.META['HTTP_NAME']
     # print(name,contenttype)
@@ -71,6 +71,9 @@ def detail(request,categoryid,bookid):
     # statue            HTTP statues code must be an integer frmo 100 to 599
     # content-type      语法形式为大类/小类的MIME类型,形如text/html,text/css,text/javascript,application/json,image/png,image/gif等
 
+    # 返回Json数据
+    return JsonResponse({'name':'mass','age':'22'})
+    # 返回重定向
     return redirect('http://www.baidu.com')
     return HttpResponse('deteail',status=200)
 
@@ -78,27 +81,38 @@ def setCookie(request):
     # 1)浏览器第一次请求服务器未携带任何cookie信息
     # 2)服务器接收到没有cookie信息的请求,设置一个cookie携带在响应中
     # 3)浏览器接收到携带cooike信息的响应,浏览器保存cookie信息到本地中
+    # 4)浏览器再次向服务器发送携带cookie信息的请求
+    # 5)服务器接收到携带cookie信息的请求,实现状态保持
 
+    # Http协议角度理解cookie原理
+    # 1)浏览器第一次请求服务器,请求同种没有任何cookie信息
+    # 2)服务器接收到没有cookie信息的请求,响应头中携带set_cookie信息
+    # 3)浏览器接收到响应再次发起请求时,会在请求头中携带cookie信息
+    # 4)结合代码中是否有set_cookie操作,以此说明响应头中有无set_cookie信息
 
     # 判断有无cookie信息
+    # if...else...
 
     # 获取用户信息
-    username = request.GET.get('username')
+    username = request.GET.get('age')
     # 服务器设置cookie信息
     response = HttpResponse('setCookie')
-    response.set_cookie('username',username)
+    # max_age单位是秒,时间是从服务器接收到这个请求+秒数计算后的时间
+    response.set_cookie('age',username,max_age=3600)
+
+    # 删除cookie两种方式
+    # response.delete_cookie(key)
+    # response.set_cookie(key,value,max_age=0)
 
     return response
 
 def getCookie(requeset):
-    # 4)浏览器再次向服务器发送携带cookie信息的请求
-    # 5)服务器接收到携带cookie信息的请求,实现状态保持
-
     # 服务器接收和查看cookie信息
     cookies = requeset.COOKIES
     # cookies是一个字典
     username = cookies.get('username')
+    age = cookies.get('age')
     # 得到用户信息进行其他操作
-    print(username)
+    print(username,age)
 
     return HttpResponse('getCookie')
