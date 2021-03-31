@@ -52,6 +52,10 @@
 # Session
 #     实现状态保持的在服务端存储信息的方法,依赖cookie,如果客户端禁用了cookie,session不能实现
 #     django默认启用session,可在setting.py文件配置
+#     TODO:session依赖于cookie,sessin依赖于cookie,sessin依赖于cookie
+#          1)更换浏览器,不能再获取到session信息
+#          2)不更换浏览器,删除浏览器中的sessionid,获取不到session信息
+#          3)再去执行setSession,会重新生成seesionid信息
 
 # session流程
 #     1)浏览器发送请求到服务器携带敏感信息
