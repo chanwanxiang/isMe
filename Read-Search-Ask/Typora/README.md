@@ -29,10 +29,10 @@ jsDelive是一个免费的CDN解决方案,用于帮助开发者和站长.
 使用方法
 
 > https://cdn.jsdelivr.net/gh/你的用户名/你的仓库名/文件路径
-> //加载js
-> https://cdn.jsdelivr.net/gh/chanwanxiang/js/jquery.js
-> //加载图片
-> https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/image/1.png
+>    //加载js
+>    https://cdn.jsdelivr.net/gh/chanwanxiang/js/jquery.js
+>    //加载图片
+>    https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/image/1.png
 
 
 
