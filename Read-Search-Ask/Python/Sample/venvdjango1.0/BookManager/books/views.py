@@ -94,11 +94,11 @@ def setCookie(request):
     # if...else...
 
     # 获取用户信息
-    username = request.GET.get('age')
+    username = request.GET.get('username')
     # 服务器设置cookie信息
     response = HttpResponse('setCookie')
     # max_age单位是秒,时间是从服务器接收到这个请求+秒数计算后的时间
-    response.set_cookie('age',username,max_age=3600)
+    response.set_cookie('username',username,max_age=3600)
 
     # 删除cookie两种方式
     # response.delete_cookie(key)
@@ -183,11 +183,13 @@ class BookView(View):
         
         return HttpResponse('post')
 
-# 个人中心页面
+# 个人中心页面  必须登录才能显示
 #     GET     请求展示个人中心
 #     POST    请求实现个人中心信息修改
 
-class CenterView(View):
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class CenterView(LoginRequiredMixin,View):
 
     def get(self,request):
 
@@ -196,3 +198,7 @@ class CenterView(View):
     def post(self,request):
         
         return HttpResponse('个人中心修改')
+
+# 中间件
+def demo(request):
+    pass
