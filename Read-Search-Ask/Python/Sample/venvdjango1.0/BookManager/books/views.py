@@ -116,3 +116,83 @@ def getCookie(requeset):
     print(username,age)
 
     return HttpResponse('getCookie')
+
+def setSession(requeset):
+    # 1)浏览器发送请求到服务器携带敏感信息
+    # 2)服务器验证通过请求信息将用户对象放入session中,session存在内存中
+    # 3)服务器向浏览器发送响应数据,将sessionid存入响应头中的cookie信息(Cookie:sessionid-xxxx)
+    # 4)浏览器接受到响应后将cookie信息保存起来(包含sessionid信息),发送请求到服务器携带sessionid cookie信息
+    # 5)服务器根据sessionid从内存中获取用户信息
+    # 6)服务器返回响应数据
+
+    # Http协议角度理解session原理
+    # 1)初次请求,请求头中没有携带任何cookie信息
+    # 2)views在设置seesion时,会将数据保存到数据库中,设置一个cookie信息,cookie会在响应头中发送到浏览器
+    # 3)再次请求,浏览器都会在请求头中携带session cookie信息
+    print(requeset.COOKIES)
+    # 假设用户名密码验证通过
+    userid = 1
+    # 设置seesion信息
+    # 1)将数据库保存在数据库中
+    # 2)设置一个cookie信息,这个cookie信息是以sessionid为key
+    requeset.session['userid'] = userid
+    # 返回响应
+    return HttpResponse('setSession')
+
+def getSession(requeset):
+    print(requeset.COOKIES)
+    userid = requeset.session['userid']
+    print(userid)
+
+    return HttpResponse('getSession')
+
+# 登录界面
+#     GET     请求获取登录界面
+#     POST    请求验证登录(用户名和密码是否正确)
+
+# 一个视图包含两个请求
+# 函数面向过程-没有记忆
+# def login(requeset):
+
+#     # 区分业务逻辑
+#     if requeset.method == 'GET':
+#         pass
+#     else:
+#         pass
+#     pass
+
+# 面向对象
+#     类视图是采用面向对象思路
+#     1)定义类视图
+#         [1]继承自View
+#         [2]不同的请求方式有不同的业务逻辑
+#             类视图的方法直接采用http的请求方式命名类里面的方法,如get,post
+#         [3]类视图的方法的第二个参数必须是请求实例对象
+#             类视图的方法必须要有返回值,返回值是HttpResponse及其子类
+
+
+from django.views import View
+
+class BookView(View):
+
+    def get(self,requeset):
+        
+        return HttpResponse('get')
+
+    def post(self,requeset):
+        
+        return HttpResponse('post')
+
+# 个人中心页面
+#     GET     请求展示个人中心
+#     POST    请求实现个人中心信息修改
+
+class CenterView(View):
+
+    def get(self,request):
+
+        return HttpResponse('个人中心')
+
+    def post(self,request):
+        
+        return HttpResponse('个人中心修改')
