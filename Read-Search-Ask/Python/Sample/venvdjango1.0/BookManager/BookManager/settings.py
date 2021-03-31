@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # 子应用名.apps.子应用名Config
 ]
 
+# 中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,6 +62,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 注册中间件
+    # 请求前的执行顺序由注册顺序向下执行
+    # 请求后的执行顺序由注册顺序向上执行
+    'books.middleware.simpleMiddleware',
+
 ]
 
 # 工程url的配置入口,默认是工程名.urls
