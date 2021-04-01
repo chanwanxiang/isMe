@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from books.views import index,detail,setCookie,getCookie,setSession,getSession,BookView,CenterView
+from books.views import index,detail,setCookie,getCookie,setSession,getSession,BookView,CenterView,HomeView
 
 urlpatterns = [
     # name给url起名,可以通过name找到这个路由
@@ -19,4 +19,5 @@ urlpatterns = [
     # BookView.as_view()返回的是一个视图函数名
     url(r'^login/$',BookView.as_view()),
     url(r'^center/$',CenterView.as_view()),
+    url(r'^main/$',HomeView.as_view()),
 ]
