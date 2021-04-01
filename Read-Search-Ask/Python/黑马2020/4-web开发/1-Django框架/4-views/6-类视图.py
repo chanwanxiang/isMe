@@ -27,5 +27,5 @@
 #     类视图原理
 #         点击as_view函数查看源码
 
-#     类视图的多继承重新dispatch
+#     类视图的多继承重新dispatch MRO继承顺序
 #         使用面向对象多继承特性,详见books.views

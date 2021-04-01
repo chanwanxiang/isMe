@@ -199,6 +199,25 @@ class CenterView(LoginRequiredMixin,View):
         
         return HttpResponse('个人中心修改')
 
-# 中间件
-def demo(request):
-    pass
+import datetime
+
+class HomeView(View):
+
+    def get(self,request):
+        # http://127.0.0.1:8000/main/?username=xxxx
+        # 获取数据
+        username = request.GET.get('username')
+        # 组织数据
+        context = {
+            'username':username,
+            'age':22,
+            'birthday':datetime.date,
+            'friends':['mass','rose','lisa'],
+            'salary':{
+                '2019':10000,
+                '2020':12000,
+                '2021':15000,
+            }
+        }
+
+        return render(request,'main.html',context=context)
