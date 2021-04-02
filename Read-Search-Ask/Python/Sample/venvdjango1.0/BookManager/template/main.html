@@ -25,14 +25,18 @@
         {% endif %}
     </p>
     <!-- 过滤器语法 变量|过滤器:参数 -->
-    <p>mybirthday {{ birthday|date:'Y-m-d'}}</p>
+    <!-- django自带模板 -->
+    {# <p>mybirthday {{ birthday|date:'Y-m-d'}}</p> #}
+    <!-- jinja2模板 -->
+    <p>mybirthday {{ date(birthday,'Y-m-d') }}</p>
     <!-- 安全执行脚本 -->
-    <p>mydesc{{ desc|safe }}</p>
+    {# <p>mydesc{{ desc|safe }}</p> #}
     <!-- 默认值 -->
-    <p>我没有定义的变量{{ abc|default:'abc'}}
+    {# <p>我没有定义的变量{{ abc|default:'abc'}} #}
     <ul>
         {% for item in friends%}
-        <li>{{ forloop.counter }}{{ item }}</li>
+            {# <li>{{ forloop.counter }}{{ item }}</li> #}
+            <li>{{ loop.index }}{{ item }}</li>
         {% endfor %}
     </ul>
 </body>
