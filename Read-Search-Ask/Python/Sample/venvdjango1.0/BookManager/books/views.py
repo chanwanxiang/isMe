@@ -71,7 +71,7 @@ def detail(request,categoryid,bookid):
     # statue            HTTP statues code must be an integer frmo 100 to 599
     # content-type      语法形式为大类/小类的MIME类型,形如text/html,text/css,text/javascript,application/json,image/png,image/gif等
 
-    return render(request,'goods.html')
+    return render(request,'inherit.html')
     # 返回Json数据
     return JsonResponse({'name':'mass','age':'22'})
     # 返回重定向
