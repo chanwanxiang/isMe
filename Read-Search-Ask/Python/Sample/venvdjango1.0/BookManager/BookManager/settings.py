@@ -75,11 +75,18 @@ ROOT_URLCONF = 'BookManager.urls'
 # 模板相关配置信息
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # 默认django自带模板
+        # 'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # 配置jinja2模板
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
         # dirs 设置模板路径
         'DIRS': [os.path.join(BASE_DIR,'template')],
         'APP_DIRS': True,
         'OPTIONS': {
+            # 默认
+            # 'environment':'jinja2.Environment',
+            # 指定jinja2环境
+            'environment':'books.jinja2env.environment',
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
