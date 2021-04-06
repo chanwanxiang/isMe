@@ -17,6 +17,6 @@ ACCOUNTINFO
             credit_message  字段 填入“风险预筛查通过，blaze策略0-建议通过”
             credit_result   填入 0
 
-Xshell连接
+SSH连接
     测试环境日志信息地址
         cd /home/songyangyang/rm-guizhou-icbc-v3-test/logs/service/service.log
