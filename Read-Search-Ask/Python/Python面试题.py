@@ -16,15 +16,15 @@
 ## TODO: (二|八|十六)进制转换成十进制:
 
 # 先将其转换为字符串,再使用int函数,指定进制转换为二进制 
-print(int('0b1111011',2))  #123
-print(int('011',8))  #9
-print(int('0x12',16))  #18
+# print(int('0b1111011',2))  #123
+# print(int('011',8))  #9
+# print(int('0x12',16))  #18
 
 ## TODO: 十进制转化为(二|八|十六)进制
 
-print(bin(10))  #0b1010  # Binary
-print(oct(20))  #0o24    # Octal
-print(hex(30))  #0x1e    # Hexadecimal
+# print(bin(10))  #0b1010  # Binary
+# print(oct(20))  #0o24    # Octal
+# print(hex(30))  #0x1e    # Hexadecimal
 
 ## TODO: 可变对象和不可变对象
 
@@ -32,6 +32,9 @@ print(hex(30))  #0x1e    # Hexadecimal
 # 不可变 number,string,tuple
 
 # 切片适用于所有序列,包括列表,字符串,元祖
+
+# ls = [1,2,3,4,5,6,7]
+# print(ls[::2])  #[1, 3, 5, 7]
 
 ## TODO: Python最大递归深度
 
@@ -142,11 +145,12 @@ print(hex(30))  #0x1e    # Hexadecimal
 # 这是中文版: http://taizilongxu.gitbooks.io/stackoverflow-about-python/content/1/README.html
 
 # iterables(迭代器)
+#   一个对象拥有__iter__()和__next__()方法,则这个对象就是迭代器
 #   可以用在for...in...语句中的都是可迭代的,比如lists,strings,files...因为这些可迭代的对象你可以随意的读取所以非常方便易用,
 #   但是你必须把它们的值放到内存里,当它们有很多值时就会消耗太多的内存
 
 # generator(生成器)
-#     生成器也是迭代器的一种,但是你只能迭代它们一次,原因很简单,因为它们不是全部存在内存里,它们只在要调用的时候在内存里生成,生成器和迭代器的区别就是用()代替[],还有你不能用for i in generator第二次调用生成器,首先计算0,然后会在内存里丢掉0去计算1,直到计算完4
+#     生成器也是迭代器的一种,但是你只能迭代它们一次,原因很简单,因为它们不是全部存在内存里,它们只在要调用的时候在内存里生成,生成器和迭代器的区别就是用()代替[],还有你不能用for i in generator第二次调用生成器,首先计算0,然后会在内存里丢掉0去计算1,直到计算完全
 
 # 这里有个关于生成器的创建问题面试官有考: 问: 将列表生成式中[]改成() 之后数据结构是否改变? 答案:是,从列表变为生成器
 
@@ -156,7 +160,8 @@ print(hex(30))  #0x1e    # Hexadecimal
 # gr = (x*x for x in range(10))
 # print(gr)  #<generator object <genexpr> at 0x000002A04FC21ED0>
 
-# 通过列表生成式,可以直接创建一个列表.但是,受到内存限制,列表容量肯定是有限的.而且,创建一个包含百万元素的列表,不仅是占用很大的内存空间,如:我们只需要访问前面的几个元素,后面大部分元素所占的空间都是浪费的.因此,没有必要创建完整的列表（节省大量内存空间）.在Python中,我们可以采用生成器:边循环,边计算的机制—>generator
+# 通过列表生成式,可以直接创建一个列表.但是,受到内存限制,列表容量肯定是有限的.而且,创建一个包含百万元素的列表,不仅是占用很大的内存空间,如:我们只需要访问前面的几个元素,后面大部分元素所占的空间都是浪费的.因此,没有必要创建完整的列表(节省大量内存空间)
+# 在Python中,我们可以采用生成器:边循环,边计算的机制—>generator
 
 # from collections import Iterable
 
@@ -214,7 +219,6 @@ print(hex(30))  #0x1e    # Hexadecimal
 #         break
 
 ## TODO: 迭代器遵守迭代器协议,必须拥有__iter__()和__next__()方法
-
 # from collections import Iterator
 
 # print('__iter__' in dir(range(5)))  #True
@@ -355,13 +359,13 @@ print(hex(30))  #0x1e    # Hexadecimal
 # lab = lambda x : x*x
 # 冒号前x为参数,冒号后x*x为表达式,返回值是该表达式的结果
 
-print(lab)  #<function <lambda> at 0x000002A646DFA840>
+# print(lab)  #<function <lambda> at 0x000002A646DFA840>
 
 # lambda配合sorted使用
-dc = {1:'c',2:'b',3:'a'}
-newdc = sorted(dc.items(),key=lambda x:x[1])
+# dc = {1:'c',2:'b',3:'a'}
+# newdc = sorted(dc.items(),key=lambda x:x[1])
 
-print(newdc)  #[(3, 'a'), (2, 'b'), (1, 'c')]
+# print(newdc)  #[(3, 'a'), (2, 'b'), (1, 'c')]
 
 ## TODO: Python函数式编程
 # 这个需要适当的了解一下吧,毕竟函数式编程在Python中也做了引用
