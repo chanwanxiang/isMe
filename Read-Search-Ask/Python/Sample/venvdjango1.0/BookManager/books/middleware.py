@@ -12,6 +12,7 @@ def simpleMiddleware(getResponse):
         username= request.COOKIES.get('username')
         if username is None:
             print('USERNAME IS NONE')
+
         # 这里是请求前
         print('before request')
 
@@ -22,3 +23,4 @@ def simpleMiddleware(getResponse):
         return response
 
     return middleware
+    
