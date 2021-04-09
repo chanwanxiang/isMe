@@ -9,7 +9,7 @@
 
 ls = [5, 4, 3, 2, 1]
 
-def SelectSort(sequ):
+def selectSort(sequ):
     # 每次选择一个最小的数排到序列前面,n个数需要n-1次选择排序
     for i in range(len(sequ)-1):
         # 记录初始位,定义为最小数索引
@@ -26,4 +26,4 @@ def SelectSort(sequ):
     return sequ
 
 
-print(SelectSort(ls))
+print(selectSort(ls))

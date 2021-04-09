@@ -10,3 +10,24 @@
 #     6)重复步骤2-5
 
 # 代码实现
+
+ls = [5, 4, 3, 2, 1]
+
+def insertSort(sequ):
+    # 第一个元素可以被认为已经被排序,遍历第一个元素之后的序列
+    for i in range(1, len(sequ)):
+        # 两数比较需要到sequ[0],即是sequ[i-1],i-1>0,i>=1
+        while i > 0:
+            # 取出未排序列的第一个元素,在已排元素序列中从后向前扫描
+            if sequ[i] < sequ[i-1]:
+                # 后面元素小于前面元素(第一次while循环前面元素即为有序序列的最后一位)则交换位置
+                sequ[i], sequ[i-1] = sequ[i-1], sequ[i]
+                i -= 1
+            else:
+                # 后面元素大于等于前面元素直接跳出本次循环
+                break
+
+    return sequ
+
+
+print(insertSort(ls))
