@@ -10,7 +10,7 @@
 
 ls = [5, 4, 3, 2, 1]
 
-def BubbleSort(sequ):
+def bubbleSort(sequ):
     # 每次冒泡确定一个最大值,n个数需要n-1次冒泡
     for i in range(len(sequ)-1):
         # 标志位初始值为False
@@ -26,10 +26,11 @@ def BubbleSort(sequ):
         # 在单词冒泡排序中,如果没有任意连个数交互位置,则说明不需要在进行下一轮冒泡排序,直接退出循环
         if flag == False:
             break
+
     return sequ
 
 
-print(BubbleSort(ls))
+print(bubbleSort(ls))
 
 # TODO:
 #     sequ[j],sequ[j+1] = sequ[j+1],sequ[j]
