@@ -19,4 +19,5 @@ def quickSort(sequ):
     # 左右序列递归方式继续排序
     return quickSort(leftSequ) + [temp] + quickSort(rigtSequ)
 
-print(quickSort([5,4,3,2,1]))
+
+print(quickSort([5, 4, 3, 2, 1]))
