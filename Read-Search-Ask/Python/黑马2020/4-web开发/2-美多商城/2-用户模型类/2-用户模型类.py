@@ -49,7 +49,7 @@
 #         AUTH_USER_MODEL = '应用名.模型类名'
     
 #     指定本项目用户模型类
-#         AUTH_USER_MODEL = 'user.User'
+#         AUTH_USER_MODEL = 'users.User'
 
 #     迁移用户模型类
 #         创建迁移文件
