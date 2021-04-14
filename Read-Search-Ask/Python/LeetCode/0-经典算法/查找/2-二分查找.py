@@ -13,28 +13,29 @@
 
 # 1)递归方法,每次传入一个新的序列无法确认元素索引位置
 
-def mergeSearch(sequ,item):
+def mergeSearch(sequ, item):
     # 传来序列每次都是新生成的,如果里面么有发现元素,则是查到尽头也没有找到
     if not sequ:
         return '不在序列之中'
-    
+
     # 使用//向下取整取序列中间索引
     midinx = len(sequ)//2
     # 如果midinx比item大,则说明元素可能出现在midinx左边,对左边再进行二分查找
     if sequ[midinx] > item:
-        return mergeSearch(sequ[0:midinx-1],item)
+        return mergeSearch(sequ[0:midinx-1], item)
     # 如果midinx比item大,则说明元素可能出现在midinx右边,对右边再进行二分查找
     elif sequ[midinx] < item:
-        return mergeSearch(sequ[midinx+1:-1],item)
+        return mergeSearch(sequ[midinx+1:-1], item)
     # 中间元素是要找的元素,返回真
     else:
         return True
 
-print(mergeSearch([1,2,3,4,5],4))
+
+print(mergeSearch([1, 2, 3, 4, 5], 4))
 
 # 2)非递归方法,对一个序列进行循环查找,可以方便确认元素索引位置
 
-def binarySearch(sequ,item):
+def binarySearch(sequ, item):
     # 最小索引位置的默认值
     mininx = 0
     # 最大索引位置的默认值
@@ -51,7 +52,8 @@ def binarySearch(sequ,item):
             mininx = midinx + 1
         else:
             return f'元素在{midinx}号位'
-    
+
     return '不在序列之中'
 
-print(binarySearch([1,2,3,4,5],4))
+
+print(binarySearch([1, 2, 3, 4, 5], 4))
