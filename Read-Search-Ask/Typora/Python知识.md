@@ -688,7 +688,7 @@ ls = [1, 2, 3, 4, 5]
 
 nls = filter(lambda x:x>3, ls)
 
-print(list(filter_ls))
+print(list(nls))
 
 ```
 
@@ -858,5 +858,5 @@ manage.py 是项目运行入口,指定配置文件路径
 \__init.py__ 是一个空文件,作用是这个目录可以被当做包使用
 setting.py是项目整体配置文件
 urls.py 是项目的 URL 配置文件
-wsgi.py 是项目与 wsgi 兼容的web服务器
+wsgi.py 是项目与 WSGI 兼容的web服务器
 
