@@ -45,8 +45,6 @@ def imgdow(url, path):
             print(f'下载失败,{msg}')
 
 # 创建多线程类
-
-
 class DownloadImg(Thread):
     # 重新__init__方法
     def __init__(self, queue, path):
