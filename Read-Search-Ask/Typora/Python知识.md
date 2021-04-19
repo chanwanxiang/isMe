@@ -74,7 +74,7 @@ except: <异常名 1,异常名 2>:<数据>:捕获异常名1或者异常名2,及�
 
 ##### 1.5.1 常用的Python标准库都有哪些?
 
-os 操作系统、time 时间、random 随机、pymysql 连接数据库、threading 线程、multiprocessing进程、queue 队列
+os 操作系统、time 时间、random 随机、pymysql 连接数据库、threading 线程、multiprocessing 进程、queue 队列
 
 ##### 1.5.2 赋值、浅拷贝和深拷贝的区别?
 
@@ -1020,7 +1020,7 @@ URL 的 编码格式采用的是 ASCII 编码,而不是 unicode,即是说所有�
 POST 请求,POST 请求会把请求的数据放置在 HTTP 请求包的包体中,因此,GET 请求的数据会暴露在地址栏中,而POST请求则不会
 
 传输数据大小,在开发中,浏览器或服务器对 URL 有长度限制,因此,使用 GET 请求时,传输的数据会受到 URL 长度限制
-对于 POST ,由于不是 URL 传值,理论上传输数据大小不受限制,实际上各个服务器会规定对 POST 提交数据大小进行限定
+对于 POST,由于不是 URL 传值,理论上传输数据大小不受限制,实际上各个服务器会规定对 POST 提交数据大小进行限定
 
 安全性,POST 的安全性比 GET 高
 
