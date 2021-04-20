@@ -212,10 +212,10 @@ def dayofyear():
     year = input('请输入年份:') 
     month = input('请输入月份:') 
     day = input('请输入天:') 
-    date1 = datetime.date(year=int(year),month=int(month),day=int(day)) 
-    date2 = datetime.date(year=int(year),month=1,day=1) 
-                  
-    return (date1 - date2 + 1).days
+    date1 = datetime.date(year=int(year),month=1,day=1)
+    date2 = datetime.date(year=int(year),month=int(month),day=int(day))
+    
+    return (date2 - date1 + 1).days
                   
 ```
 
@@ -1022,7 +1022,7 @@ import re
 print(re.findall('baidu','www.baidu.com/baiduSearch/baiduValue'))  #['baidu', 'baidu', 'baidu']
 
 # 替换
-print(re.sub('baidu','google','www.baidu.com/baiduSearch/baiduValue'))  #www.google.com/googleSearch/googleValue
+print(re.sub('baidu','google','www.baidu.com/baiduSearch'))  #www.google.com/googleSearch
 
 ```
 
