@@ -143,7 +143,7 @@
 #     Controller      控制器       View
 
 # Django框架的MVC流程
-#     用户 -> 发出访问请求 -> (Nginx|Apatch)服务器 -> Django(Router-View(Controller)-Model-Template[渲染所有代码]) --> 浏览器展示的内容  --> 用户
+#     用户 -> 发出访问请求 -> (Nginx|Apatch)服务器 -> Django(Router-View(Controller)-Model-Template[渲染所有代码]) --> 浏览器展示的内容  -> 用户
 
 # Django入门命令以及设置
 #     1. 创建Django工程       django-admin startproject mains
