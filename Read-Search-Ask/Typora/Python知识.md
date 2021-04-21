@@ -96,7 +96,7 @@ main()
 
 ```
 
-##### 1.4.2 介绍一下 except 的作用和用法？
+##### 1.4.2 介绍一下except的作用和用法？
 
 except: 捕获所有异常 
 except: <异常名>: 捕获指定异常 
@@ -229,7 +229,7 @@ print(random.shuffle(ls))
 
 ```
 
-##### 1.5.7 说明一下 os.path 和 sys.path 分别代表什么?
+##### 1.5.7 说明一下os.path和sys.path分别代表什么?
 
 os.path 主要是用于对系统路径文件的操作
 sys.path 主要是对 Python 解释器的系统环境参数的操作(动态的改变 Python 解释器搜索路径)
@@ -257,7 +257,7 @@ sys.path 返回模块的搜索路径,初始化时使用 PYTHONPATH 环境变量�
 
 #### 1.6 Python特性
 
-##### 1.6.1 Python 是强语言类型还是弱语言类型?
+##### 1.6.1 Python是强语言类型还是弱语言类型?
 
 Python 是强类型的动态脚本语言
 强类型:不允许不同类型相加 
@@ -330,6 +330,50 @@ UTF-8编码是可变长编码的Unicode编码(节省空间),UTF-8把一个Unicod
 ##### 1.6.10 列举布尔值为False的常见值?
 
 除了标准值 False 和 None,所以类型的数字 0,空序列(空字符,空元祖,空列表,空字典)都为假
+
+##### 1.6.11 Python变量作用域,局部和全局变量?
+
+**变量定义以后，是有一定的使用范围，称之为变量的作用域**
+
+局部变量作用域:只能在被声明的函数内部访问,函数外部无法使用
+
+全局变量作用域:可以在整个程序范围内访问,任意函数都可以访问
+
+```python
+#1.局部变量，外部访问不了
+def f1 (v1,v2): #参数也属于局部变量
+    sum = v1+v2
+    a = 5  #局部变量，函数外部访问不了
+    return sum
+
+print(a) #报错，NameError: name 'a' is not defined
+ 
+#2.全部变量,函数里外都可以访问
+a =3
+
+def f3(v2):
+  # a = a+1  注意：报错，因为局部作用域内只能引用全局域变量的值，而不能修改全局作用域的值。
+  # b = a+1  则不会报错，引用全局变量的值，运算后给赋给局部变量b.
+    return a+1   #外部的全局变量函数内部使用
+
+print(f3(1))  #4
+
+#3.如果全局变量的名字和局部变量的名字相同，那么函数内部使用的是局部变量
+sum = 5
+
+def f2(v2):
+    sum = 0
+    while v2 < 10:
+        sum += v2   #这里sum使用的是局部变量的初始值0，而不是全局sum=5
+        v2 += 1
+    return sum
+
+print(sum)  #5
+print(f2(0))  #45
+
+```
+
+**Python的作用域由def、class、lambda等语句产生,if、try、for等语句并不会产生新的作用域,换句话说就是if,try,for等语句里面定义的变量并不会随着该语句执行结束而回收,而是可以到处引用的,if,try,for等语句内变量作用域实际范围受其所在的def、class、lambda范围约束**
 
 ### 2 数据类型
 
@@ -979,7 +1023,7 @@ print(en)  #<generator object <genexpr> at 0x000002A04FC21ED0>
 
 **Python 中,数值类型(int 和 float)、字符串 str、元组 tuple 都是不可变类型,而列表 list、字典 dict、集合 set 是可变类型**
 
-##### 4.1.2 Python中 is 和 == 的区别?
+##### 4.1.2 Python中is和==的区别?
 
 is 判断的是 a 对象是否就是 b 对象,是通过 id 来判断的 
 == 判断的是 a 对象的值是否和 b 对象的值相等,是通过 value 来判断的
@@ -1006,14 +1050,14 @@ is 判断的是 a 对象是否就是 b 对象,是通过 id 来判断的
 
 #### 5.1 正则语法
 
-##### 5.1.1 Python中 match 和 serach 的区别?
+##### 5.1.1 Python中match和serach的区别?
 
 match() 函数监测 RE 是不是在 string 开始位置匹配
 search() 函数会扫描整个 string 查找匹配
 
 如果不是在开始位置匹配成功的话,match() 就返回 None
 
-##### 5.1.2 Python 中字符串查找和替换?
+##### 5.1.2 Python中字符串查找和替换?
 
 ```python
 import re
@@ -1032,13 +1076,13 @@ print(re.sub('baidu','google','www.baidu.com/baiduSearch'))  #www.google.com/goo
 
 #### 6.1 谈谈多进程、多线程以及协程理解?
 
-#### 6.2 Python 虚拟环境使用?
+#### 6.2 Python虚拟环境使用?
 
-##### 6.2.1 什么是 Python 虚拟环境
+##### 6.2.1 什么是Python虚拟环境
 
 一种采用协作式隔离的运行时环境,允许 Python 用户和应用程序在安装和升级 Python 分发包时不会干扰到同一系统上运行的其他 Python 应用程序的行为
 
-##### 6.2.2 venv 基本使用和原理
+##### 6.2.2 venv基本使用和原理
 
 查看 venv 命令参数
 
@@ -1068,13 +1112,13 @@ print(re.sub('baidu','google','www.baidu.com/baiduSearch'))  #www.google.com/goo
 
 ### 七. 网络编程
 
-#### 7.1 UDP 总结
+#### 7.1 UDP总结
 
-#### 7.2 TCP 总结
+#### 7.2 TCP总结
 
-#### 7.3 简述 TCP 和 UDP 区别以及优缺点?
+#### 7.3 简述TCP和UDP区别以及优缺点?
 
-#### 7.4 简述浏览器通过 wsgi 请求动态资源过程?
+#### 7.4 简述浏览器通过wsgi请求动态资源过程?
 
 1).发送 http 请求动态资源给 web 服务器
 2).web 服务器收到请求后通过 WSGI 调用一个属性给应用程序框架
@@ -1094,7 +1138,7 @@ print(re.sub('baidu','google','www.baidu.com/baiduSearch'))  #www.google.com/goo
 6)关闭 TCP 连接（四次挥手）
 7)浏览器渲染页面
 
-#### 7.7 GET 和 POST 请求区别有哪一些?
+#### 7.7 GET和POST请求区别有哪一些?
 
 GET 请求,请求的数据会附加在 URL 之后,以?分割 URL 和传输数据,多个参数用&连接
 URL 的 编码格式采用的是 ASCII 编码,而不是 unicode,即是说所有的非 ASCII 字符都要编码之后再传输
@@ -1121,9 +1165,9 @@ POST 请求,POST 请求会把请求的数据放置在 HTTP 请求包的包体中
   5.浏览器开始发送数据
   6.服务器返回 200 OK 响应
 
-#### 7.8 cookie 和 session
+#### 7.8 cookie和session
 
-##### 7.8.1 cookie 和 session 的区别?
+##### 7.8.1 cookie和session的区别?
 
 1.cookie 数据存放在客户的浏览器上,session 数据放在服务器上
 2.cookie 不是很安全,别人可以分析存放在本地的 cookie 并进行 cookie 欺骗考虑到安全应当使 用 session
@@ -1131,7 +1175,7 @@ POST 请求,POST 请求会把请求的数据放置在 HTTP 请求包的包体中
 4.单个 cookie 保存的数据不能超过 4K,很多浏览器都限制一个站点最多保存 20 个 cookie
 5.建议将登陆信息等重要信息存放为 session,其他信息如果需要保留,可以放在 cookie 中
 
-##### 7.8.2 cookie 和 session 的联系?
+##### 7.8.2 cookie和session的联系?
 
 session 对 cookie 的依赖
 
@@ -1141,7 +1185,7 @@ cookie 采用客户端存储,session 采用的服务端存储的机制,session �
 
 当程序需要为客户端创建一个 session 的时候,服务器首先检测这个客户端请求里面是否已经包含了 session 的表示(sessionId),如果已经包含,则说明已经为客户端创建过一个 session,服务端根据 sessionId 检索出来 sesion 并使用,如果客户端请求不包含 sessionId,则为客户端创建一个 session,并生成一个 sessionId 返回给客户端保存
 
-#### 7.9 简单描述 TCP 三次握手和四次挥手?
+#### 7.9 简单描述TCP三次握手和四次挥手?
 
 ![image-20210419161819090](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210419161819090.png)
 
@@ -1153,7 +1197,7 @@ cookie 采用客户端存储,session 采用的服务端存储的机制,session �
 
 ##### 7.9.2 **四次挥手**
 
-#### 7.10 说说 HTTP 和 HTTPS 区别?
+#### 7.10 说说HTTP和HTTPS区别?
 
 #### 7.11 HTTP协议状态码作用及常见状态码?
 
@@ -1170,12 +1214,12 @@ cookie 采用客户端存储,session 采用的服务端存储的机制,session �
 
 #### 8.1 django
 
-##### 8.1.1 django 创建项目的命令?
+##### 8.1.1 django创建项目的命令?
 
 > django-admin startproject 项目名称
 > python manage.py startapp 应用名称
 
-##### 8.1.2 django 创建项目后项目文件夹下的组成部分?
+##### 8.1.2 django创建项目后项目文件夹下的组成部分?
 
 ![image-20210416144220927](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210416144220927.png)
 
@@ -1189,11 +1233,15 @@ manage.py	  项目运行入口,指定配置文件路径
 	urls.py 		项目的 URL 配置文件
 	wsgi.py		项目与 WSGI 兼容的 web 服务器入口
 
-##### 8.1.3 django 框架的 MVC 流程
+##### 8.1.3 django框架的MVC流程?
 
 用户 -> 发出访问请求 -> (Nginx|Apatch)服务器 -> Django(Router-View(Controller)-[Model]-Template(渲染所有代码)) --> 浏览器展示的内容 -> 用户
 
-##### 8.1.4 对 uWSGI 和 nginx 的理解?
+#### 8.2 flask
+
+#### 8.3 通识
+
+##### 8.3.1 对uWSGI和nginx的理解?
 
 **uWSGI** 
 
@@ -1218,9 +1266,29 @@ uWSGI 是实现了 uwsgi 和 WSGI 两种协议的 web 服务器
 3)稳定性高，配置简洁
 4)强大的反向代理和负载均衡功能,平衡集群中各个服务器的负载压力应用
 
-##### 8.1.5 nginx 和 uWISG 服务器之间如何配合工作?
+##### 8.3.2 nginx和uWISG服务器之间如何配合工作?
 
 浏览器发起 http 请求到 nginx 服务器,nginx 根据接收到请求包,进行 url 分析,判断访问的资源类型,如果是静态资源,直接读取静态资源返回给浏览器,如果请求的是动态资源就转交给 uWSGI 服务器,uWSGI 服务器根据自身的 uwsgi 和 WSGI 协议,找到对应的 django 框架,django 框架下的应用进行逻辑处理后,将返回值发送到 uWSGI 服务器,然后 uWSGI 服务器再返回给 nginx,最 nginx 将返回值返回给浏览器进行渲染显示给用户
+
+##### 8.3.3 什么是CSRF攻击原理,如何解决?
+
+CSRF(Cross Site Request Forgery),跨站请求伪造
+
+图中 Browse 是浏览器,WebServerA 是受信任网站/被攻击网站 A,WebServerB 是恶意网站/点 击网站 B 
+
+1)一开始用户打开浏览器,访问受信任网站 A,输入用户名和密码登陆请求登陆网站 A
+2)网站 A 验证用户信息,用户信息通过验证后,网站 A 产生 Cookie 信息并返回给浏览器。 
+3)用户登陆网站 A 成功后,可以正常请求网站 A
+4)用户未退出网站 A 之前,在同一浏览器中,打开一个 TAB 访问网站 B。 
+5)网站 B 看到有人访问后,他会返回一些攻击性代码。 
+6)浏览器在接受到这些攻击性代码后,促使用户不知情的情况下浏览器携带 Cookie(包括 sessionId)信息,请求网站 A,这种请求有可能更新密码,带有恶意操作
+
+解决方法
+
+1)csrf_token
+2)短信验证码
+
+##### 8.3.4 代码优化从哪些方向考虑?
 
 ### **九. Ubantu**
 
@@ -1632,13 +1700,13 @@ linux用户需要至少都属于一个组
   >
   > ​	-p	 	通过指定监控进程ID来仅仅监控某个进程状态
 
-#### 9.9 Python 定制篇开发平台 Ubantu
+#### 9.9 Python定制篇开发平台Ubantu
 
-##### 9.9.1 apt 介绍
+##### 9.9.1 apt介绍
 
 + apt 是 Advanced Packaging Tool 简称,是一款安装包管理工具,在 ubantu 下可以使用 apt 指令用于软件包的安装、删除、清理等操作,类似于 windows 下的软件管理工具
 
-##### 9.9.2  ubantu 软件操作相关命令
+##### 9.9.2  ubantu软件操作相关命令
 
 + 常用
 
@@ -1654,7 +1722,7 @@ linux用户需要至少都属于一个组
   | sudo apt-get upgrade                | 更新已安装的包                        |
   | sudo apt-get dist-upgrade           | 升级系统                              |
 
-##### 9.9.3 ubantu 软件安装卸载实例
+##### 9.9.3 ubantu软件安装卸载实例
 
 + 安装卸载vim软件
 
@@ -1664,7 +1732,7 @@ linux用户需要至少都属于一个组
   >
   > sudo apt-cache show package (功能描述:获取vim包信息)
 
-##### 9.3.4 ubantu 防火墙常用指令
+##### 9.3.4 ubantu防火墙常用指令
 
 + 查看防火墙状态
 
@@ -1688,7 +1756,7 @@ linux用户需要至少都属于一个组
 
 #### 10.1 Mysql
 
-##### 10.1.1 Python 中操作 Mysql 步骤?
+##### 10.1.1 Python中操作Mysql步骤?
 
 ![image-20210419183934396](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210419183934396.png)
 
@@ -1764,7 +1832,7 @@ if __name__ == "__main__":
     
 ```
 
-##### 10.1.2 SQL 的 selete 语句完整执行顺序?
+##### 10.1.2 SQL的selete语句完整执行顺序?
 
 ```sql
 SELECT *
@@ -1787,7 +1855,7 @@ LIMIT 分页;
 7)SELECT 子句查询字段
 8)ORDER BY 子句对结果集进行排序
 
-##### 10.1.3 Mysql 数据库存储原理?
+##### 10.1.3 Mysql数据库存储原理?
 
 ##### 10.1.4 事物的特性?
 
@@ -1795,7 +1863,7 @@ LIMIT 分页;
 
 ##### 10.1.6 数据库怎么优化查询效率?
 
-##### 10.1.7 NoSQL 和关系数据库的区别?
+##### 10.1.7 NoSQL和关系数据库的区别?
 
 #### 10.2 redis
 
