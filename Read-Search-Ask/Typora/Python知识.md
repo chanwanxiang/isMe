@@ -392,7 +392,26 @@ print(f2(0))  #45
 2.路径名中用来连接路径名
 3.编写太长代码手动软换行
 
-##### 2.1.3 写过反转字符串的方法
+##### 2.1.3 string常用方法
+
+1)移出字符串的首尾指定字符(默认为空格或换行符)
+
+```python
+str = '0baidu0'
+
+print(str.strip('0'))  #baidu
+
+str = '  baidu  '
+
+print(str.strip())  #baidu
+
+```
+
+
+
+
+
+##### 2.1.4 写出反转字符串的方法
 
 方法一 切片
 
@@ -426,9 +445,9 @@ nstr = ''.join(str(-x) for x in range(1, len(str)+1))
 
 
 
-##### 2.1.4 将字符串"k:1|k1:2|k2:3|k3:4"，处理成 Python 字典：{k:1， k1:2， ... } ,字典里的 k 作为字符串处理
+##### 2.1.5 将字符串"k:1|k1:2|k2:3|k3:4"，处理成 Python 字典：{k:1， k1:2， ... } ,字典里的 k 作为字符串处理
 
-##### 2.1.5 请按 ls 中元素的 age 由大到小排序
+##### 2.1.6 请按 ls 中元素的 age 由大到小排序
 
 #### 2.2 tuple
 
@@ -450,7 +469,7 @@ pirnt(type(b))  #tuple
 
 list是 Python 中使用最频繁的数据类型,在其他语言中通常叫做数组,通过索引进行查找,使用方括号[], 列表是有序的集合
 
-##### 2.3.1 列表常用操作
+##### 2.3.1 列表常用方法
 
 1) 增加
 
@@ -630,6 +649,138 @@ nls = list(newdic)
 
 ```
 
+##### 2.3.5 列表合并
+
+方法一 循环
+
+```python
+l1 = [1, 2, 3]
+l2 = [4, 5, 6]
+
+for i in l2:
+    l1.append(i)
+
+print(a)
+
+```
+
+方法二 使用+
+
+```python
+l1 = [1, 2, 3]
+l2 = [4, 5, 6]
+
+l1 = l1 + l2
+
+print(l1)
+
+```
+
+方法三 使用extend关键字
+
+```python
+l1 = [1, 2, 3]
+l2 = [4, 5, 6]
+
+l1.entend(l2)
+
+print(l1)
+
+```
+
+如果列表很大,extend效率比+更高
+
+##### 2.3.6 列表排序
+
+使用sort()或者内建函数sorted()对列表进行排序
+
+sort()方法是对原列表进行操作,而sorted()方法会返回一个新列表,不再原来的基础上进行操作
+
+sort()是应用在列表上的方法,而sorted()可以对所有可迭代对象进行排序操作
+
+```python
+# sort()
+ls = [1, 2, 3, 4, 3, 2, 1]
+# 倒序,默认升序
+ls.sort(revrese=True)
+
+print(a)
+
+# sorted()
+ls = [1, 2, 3, 4, 3, 2, 1]
+
+pirnt(sorted(ls))
+
+```
+
+##### 2.3.7 遍历列表的索引和元素对
+
+使用enumerate()函数可以同时输出索引和元素值
+
+```python
+ls = ['go', 'java', 'python']
+
+for i,j in enumerate(ls):
+    print(i, j)
+    
+# output
+0 go
+1 java
+2 python
+    
+```
+
+##### 2.3.8 查找列表中最频繁的元素
+
+使用max()函数可以快速查找一个列表中出现频率最高的某个元素
+
+```python
+ls = [1, 1, 2, 2, 2, 3, 3]
+
+print(max(set(ls), key=ls.count))
+
+```
+
+##### 2.3.9 将两个列表合并成字典
+
+使用zip()函数,可以将两个列表合并成字典
+
+```python
+l1 = ['one', 'two', 'three']
+l2 = [1, 2, 3]
+
+print(dict(zip(l1, l2)))
+
+```
+
+##### 2.3.10 列表扁平化
+
+使用列表推导式多层递归完成
+
+```python
+# 列表扁平化
+nls = []
+
+def flatlist(ls):
+    for x in ls:
+        if isinstance(x, list):
+            flatlist(x)
+        else:
+            nls.append(x)
+    return nls
+
+print(flatlist([[1,2,3], 4, [5,[6,7],8]]))
+
+output
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+[flatlist(x) for x in ls if instance(x, list) else x]
+```
+
+##### 2.3.11 列表推导式
+
+
+
 #### 2.4 dict
 
 ##### 2.4.1 现有字典dic = {'a':5, 'b':4, 'c':3}请按字典中的value值进行排序?
@@ -680,6 +831,19 @@ for x in str:
         dic[x] = 1
     else:
         dic[x] += 1
+        
+print(dic)
+
+```
+
+方法三 collections模块
+
+```python
+from collections import Counter
+
+str = 'life is short I use python'
+
+dic = dict(Counter(str))
         
 print(dic)
 
@@ -738,6 +902,10 @@ b = {1, 3, 5, 7, 9}
 
 print(a ^ b)
 ```
+
+#### 2.6 Pythonic
+
+##### 
 
 ## 二. Python高级
 
