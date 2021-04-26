@@ -855,6 +855,46 @@ print(dic)
 
 ```
 
+##### 2.4.3 字典由value获取可key的方法
+
+方法一 字典列表化
+
+```python
+stuinfo = {1:'小明', 2:'小红', 3:'小绿'}
+
+def getKey(dict, value):
+    return list(dict.keys())[list(dict.values()).index(value)]
+    
+
+print(getKey(stuinfo, '小明'))  #1
+
+```
+
+方法二 推导式
+
+```python
+stuinfo = {1:'小明', 2:'小红', 3:'小绿'}
+
+def getKey(dict, value):
+    return [x for x,y in dict.items() if y==value].pop()
+
+print(getKey(stuinfo, '小红'))  #2
+
+```
+
+方法三 key,value值互换
+
+```python
+stuinfo = {1:'小明', 2:'小红', 3:'小绿'}
+
+def getKey(dict, value):
+    newdict = {v,k for k,v in dict.items()}
+    return newdict[value]
+
+pirnt(getKey(stuinfo, '小绿'))  #3
+
+```
+
 #### 2.5 set
 
 set 集合,在 Python 中的书写方式的{},集合与之前列表、元组类似,可以存储多个数据,但是这些数据是不重复的
