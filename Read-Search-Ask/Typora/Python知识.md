@@ -2065,6 +2065,76 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 
 ![image-20210401220936652](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210401220936652.png)
 
+#### 6.3 Git
+
+##### 6.3.1 常用操作
+
+###### 1)git clone
+
+从git服务器拉取代码
+
+> https://github.com/chanwanxiang/isMe.git
+
+###### 2)git config
+
+配置开发者用户名和邮箱
+
+> 每次代码提交时候都会生成一条记录,其中会包含当前配置用户名和邮箱
+
+###### 3)git branch
+
+创建、重命名、查看、删除项目分支，通过 Git做项目开发时,一般都是在开发分支中进行,开发完成后合并分支到main
+
+> git branch feature/dev-20210401
+> 创建一个名为 dev-20210401
+>
+> git branch -m feature/dev-20210401 feature/dev-20210402
+> 分支重命名 dev-20210402
+>
+> gitbranch
+> 不带参数查看当前项目分支列表
+>
+> gitbranch -d feature/dev-20210402
+> 分支已经完成可以通过-d参数将分支删除
+
+###### 4)git checkout
+
+切换分支
+
+> git checkout feature/dev-20210403
+
+###### 5)git status
+
+查看文件变动状态
+
+###### 6)git add
+
+添加文件到暂存区
+
+###### 7)git commit
+
+提交文件变动到版本库
+
+###### 8)git push
+
+将本地改动推送到服务器
+
+###### 9)git pull
+
+将服务器最新资源拉取到本地
+
+###### 10)git log
+
+查看版本提交记录
+
+###### 11) git tag
+
+为项目标记里程碑
+
+###### 12).gitignore
+
+设置哪些内容被git忽略不需要推送服务器
+
 ### 七. 网络编程
 
 #### 7.1 UDP总结
