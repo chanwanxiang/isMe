@@ -1414,12 +1414,6 @@ lambda 函数是一个可以接受任意多个参数(包括可选参数)并且�
 2. 匿名函数,一般用来给filter、map这样的函数式编程服务
 3. 作为回调函数,传递给某些应用,比如消息处理
 
-#### 2.6 Python杂记
-
-##### 2.6.1 Python中代替switch-case语法
-
-##### 2.6.2 itertools模块
-
 ### 三. 设计模式
 
 #### 3.1 单例模式
@@ -3587,6 +3581,12 @@ SQL:结构化查询语言(Structure Query Language),专门用来与数据库通�
 
 ##### 10.2.2 DQL数据库查询语言
 
+启动mysql服务(cmd管理员)
+
+> net start mysql
+>
+> net stop mysql
+
 ###### 1)基础查询
 
 ```sql
@@ -4413,15 +4413,279 @@ WHERE departments.`department_name` = 'SAL' OR departments.`department_name` = '
 
 ###### 1)插入语句
 
+```sql
+# 方式一:经典插入
+/*
+语法:
+insert into 表名(列名,...)
+values(值1,...); 
+
+列名值名必须一一对应
+可以省略列名,默认所有的列,且顺序和表中顺序一一对应
+*/
+
+# 1. 插入值的类型要与列的类型一致或兼容
+INSERT INTO beauty(id,NAME,sex,borndate,phone,photo,boyfriend_id)
+VALUES(13,'糖糖','女','1994-1-1','11111111111',NULL,2);
+
+SELECT * FROM beauty;
+
+# 2. 不可以为null的列必须插入值,可以为null的值如何插入值?
+
+# 方式一:可以为空的写null
+INSERT INTO beauty(id,NAME,sex,borndate,phone,photo,boyfriend_id)
+VALUES(13,'糖糖','女','1994-1-1','11111111111',NULL,2);
+
+# 方式二:可以为空的不写
+INSERT INTO beauty(id,NAME,sex,borndate,phone,boyfriend_id)
+VALUES(14,'方方','女','1990-2-2','11111111111',2);
+
+# 3. 列的顺序是否可以调换--可以
+INSERT INTO beauty(NAME,sex,id,phone) VALUES('江鲜','女',16,'110');
+
+# 方式二:
+/*
+语法:
+insert into 表名
+set 列名=值,列名=值,...;
+*/
+
+INSERT INTO beauty
+SET id=17,NAME='刘诗诗',sex='女',borndate='1991-3-3',phone='1818181818',boyfriend_id=2;
+
+# 两种方式PK
+# 1. 方式一支持多行插入,方式二不支持
+# 2. 方式一支持子查询,方式二不支持
+
+```
+
 ###### 2)修改语句
 
+```sql
+/*
+语法:
+1. 修改单表记录
+update 表名
+set 列=新值,列=新值,...
+where 筛选条件;
+
+2. 修改多表记录[补充]
+
+sql92语法:
+update 表1 别名,表2 别名
+set 列=值,...
+where 连接条件
+and 筛选条件;
+
+sql99语法:
+update 表1 别名
+inner|left|right join 表2 别名
+on 连接条件
+set 列=值,...
+where 筛选条件;
+*/
+
+# 1. 修改单表记录
+# 案例:修改beauty表中姓唐的电话为11111111
+UPDATE beauty
+SET phone='11111111'
+WHERE NAME LIKE '糖%';
+
+# 案例:修改boys表中id号为2的名称为张飞,魔力值10
+UPDATE boys SET boyname='张飞',userCP=10
+WHERE id=2;
+
+# 2. 修改多表记录
+# 案例:修改张无忌的女朋友的号码为114
+UPDATE beauty be
+INNER JOIN boys bo ON bo.`id`=be.`boyfriend_id`
+SET phone='114'
+WHERE bo.`boyName`='张无忌';
+
+SELECT * FROM beauty;
+
+# 案例:修改没有男朋友的女神男朋友编号为2
+UPDATE beauty be
+LEFT OUTER JOIN boys bo ON be.`boyfriend_id`=bo.`id`
+SET be.`boyfriend_id`=2
+WHERE bo.`id` IS NULL;
+
+```
+
 ###### 3)删除语句
+
+```sql
+/*
+方式一:delete
+语法:
+1. 单表删除[*]
+delete from 表名 where 筛选条件
+
+2. 多表删除[补充]
+语法:
+sql92语法:
+delete 表1的别名,表2的别名
+from 表1 别名,表2 别名
+where 连接条件
+and 筛选条件;
+
+sql99语法:
+delete 表1的别名,表2的别名
+from 表1 别名
+inner|left|right join 表2 别名 on 连接条件
+where 筛选条件;
+
+truncate table 表名;
+*/
+
+# 方式一:delete
+
+# 1.单表删除,删除手机号为9结尾女神信息
+DELETE FROM beauty WHERE phone LIKE '%9';
+SELECT * FROM beauty;
+
+# 2.多表删除,删除张无忌女朋友的信息
+DELETE be
+FROM beauty be
+INNER JOIN boys bo ON be.`boyfriend_id`=bo.`id`
+WHERE bo.`boyName`='张无忌';
+
+SELECT * FROM beauty;
+
+# 案例:删除黄晓明的信息以及他女朋友的信息
+DELETE be,bo
+FROM beauty be
+INNER JOIN boys bo ON be.`boyfriend_id`=bo.`id`
+WHERE bo.`boyName`='黄晓明';
+
+# 方式二:truncate语句 == delete from table;
+
+# 案例:将魅力值>100的男神信息删除
+TRUNCATE TABLE boys;
+
+#delete PK truncate[面试题]
+/*
+1. delete可以加where条件,truncate不可
+2. truncate删除,效率高些
+3. 假如要删除的表中有自增长列,delete删除再插入数据,自增长的列从断点开始,truncate自增长列从1开始
+4. truncate删除没有返回值,delete删除有返回值
+5. truncate删除不能回滚,delete可以回滚
+*/
+
+```
 
 ##### 10.2.4 DDL数据库定义语言
 
 ###### 1)库的管理
 
+```sql
+/*
+ 1. 库的创建:
+creat database [if not exists] 库名;
+*/
+CREATE DATABASE IF NOT EXISTS books;
+
+# 2. 库的修改
+RENAME DATABASE books TO 新库名;
+# 更改库的字符集
+ALTER DATABASE books CHARACTER SET gbk;
+
+# 3. 库的删除
+DROP DATABASE IF EXISTS books;
+
+```
+
 ###### 2)表的管理
+
+```sql
+# 1. 表的创建
+CREATE TABLE 表名(
+	列名 列的类型[(长度) 约束],
+	列名 列的类型[(长度) 约束],
+	列名 列的类型[(长度) 约束]
+)
+
+CREATE TABLE book(
+	id INT, # 编号
+	bookName VARCHAR(20), # 书名
+	authorid INT, # 作者
+	price DOUBLE # 价格	
+);
+
+CREATE TABLE author(
+	id INT,
+	auName VARCHAR(20),
+	nation VARCHAR(20)
+);
+
+# 2. 表的修改
+/*
+alter table 表名 add|drop|modify|change column 列名 [列类型 约束];
+*/
+
+# 修改列名
+ALTER TABLE book CHANGE COLUMN authorid atorid INT;
+# 修改列的类型或者约束
+ALTER TABLE book MODIFY COLUMN atorid DOUBLE;
+# 添加新列
+ALTER TABLE book ADD COLUMN annual DOUBLE;
+# 删除旧列
+ALTER TABLE book DROP COLUMN annual;
+# 修改表名
+ALTER TABLE author RENAME TO authorinfo;
+
+# 3. 表的删除
+DROP TABLE IF EXISTS  authorinfo;
+SHOW TABLES;
+
+# 4. 表的复制
+
+INSERT INTO authorinfo VALUES
+(1,'村上','日本'),
+(2,'莫言','中国'),
+(3,'金庸','中国');
+
+# 1. 仅仅复制表的结构
+SELECT * FROM authorinfo;
+
+CREATE TABLE copy1 LIKE authorinfo;
+
+# 2. 复制表的结构+数据
+CREATE TABLE copy2
+SELECT * FROM authorinfo;
+
+# 3. 仅复制部分数据
+CREATE TABLE copy3
+SELECT id,auName
+FROM authorinfo
+WHERE nation='中国';
+
+# 4. 仅复制某些字段
+CREATE TABLE copy4
+SELECT id,auName
+FROM authorinfo
+WHERE 0;
+
+SELECT * FROM copy4;
+
+# 案例讲解
+
+# 创建表 dept1.
+NAME NULL? TYPE
+id         INT(7)
+NAME       VARCHAR(25)
+# 
+USE test;
+CREATE TABLE dept1(
+	id INT(7),
+	NAME VARCHAR(25)
+	);
+
+# 将表departments中的数据茶树新表dept2中
+CREATE TABLE dept2
+SELECT * FROM myemployees.`departments`;
+
+```
 
 ###### 3)常见数据类型
 
@@ -4435,30 +4699,416 @@ WHERE departments.`department_name` = 'SAL' OR departments.`department_name` = '
 
 ### 十一. 数据结构算法
 
-#### 11.1 概念
+#### 11.1 绪论
 
-##### 11.1.1 算法的特征?
+##### 11.1.1 前导课
 
-1)有穷性,算法必须保证执行有限步骤之后结束
-2)确切性,算法的每一步必须有确切的定义
-3)可行性,算法原则上能够精确运行,用简单方法做有限次运算后即可完成
-4)输入,算法有0个或者多个输入,以刻画运算对象的初始情况,0个输入是指算法本身给定初始条件
-5)输出,算法有1个或者多个输出,以反应对输入数据加工后的结果,没有输出的算法是无意义的
+###### 1)编程境界
 
-##### 11.1.2 基础的数据结构有哪些?
+写程序 - 高效地写程序 - 写高效的程序 - 设计算法 - 设计有用算法
 
-#### 11.2 Python实现经典算法
+###### 2)频繁查找词组
 
-##### 11.2.1 线性查找
+方法一 线性结构
+
+​	线性结构,这些词按照默认顺序存放,查找一个词从头到尾顺序搜索
+
+方法二 树状结构
+
+​	树状结构,这些词条按照26个字符存放,查找一个词,首先查找第一个词的首字母,在查找第二个词的首字母
+
+方法三 哈希结构
+
+​	哈希结构,汉字在内存是有效二进制编码的,把这些词的二进制编码转换成对应十进制数,这个数作为词在顺序表中的存储位置组织并存放词条,那么查找某个词是否在词库中
+​	1)首先计算该词的10进制值
+​	2)然后对这个值所对应的存储下标去查找
+
+##### 11.1.2 逻辑结构
+
+在自然界中数据和数据之间可以归纳为四种逻辑关系
+
+| 结构     |           说明            |
+| -------- | :-----------------------: |
+| 线性结构 | 一对一,如线性表、栈、队列 |
+| 树形结构 |        一对多,如树        |
+| 图状结构 |        多对多,如图        |
+| 集合关系 |  没有关系的数据放在一起   |
+
+##### 11.1.3 存储结构
+
+数据在内存存放有两种基本形式
+
+| 存储结构     |                            说明                            |
+| ------------ | :--------------------------------------------------------: |
+| 顺序存储结构 | 借助元素在存储器中的**相对位置**表示数据元素之间的逻辑关系 |
+| 链式存储结构 |   借助指示元素存储地址的**指针**表示数据元素间的逻辑关系   |
+
+##### 11.1.4 算法分析
+
+###### 1)定义
+
+解决某一特定问题的具体步骤的描述,它是指令的有限序列,每一个指令表示一个或多个操作,可以用自然语言,也可以使用计算机语言来描述
+
+###### 2)算法特征
+
++ 有穷性,算法必须保证执行有限步骤之后结束
++ 确切性,算法的每一步必须有确切的定义
++ 可行性,算法原则上能够精确运行,用简单方法做有限次运算后即可完成
++ 输入,算法有0个或者多个输入,以刻画运算对象的初始情况,0个输入是指算法本身给定初始条件
++ 输出,算法有1个或者多个输出,以反应对输入数据加工后的结果,没有输出的算法是无意义的
+
+###### 3)算法评价
+
++ 正确性
++ 可读性
++ 健壮性
++ 效率与低存储量
+
+###### 4)算法性能分析与度量
+
+引入**渐进时间复杂度**在数量上古迹一个算法的执行时间
+
+> T(n) = O(f(n))
+
+它表示随问题规模n的增大,算法执行时间的增长率和f(n)相同,并且只考虑数量级最高的语句执行频度,使用大O记号,O(f(n))称为算法渐进时间复杂度,简称时间复杂度
+
+==算法时间复杂度取决于最深循环内包含基本操作的语句的重复执行次数,称语句重复执行次数为语句的频度==
+
+5)算法好坏评价标准
+
++ 时间复杂度
+
+  根据算法写成程序在执行时耗费时间的长度,这个长度往往也与输入数据的规模有关
+
++ 空间复杂度
+
+  一般情况下,程序在机器上运行时,抛去需要存储程序本身的输入数据等之外,还需要存储对数据操作的存储单元,如果输入数据所占空间和算法无关,只取决于问题本身,那么只需要分析算法在实现过程中所占的辅助单元即可
+
+现阶段优化方向是**空间换时间**
+
+#### 11.2 线性表
+
+##### 11.2.1 概念和表抽象数据类型
+
+###### 1)概念
+
+线性表时相同数据类型的n个数据元素的有限序列
+
+> A = (a1, a2, a3, a4, a5,......, an)
+>
+> 表头元素没有前驱
+> 表尾元素没有后继
+>
+> n表示线性表A的长度,当n=0是,表A时空表
+
+线性结构特点,在数据元素的非空有限集中
+
++ 存在唯一的一个被称作第一个的数据元素
++ 存在唯一的一个被称作最后一个的数据元素
++ 除第一个外,集合中的每个元素均只有一个前驱
++ 除最后一个外,集合中的每个数据元素均只有一个后继
+
+###### 2)线性表的抽象数据类型
+
+![image-20210503232358633](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210503232358633.png)
+
+###### 3)线性表的实现
+
+顺序存储 顺序表
+
++ 将表中元素顺序存放在一大块连续的存储区中,这样实现的线性结构称为顺序表,顺序表中元素类型相同,元素之间的顺序关系由它们的存储顺序体现
+
+链式存储 链表
+
++ 将表元素存放在通过地址连接构造起来的一系列内存中,通过地址的指引来体现数据之间的顺序
+
+##### 11.2.2 顺序表
+
+###### 1)实现
+
+定义
+
++ 用一组地址连续的存储单元存放一个线性表
+
+线性表顺序存储的特点
+
++ 逻辑上相邻的数据元素,其物理地址也相邻,即用物理上的相邻表示逻辑上的相邻
++ 实现随机存取[知道一个元素的地址,可以知道其他元素地址],时间复杂度O(1)
+
+###### 2)操作
+
+| 操作           | 时间复杂度 |
+| -------------- | :--------: |
+| 按序号查找数据 |    O(1)    |
+| 按值查找数据   |    O(n)    |
+| 插入数据       |    O(n)    |
+| 删除数据       |    O(n)    |
+
+```python
+# 按值查找
+
+def search(sequ, elem):
+    i = 0
+    while i < len(sequ)-1:
+        if self[i] == elem:
+            return True
+        else:
+            i += 1
+    else:
+        return False
+    
+```
+
+##### 11.2.3 python中顺序表的实现
+
+Python中的list和tuple两种类型采用了顺序表的实现技术
+
+![image-20210503235929399](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210503235929399.png)
+
+##### 11.2.4 顺序表的结构定义
+
+###### 1)一个顺序表的完整信息包括两部分
+
++ 数据区域,表中元素集合
++ 表头区域,记录表中整体情况信息
+  + 元素存储区的容量
+  + 已有元素个数两项
+
+###### 2)顺序表结构两种形式
+
+![image-20210504001154707](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504001154707.png)
+
+###### 3)动态顺序表
+
+当你执行添加数据操作时,Python中的列表自动的去扩容,即换一块更大的存储区域,这就是所谓的动态顺序表
+
+列表就是动态顺序表,采用的是分离式结构
+
+##### 11.2.5 顺序表特点
+
+###### 1)优点
+
++ 逻辑相邻,物理相邻,存储空间紧凑,不必为结点间的逻辑关系而增加额外的存储开销
++ 可随机存储任一元素 O(1)
+
+###### 2)缺点
+
++ 插入、删除操作需要移动大约表中一半元素,对n较大的顺序表效率低下
+
+#### 11.3 链表
+
+##### 11.3.1 链表概述
+
+###### 1)结点结构
+
++ 数据区域,数据元素本身信息
++ 链接区域,直接后继或者直接前驱存储地址
+
+![image-20210504003507580](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504003507580.png)
+
+###### 2)链表分类
+
++ 单向链表
+
+  每个结点除包含数据域外,只设置一个链接域,用以指向其后继结点
+
++ 双向链表
+
+  每个结点除包含数据域外,设置两个链接域,分别用于指向其前驱结点和后继结点
+
+```python
+# 单链表类定义
+
+class Node(object):
+    # 初始化
+    def __init__(self, elem):
+        # data为自定义数据
+        self.data = elem
+        # next为下一个结点的地址
+        self.next = None
+        
+```
+
+##### 11.3.2 链表的变形和操作
+
+![image-20210504010354390](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504010354390.png)
+
+###### 1)初始化化单链表
+
+```python
+class Node(object):
+    # 初始化
+    def __init__(self):
+        # 表头__head为空
+        self.__head = None
+        
+```
+
+###### 2)判断单链表是否为空 O(1)
+
+```python
+def is_empty(self):
+    if self.__head == None:
+        return True
+    else:
+        return False
+    
+```
+
+###### 3)头插法添加元素
+
+```python
+# 创建新结点并存入数据
+s = Node(5)
+
+# 把原链接首结点链接存入新结点的链接域next
+s.next = self.__head
+
+# 修改表头变量,使之指向新的结点
+self.__head = s
+
+```
+
+###### 4)扫描指针和遍历单链表
+
+单链表的特点是每个结点只保存其直接后继的地址,在已知单链表的head首地址情况下,如果要访问到单链表中的所有结点,需要一个扫描游标
+
+```python
+p = self.__head
+while p is not None:
+    print(p.elem)
+    p.next
+    
+```
+
+###### 5)单链表表长 O(n)
+
+```python
+def length(self):
+    p = self.__head
+    count = 0
+    while p is not None:
+        count += 1
+        p = p.next
+        
+    return count
+
+```
+
+###### 6)按序号查找元素 O(n)
+
+在链表中,即使知道被访问结点的序号i,也不能像顺序表中那样直接按序号i访问结点,而只能从链表的head出发,顺链接域逐个向下搜索,直到搜索到第i个结点为止
+
+基本思路,借助扫描指针,从第一个结点开始扫描,判断当前结点是否是第i个,如果是,返回此节点地址,否则继续向后查找,知道找到或者链表结束
+
+```python
+def searchpos(self, pos):
+    p = self.__head
+    count = 1
+    if pos < i:
+        return None
+    else:
+        while p is not None and count != pos:
+            p = p.next
+            count += 1
+        # 查找成功返回p,查找失败返回空
+        return p
+    
+```
+
+###### 7)按值查找 O(n)
+
+```python
+def searchelem(self, elem):
+    p = self.__head
+    while p is not None and p.elem != elem:
+        p = p.next
+    if p.elem == elem:
+        reutrn p
+    elif p is None:
+        return None
+    
+```
+
+###### 8)尾插法添加元素 O(n)
+
+```python
+def append(self, elem):
+    p = self.__head
+    while p.next is not None:
+        p = p.next
+    # 生成结点,传值elem
+    s = Node(elem)
+    # 修改链接
+    p.next = s
+    
+```
+
+###### 9)在指定位置插入元素 O(n)
+
+```python
+def insert(self, pos, elem):
+    p = self.__head
+    count = 0
+    if pos >= self.length():
+        return None
+    while count < pos:
+        p = p.next
+        count += 1
+    s = Node(elem)
+    s.next = p.next
+    p.next = s
+       
+```
+
+###### 10)按值删除元素 O(n)
+
+```Python
+def remove(self, elem):
+    p = self.__head
+    
+    # 删除的是第一个结点需要单独处理
+    if p.elem == elem:
+        self.__head = p.next
+    else:   
+    	while p is not None and p.elem != elem:
+            # 记录p前驱结点
+        	prep = p
+            # p指针后移
+        	p = p.next
+        # 找到elem后,修改链接域
+        pre.next = p.next
+        
+    return p
+        
+```
+
+##### 11.3.3 单链表特点
+
+它是一种==动态结构==,整个内存空间为多个链表共用(空间可以是连续或者不连续)
+不需要预先分配空间
+链接域占用额外的存储空间
+不能随机存取(不可通过地址运算计算某个元素位置),查找速度慢(必须从第一个元素开始查找)
+
+##### 11.3.4 双链表
+
+#### 11.4 栈和队列
+
+#### 11.5 二叉树和树
+
+#### 11.6 图
+
+#### 11.7 查找
+
+##### 11.7.1 线性查找
 
 线性查找适合无序序列查找元素
 
 ```python
-
 # 算法步骤
 #   线性查找指按一定的顺序检查数组中每一个元素,直到找到所要寻找的特定值为止
 
-def lineSearch(sequ, item):
+def search(sequ, item):
     for i in range(len(sequ)):
         if sequ[i] == item:
             return f'元素在{i}号位'
@@ -4466,11 +5116,11 @@ def lineSearch(sequ, item):
         return '元素不在序列中'
 
 
-print(lineSearch([1, 2, 3, 4, 5], 4))
+print(search([1, 2, 3, 4, 5], 4))
 
 ```
 
-##### 11.2.2 二分查找
+##### 11.7.2 二分查找
 
 ```python
 # 算法步骤
@@ -4486,7 +5136,7 @@ print(lineSearch([1, 2, 3, 4, 5], 4))
 
 # 1)递归方法,每次传入一个新的序列无法确认元素索引位置
 
-def mergeSearch(sequ, item):
+def half_search(sequ, item):
     # 传来序列每次都是新生成的,如果里面么有发现元素,则是查到尽头也没有找到
     if not sequ:
         return '不在序列之中'
@@ -4495,20 +5145,20 @@ def mergeSearch(sequ, item):
     midinx = len(sequ)//2
     # 如果midinx比item大,则说明元素可能出现在midinx左边,对左边再进行二分查找
     if sequ[midinx] > item:
-        return mergeSearch(sequ[0:midinx-1], item)
+        return half_search(sequ[0:midinx-1], item)
     # 如果midinx比item大,则说明元素可能出现在midinx右边,对右边再进行二分查找
     elif sequ[midinx] < item:
-        return mergeSearch(sequ[midinx+1:-1], item)
+        return half_search(sequ[midinx+1:-1], item)
     # 中间元素是要找的元素,返回真
     else:
         return True
 
 
-print(mergeSearch([1, 2, 3, 4, 5], 4))
+print(half_search([1, 2, 3, 4, 5], 4))
 
 # 2)非递归方法,对一个序列进行循环查找,可以方便确认元素索引位置
 
-def binarySearch(sequ, item):
+def binary_search(sequ, item):
     # 最小索引位置的默认值
     mininx = 0
     # 最大索引位置的默认值
@@ -4529,11 +5179,13 @@ def binarySearch(sequ, item):
     return '不在序列之中'
 
 
-print(binarySearch([1, 2, 3, 4, 5], 4))
+print(binary_search([1, 2, 3, 4, 5], 4))
 
 ```
 
-##### 11.2.3 冒泡排序
+#### 11.8 排序
+
+##### 11.8.1 冒泡排序
 
 ```python
 # 算法步骤
@@ -4550,7 +5202,7 @@ print(binarySearch([1, 2, 3, 4, 5], 4))
 
 ls = [5, 4, 3, 2, 1]
 
-def bubbleSort(sequ):
+def bubble_sort(sequ):
     # 每次冒泡确定一个最大值,n个数需要n-1次冒泡
     for i in range(len(sequ)-1):
         # 标志位初始值为False
@@ -4570,7 +5222,7 @@ def bubbleSort(sequ):
     return sequ
 
 
-print(bubbleSort(ls))
+print(bubble_sort(ls))
 
 # TODO:
 #     sequ[j],sequ[j+1] = sequ[j+1],sequ[j]
@@ -4581,7 +5233,7 @@ print(bubbleSort(ls))
 
 ```
 
-##### 11.2.4 选择排序
+##### 11.8.2 选择排序
 
 ```python
 # 算法步骤
@@ -4597,7 +5249,7 @@ print(bubbleSort(ls))
 
 ls = [5, 4, 3, 2, 1]
 
-def selectSort(sequ):
+def select_sort(sequ):
     # 每次选择一个最小的数排到序列前面,n个数需要n-1次选择排序
     for i in range(len(sequ)-1):
         # 记录初始位,定义为最小数索引
@@ -4614,11 +5266,11 @@ def selectSort(sequ):
     return sequ
 
 
-print(selectSort(ls))
+print(select_sort(ls))
 
 ```
 
-##### 11.2.5 插入排序
+##### 11.8.3 插入排序
 
 ```python
 # 算法步骤
@@ -4637,7 +5289,7 @@ print(selectSort(ls))
 
 ls = [5, 4, 3, 2, 1]
 
-def insertSort(sequ):
+def insert_sort(sequ):
     # 第一个元素可以被认为已经被排序,遍历第一个元素之后的序列
     for i in range(1, len(sequ)):
         # 两数比较需要到sequ[0],即是sequ[i-1],i-1>0,i>=1
@@ -4654,11 +5306,11 @@ def insertSort(sequ):
     return sequ
 
 
-print(insertSort(ls))
+print(insert_sort(ls))
 
 ```
 
-##### 11.2.6 快速排序
+##### 11.8.4 快速排序
 
 ```python
 # 算法步骤
@@ -4670,7 +5322,7 @@ print(insertSort(ls))
 # 空间复杂度O(nlog2N)
 # 不稳定
 
-def quickSort(sequ):
+def quick_sort(sequ):
     # 序列元素不超过1个则返回该序列
     if len(sequ) < 2:
         return sequ
@@ -4682,9 +5334,10 @@ def quickSort(sequ):
     rigtSequ = [x for x in sequ if x > temp]
 
     # 左右序列递归方式继续排序
-    return quickSort(leftSequ) + [temp] + quickSort(rigtSequ)
+    return quick_sort(leftSequ) + [temp] + quick_sort(rigtSequ)
 
 
-print(quickSort([5, 4, 3, 2, 1]))
+print(quick_sort([5, 4, 3, 2, 1]))
 
 ```
+
