@@ -720,7 +720,7 @@ print(set1^set2)
 
 ##### 1.9.4 列表去重
 
-方法一 set去重
+###### 1)set去重
 
 ```python
 ls = [1, 1, 2, 2, 3, 3, 4, 4]
@@ -731,7 +731,7 @@ nls.sort(key=ls.index)
 
 ```
 
-方法二 循环去重
+###### 2)循环去重
 
 ```python
 ls = [1, 1, 2, 2, 3, 3, 4, 4]
@@ -744,7 +744,7 @@ for x in ls:
         
 ```
 
-方法三 dict属性
+###### 3)dict属性
 
 ```python
 ls = [1, 1, 2, 2, 3, 3, 4, 4]
@@ -755,9 +755,20 @@ nls = list(newdic)
 
 ```
 
+###### 4)count + remove
+
+```python
+ls = [1, 1, 2, 2, 3, 3, 4, 4]
+
+for x in ls:
+    if ls.count(x) != 1:
+        ls.remove(x)
+        
+```
+
 ##### 1.9.5 列表合并
 
-方法一 循环
+###### 1)循环
 
 ```python
 l1 = [1, 2, 3]
@@ -770,7 +781,7 @@ print(a)
 
 ```
 
-方法二 使用+
+###### 2)使用+
 
 ```python
 l1 = [1, 2, 3]
@@ -782,7 +793,7 @@ print(l1)
 
 ```
 
-方法三 使用extend关键字
+###### 3)使用extend关键字
 
 ```python
 l1 = [1, 2, 3]
@@ -4955,7 +4966,7 @@ def is_empty(self):
     
 ```
 
-###### 3)头插法添加元素
+###### 3)头插法添加元素 O(1)
 
 ```python
 # 创建新结点并存入数据
@@ -4969,7 +4980,7 @@ self.__head = s
 
 ```
 
-###### 4)扫描指针和遍历单链表
+###### 4)扫描指针和遍历单链表 O(n)
 
 单链表的特点是每个结点只保存其直接后继的地址,在已知单链表的head首地址情况下,如果要访问到单链表中的所有结点,需要一个扫描游标
 
@@ -5340,4 +5351,200 @@ def quick_sort(sequ):
 print(quick_sort([5, 4, 3, 2, 1]))
 
 ```
+
+#### 11.9 力扣
+
+##### 11.9.1 简单
+
+###### 1)[两数之和](https://leetcode-cn.com/problems/two-sum/)
+
++ 双重for循环暴力求解 O(n**2)
+
+```python
+def twoSum(nums, target):
+        for i in range(len(nums)):
+            for j in range(i, len(nums)):
+                if nums[i] + nums[j] == target:
+                    return [i, j]
+                
+```
+
++ for...if... O(n**2)
+
+```python
+def twoSum(nums, target):
+    for i in nums:
+        j = tartget - i
+        startindex = nums.index(i)
+        tempnums = [startindex+1:]
+        if j in tempnums:
+            return [startindex, startindex + tempnums.index(j)]
+        
+```
+
++ dict O(n**n)
+
+```python
+def twoSum(nums, target):
+    dt = {}
+    for i, num in enumerate(nums):
+        if target - num  not in dt:
+            dt[num] = i
+        else:
+            return [dt[target-num], i]
+            
+```
+
+###### 7)[整数反转](https://leetcode-cn.com/problems/reverse-integer/)
+
+```python
+def reverse(x):
+    num = 0
+    a = abs(x)
+    
+    while a != 0:
+        temp = a%10
+        num = num*10 + temp
+        a = a//10
+    
+    if x > 0 and num < 2**31-1:
+        return num
+    if x < 0 and num < 2**31:
+        return -num
+    else:
+        return 0
+    
+```
+
+###### 9)[回文数](https://leetcode-cn.com/problems/palindrome-number/)
+
+```python
+def ispal(x):
+    num = 0
+    a = abs(x)
+    
+    while a != 0:
+        temp = a%10
+        num = num*10 + temp
+        a = a//10
+        
+    if x > 0 and x == num:
+        return True
+    else:
+        return False
+    
+```
+
+###### 13)[罗马数字转整数](https://leetcode-cn.com/problems/roman-to-integer/)
+
+```python
+def romantoint(s):
+    # 字母数字映射
+    numMap = {'I':1, 'V':5, 'X':10, 'L':50
+              'C':100, 'D':500, 'M':1000}
+    # 返回结果
+    result = 0
+    for i in range(len(s)):
+        if i > 0 and numMap[s[i]] > numMap[s[i-1]]:
+            result += numMap[s[i]] - 2*numMap[s[i-1]]
+        else:
+            result += numMap[s[i]]
+            
+    return result
+    
+```
+
+###### 14)[最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
+
++ whileloop
+
+```python
+def maxpre(strs):
+    result = ''
+    i = 0
+    
+    while True:
+        sets = set(string[i] for string in strs)
+        if len(sets) == 1:
+            result += sets.pop()
+            i += 1
+        else:
+            break
+            
+    return result
+    
+```
+
++ forloop
+
+```python
+def maxpre(strs):
+    result = ''
+    
+    for i in range(len(strs[0])):
+        for string in strs[1:]:
+            if len(string) <= i or strs[0][i] != string[i]:
+                break
+            else:
+                return result += strs[0][i]
+    
+    return result
+
+```
+
+###### 20)[有效括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
++ replace
+
+```python
+def isvalid(str):
+    while '()' in str or '[]' in str or '{}' in str:
+        str = str.replace('()', '')
+        str = str.replace('[]', '')
+        str = str.replace('{}', '')
+        
+    return str == ''
+
+```
+
++ dict
+
+```python
+def isvalid(str):
+    pile = []
+    match = {'(':')', '[':']', '{','}'}
+    
+    for i in str:
+        if i in match:
+            pile.append(i)
+        elif pile and i == match[pile[-1]]:
+            pile.pop()
+        else:
+            return False
+        
+    return not pile
+            
+```
+
+21)[合并有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+
+```python
+```
+
+###### 26)[删除有序数组重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+```python
+def removedup(nums):
+    # 
+    for i in nums[:]:
+        if nums.count(i) != 1:
+            nums.remove(i)
+        
+```
+
+##### 11.9.2 中等
+
+##### 11.9.3 困难
+
+
 
