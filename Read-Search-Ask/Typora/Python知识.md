@@ -760,7 +760,7 @@ nls = list(newdic)
 ```python
 ls = [1, 1, 2, 2, 3, 3, 4, 4]
 
-for x in ls:
+for x in ls[:]:
     if ls.count(x) != 1:
         ls.remove(x)
         
@@ -4915,7 +4915,7 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 + 数据区域,数据元素本身信息
 + 链接区域,直接后继或者直接前驱存储地址
 
-![image-20210504003507580](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504003507580.png)
+![image-20210504003507580](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210504003507580.png)
 
 ###### 2)链表分类
 
@@ -4942,7 +4942,7 @@ class Node(object):
 
 ##### 11.3.2 链表的变形和操作
 
-![image-20210504010354390](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504010354390.png)
+![image-20210504010354390](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210504010354390.png)
 
 ###### 1)初始化化单链表
 
@@ -5096,7 +5096,7 @@ def remove(self, elem):
 
 ##### 11.3.3 单链表特点
 
-它是一种==动态结构==,整个内存空间为多个链表共用(空间可以是连续或者不连续)
+==它是一种动态结构,整个内存空间为多个链表共用(空间可以是连续或者不连续)==
 不需要预先分配空间
 链接域占用额外的存储空间
 不能随机存取(不可通过地址运算计算某个元素位置),查找速度慢(必须从第一个元素开始查找)
@@ -5526,7 +5526,7 @@ def isvalid(str):
             
 ```
 
-21)[合并有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+###### 21)[合并有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```python
 ```
@@ -5535,7 +5535,7 @@ def isvalid(str):
 
 ```python
 def removedup(nums):
-    # 
+    # nums和nums[:]之间的区别,就是引用和副本之间的区别
     for i in nums[:]:
         if nums.count(i) != 1:
             nums.remove(i)
