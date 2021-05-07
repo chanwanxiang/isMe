@@ -4823,7 +4823,7 @@ SELECT * FROM myemployees.`departments`;
 
 ###### 2)线性表的抽象数据类型
 
-![image-20210503232358633](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210503232358633.png)
+![image-20210503232358633](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210503232358633.png)
 
 ###### 3)线性表的实现
 
@@ -4876,7 +4876,7 @@ def search(sequ, elem):
 
 Python中的list和tuple两种类型采用了顺序表的实现技术
 
-![image-20210503235929399](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210503235929399.png)
+![image-20210503235929399](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210503232358633.png)
 
 ##### 11.2.4 顺序表的结构定义
 
@@ -4889,7 +4889,7 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 
 ###### 2)顺序表结构两种形式
 
-![image-20210504001154707](C:/Users/wxchan/AppData/Roaming/Typora/typora-user-images/image-20210504001154707.png)
+![image-20210504001154707](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210504001154707.png)
 
 ###### 3)动态顺序表
 
@@ -4960,7 +4960,7 @@ class Node(object):
 ###### 2)判断单链表是否为空 O(1)
 
 ```python
-def is_empty(self):
+def isEmpty(self):
     if self.__head == None:
         return True
     else:
@@ -5121,7 +5121,7 @@ def remove(self, elem):
 # 算法步骤
 #   线性查找指按一定的顺序检查数组中每一个元素,直到找到所要寻找的特定值为止
 
-def search(sequ, item):
+def steepSearch(sequ, item):
     for i in range(len(sequ)):
         if sequ[i] == item:
             return f'元素在{i}号位'
@@ -5149,7 +5149,7 @@ print(search([1, 2, 3, 4, 5], 4))
 
 # 1)递归方法,每次传入一个新的序列无法确认元素索引位置
 
-def half_search(sequ, item):
+def halfSearch(sequ, item):
     # 传来序列每次都是新生成的,如果里面么有发现元素,则是查到尽头也没有找到
     if not sequ:
         return '不在序列之中'
@@ -5158,20 +5158,20 @@ def half_search(sequ, item):
     midinx = len(sequ)//2
     # 如果midinx比item大,则说明元素可能出现在midinx左边,对左边再进行二分查找
     if sequ[midinx] > item:
-        return half_search(sequ[0:midinx-1], item)
+        return halfSearch(sequ[0:midinx-1], item)
     # 如果midinx比item大,则说明元素可能出现在midinx右边,对右边再进行二分查找
     elif sequ[midinx] < item:
-        return half_search(sequ[midinx+1:-1], item)
+        return halfSearch(sequ[midinx+1:-1], item)
     # 中间元素是要找的元素,返回真
     else:
         return True
 
 
-print(half_search([1, 2, 3, 4, 5], 4))
+print(halfSearch([1, 2, 3, 4, 5], 4))
 
 # 2)非递归方法,对一个序列进行循环查找,可以方便确认元素索引位置
 
-def binary_search(sequ, item):
+def binarySearch(sequ, item):
     # 最小索引位置的默认值
     mininx = 0
     # 最大索引位置的默认值
@@ -5192,7 +5192,7 @@ def binary_search(sequ, item):
     return '不在序列之中'
 
 
-print(binary_search([1, 2, 3, 4, 5], 4))
+print(binarySearch([1, 2, 3, 4, 5], 4))
 
 ```
 
@@ -5215,7 +5215,7 @@ print(binary_search([1, 2, 3, 4, 5], 4))
 
 ls = [5, 4, 3, 2, 1]
 
-def bubble_sort(sequ):
+def bubbleSort(sequ):
     # 每次冒泡确定一个最大值,n个数需要n-1次冒泡
     for i in range(len(sequ)-1):
         # 标志位初始值为False
@@ -5235,7 +5235,7 @@ def bubble_sort(sequ):
     return sequ
 
 
-print(bubble_sort(ls))
+print(bubbleSort(ls))
 
 # TODO:
 #     sequ[j],sequ[j+1] = sequ[j+1],sequ[j]
@@ -5262,7 +5262,7 @@ print(bubble_sort(ls))
 
 ls = [5, 4, 3, 2, 1]
 
-def select_sort(sequ):
+def selectSort(sequ):
     # 每次选择一个最小的数排到序列前面,n个数需要n-1次选择排序
     for i in range(len(sequ)-1):
         # 记录初始位,定义为最小数索引
@@ -5279,7 +5279,7 @@ def select_sort(sequ):
     return sequ
 
 
-print(select_sort(ls))
+print(selectSort(ls))
 
 ```
 
@@ -5302,7 +5302,7 @@ print(select_sort(ls))
 
 ls = [5, 4, 3, 2, 1]
 
-def insert_sort(sequ):
+def insertSort(sequ):
     # 第一个元素可以被认为已经被排序,遍历第一个元素之后的序列
     for i in range(1, len(sequ)):
         # 两数比较需要到sequ[0],即是sequ[i-1],i-1>0,i>=1
@@ -5319,7 +5319,7 @@ def insert_sort(sequ):
     return sequ
 
 
-print(insert_sort(ls))
+print(insertSort(ls))
 
 ```
 
@@ -5335,7 +5335,7 @@ print(insert_sort(ls))
 # 空间复杂度O(nlog2N)
 # 不稳定
 
-def quick_sort(sequ):
+def fastSort(sequ):
     # 序列元素不超过1个则返回该序列
     if len(sequ) < 2:
         return sequ
@@ -5347,10 +5347,10 @@ def quick_sort(sequ):
     rigtSequ = [x for x in sequ if x > temp]
 
     # 左右序列递归方式继续排序
-    return quick_sort(leftSequ) + [temp] + quick_sort(rigtSequ)
+    return fastSort(leftSequ) + [temp] + fastSort(rigtSequ)
 
 
-print(quick_sort([5, 4, 3, 2, 1]))
+print(fastSort([5, 4, 3, 2, 1]))
 
 ```
 
@@ -5541,6 +5541,8 @@ def removedup(nums):
     for i in nums[:]:
         if nums.count(i) != 1:
             nums.remove(i)
+            
+    return nums
         
 ```
 
@@ -5603,6 +5605,7 @@ def strstr(strs, str):
     for x in range(i):
         if strs[x:x+j] == str:
             return x
+        
     return -1
 
 ```
@@ -5623,6 +5626,7 @@ def strstr(strs, str):
 def searchinsert(nums, elem):
     mininx = 0
     maxinx = len(sequ)-1
+    
    	while mininx <= maxinx:
         midinx = (mininx+maxinx)//2
         if nums[midinx] > elem:
@@ -5631,6 +5635,7 @@ def searchinsert(nums, elem):
             mininx = midinx + 1
         else:
             return midinx
+        
     return mininx
 
 ```
@@ -5638,6 +5643,23 @@ def searchinsert(nums, elem):
 ###### 38)[外观数列](https://leetcode-cn.com/problems/count-and-say/)
 
 ```python
+def countAndSay(n):
+    pre = ''
+    cur = '1'
+    
+    for i in range(1, n):
+        pre = cur
+        cur = ''
+        start = 0
+        end = 0
+        while end < len(pre):
+            while end < len(pre) and pre[start] == pre[end]:
+                end += 1
+            cur += str(end-start) + pre[start]
+            start = end
+
+    return cur
+
 ```
 
 ###### 66)[加一](https://leetcode-cn.com/problems/plus-one/)
