@@ -480,7 +480,7 @@ def main():
     str.startwith('1')  #True
     
     # 字符串是否以指定字符结尾
-    str.endwith('1')  #False
+    str.endswith('1')  #False
     
     # 检查字符串是否由数字构成
     str.isdigit()  #True
@@ -4794,6 +4794,8 @@ SELECT * FROM myemployees.`departments`;
 + 空间复杂度
 
   一般情况下,程序在机器上运行时,抛去需要存储程序本身的输入数据等之外,还需要存储对数据操作的存储单元,如果输入数据所占空间和算法无关,只取决于问题本身,那么只需要分析算法在实现过程中所占的辅助单元即可
+  
+  空间复杂度是对一个算法在运行过程中临时占用存储空间大小的量度,所谓的临时占用存储空间指的就是代码中**辅助变量所占用的空间**,它包括为参数表中**形参变量**分配的存储空间和为在函数体中定义的**局部变量**分配的存储空间两个部分,我们用 S(n)=O(f(n))来定义,其中n为问题的规模(或大小)。通常来说,只要算法不涉及到动态分配的空间,以及递归、栈所需的空间,空间复杂度通常为O(1),一个一维数组a[n],空间复杂度O(n),二维数组为O(n^2)
 
 现阶段优化方向是**空间换时间**
 
@@ -5540,6 +5542,111 @@ def removedup(nums):
         if nums.count(i) != 1:
             nums.remove(i)
         
+```
+
+###### 27)[移出元素](https://leetcode-cn.com/problems/remove-element/)
+
++ whileloop
+
+```python
+def removeelem(nums, elem):
+    i = 0
+    while i < len(nums):
+        if nums[i] == elem:
+            nums.pop(i)
+        else:
+            i += 1
+    
+    return nums
+    
+```
+
++ while...in...
+
+```python
+def removeelem(nums, elem):
+    while elem in nums:
+        nums.remove(elem)
+        
+    return nums
+
+```
+
++ 快慢指针
+
+```python
+def removeelem(nums, elem):
+    i = 0
+    j = len(nums)
+    
+    while i <= j:
+        if nums[i] == elem:
+            # 赋值让慢指针继续前驱
+            nums[i] = nums[j]
+            j -= 1
+        else:
+            i += 1
+            
+    return i
+
+```
+
+###### 28) [strStr](https://leetcode-cn.com/problems/implement-strstr/)
+
++ 切片
+
+```python
+def strstr(strs, str):
+    if strs == str:
+        return 0
+    i, j = len(strs), len(str)
+    for x in range(i):
+        if strs[x:x+j] == str:
+            return x
+    return -1
+
+```
+
++ find
+
+```python
+def strstr(strs, str):
+    return strs.find(str)
+
+```
+
+###### 35)[搜索插入位置](https://leetcode-cn.com/problems/search-insert-position/)
+
++ 二分法
+
+```python
+def searchinsert(nums, elem):
+    mininx = 0
+    maxinx = len(sequ)-1
+   	while mininx <= maxinx:
+        midinx = (mininx+maxinx)//2
+        if nums[midinx] > elem:
+            maxinx = midinx-1
+        elif nums[midinx] < elem:
+            mininx = midinx + 1
+        else:
+            return midinx
+    return mininx
+
+```
+
+###### 38)[外观数列](https://leetcode-cn.com/problems/count-and-say/)
+
+```python
+```
+
+###### 66)[加一](https://leetcode-cn.com/problems/plus-one/)
+
+```python
+def plusone(nums):
+    nums = int(''.join([str(x) for x in nums]))+1
+    return [int(x) for x in str(nums)]
+
 ```
 
 ##### 11.9.2 中等
