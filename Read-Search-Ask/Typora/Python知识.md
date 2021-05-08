@@ -437,7 +437,9 @@ print(f2(0))  #45
 
 ##### 1.7.3 string常用方法
 
-1)str.strip('x') 移出字符串的首尾指定字符(默认为空格或换行符)
+###### 1)str.strip('x') 
+
+移出字符串的首尾指定字符(默认为空格或换行符)
 
 ```python
 str = '0baidu0'
@@ -450,7 +452,9 @@ print(str.strip())  #baidu
 
 ```
 
-2)str.find('x') 检测字符串中是否包含子字符串x,包含子字符串返回开始索引值,否则返回-1
+###### 2)str.find('x')
+
+检测字符串中是否包含子字符串x,包含子字符串返回开始索引值,否则返回-1
 
 ```python
 str = '1234567'
@@ -461,7 +465,7 @@ str.find('0')  #-1
 
 ```
 
-3)其他
+###### 3)其他
 
 ```python
 def main():
@@ -577,7 +581,7 @@ list是 Python 中使用最频繁的数据类型,在其他语言中通常叫做�
 
 ##### 1.9.1 列表常用方法
 
-1) 增加
+###### 1) 增加
 
 在指定位置插入数据 列表.insert(index, value)
 
@@ -612,7 +616,7 @@ ls.extend(str)
 
 ```
 
-2)删除
+###### 2)删除
 
 删除指定索引数据 del 列表[index]
 
@@ -659,7 +663,7 @@ ls.clear()
 
 ```
 
-3)排序
+###### 3)排序
 
 升序排序 列表.sort(reverse=False)
 
@@ -679,7 +683,7 @@ ls.reverse()
 
 ```
 
-4)统计相关
+###### 4)统计相关
 
 数据在列表中出现的次数 列表.count(value)
 
@@ -4878,6 +4882,19 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 
 ![image-20210503235929399](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210503232358633.png)
 
+tuple 是不可变类型,即不变的顺序表,因此不支持改变其内部状态的任何操作,而其他方面,则与list的性质类型类似
+
+list基本实现技术
+
+Python标准类型 list 就是一种元素个数可变的线性表,可以加入和删除元素,并且在各种操作中维持已有元素的顺序(即保序),而且还具有以下特征:
+
+| list                                       |                            顺序表                            |
+| ------------------------------------------ | :----------------------------------------------------------: |
+| 元素位置有下标,以索引可以直接获取元素      | 连续的存储空间,以偏移量计算取得元素,不必遍历所有元素,时间复杂度为O(1) |
+| 元素无论如何改变,表对象不变,也就是其id不变 |                          分离式结构                          |
+| 元素可以是任意类型                         |                           元素外置                           |
+| 可以任意添加元素                           |                           动态扩充                           |
+
 ##### 11.2.4 顺序表的结构定义
 
 ###### 1)一个顺序表的完整信息包括两部分
@@ -4910,7 +4927,11 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 
 #### 11.3 链表
 
+顺序表的构建需要预先知道数据大小来申请连续的存储空间,而在进行扩充时又需要进行数据的搬迁,所以使用起来并不是很灵活
+
 ##### 11.3.1 链表概述
+
+链表(linkend list)是一种常见的基础数据结构,是一种线性表,但是不像顺序表一样连续存储数据,而是在每一个节点(数据存储单元)里存放下一个节点的位置信息(地址)
 
 ###### 1)结点结构
 
@@ -4923,7 +4944,7 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 
 + 单向链表
 
-  每个结点除包含数据域外,只设置一个链接域,用以指向其后继结点
+  每个结点除包含数据域外,只设置一个链接域,用以指向其后继结点,最后一个节点的链接域则指向一个空值
 
 + 双向链表
 
@@ -4932,13 +4953,20 @@ Python中的list和tuple两种类型采用了顺序表的实现技术
 ```python
 # 单链表类定义
 
+# 构造节点
 class Node(object):
     # 初始化
     def __init__(self, elem):
         # data为自定义数据
-        self.data = elem
+        self.elem = elem
         # next为下一个结点的地址
         self.next = None
+        
+# 构造链表
+class AlongLinkList():
+    # 初始化链表,默认为空
+    def __init__(self, node=None):
+        self.head = node
         
 ```
 
@@ -4952,8 +4980,8 @@ class Node(object):
 class Node(object):
     # 初始化
     def __init__(self):
-        # 表头__head为空
-        self.__head = None
+        # 表头head为空
+        self.head = None
         
 ```
 
@@ -4961,7 +4989,7 @@ class Node(object):
 
 ```python
 def isEmpty(self):
-    if self.__head == None:
+    if self.head == None:
         return True
     else:
         return False
@@ -4975,10 +5003,10 @@ def isEmpty(self):
 s = Node(5)
 
 # 把原链接首结点链接存入新结点的链接域next
-s.next = self.__head
+s.next = self.head
 
 # 修改表头变量,使之指向新的结点
-self.__head = s
+self.head = s
 
 ```
 
@@ -4987,7 +5015,7 @@ self.__head = s
 单链表的特点是每个结点只保存其直接后继的地址,在已知单链表的head首地址情况下,如果要访问到单链表中的所有结点,需要一个扫描游标
 
 ```python
-p = self.__head
+p = self.head
 while p is not None:
     print(p.elem)
     p.next
@@ -4998,7 +5026,7 @@ while p is not None:
 
 ```python
 def length(self):
-    p = self.__head
+    p = self.head
     count = 0
     while p is not None:
         count += 1
@@ -5016,7 +5044,7 @@ def length(self):
 
 ```python
 def searchpos(self, pos):
-    p = self.__head
+    p = self.head
     count = 1
     if pos < i:
         return None
@@ -5033,7 +5061,7 @@ def searchpos(self, pos):
 
 ```python
 def searchelem(self, elem):
-    p = self.__head
+    p = self.head
     while p is not None and p.elem != elem:
         p = p.next
     if p.elem == elem:
@@ -5047,7 +5075,7 @@ def searchelem(self, elem):
 
 ```python
 def append(self, elem):
-    p = self.__head
+    p = self.head
     while p.next is not None:
         p = p.next
     # 生成结点,传值elem
@@ -5061,7 +5089,7 @@ def append(self, elem):
 
 ```python
 def insert(self, pos, elem):
-    p = self.__head
+    p = self.head
     count = 0
     if pos >= self.length():
         return None
@@ -5078,11 +5106,11 @@ def insert(self, pos, elem):
 
 ```Python
 def remove(self, elem):
-    p = self.__head
+    p = self.head
     
     # 删除的是第一个结点需要单独处理
     if p.elem == elem:
-        self.__head = p.next
+        self.head = p.next
     else:   
     	while p is not None and p.elem != elem:
             # 记录p前驱结点
@@ -5103,9 +5131,57 @@ def remove(self, elem):
 链接域占用额外的存储空间
 不能随机存取(不可通过地址运算计算某个元素位置),查找速度慢(必须从第一个元素开始查找)
 
-##### 11.3.4 双链表
+##### 11.3.4 链表与顺序表的对比
+
+链表失去了顺序表随机读取的优点,同时链表由于增加了节点的指针域,空间开销比较大,但对存储空间的使用要相对灵活
+
+链表与顺序表的各种操作复杂度如下：
+
+| 操作            | 链表 | 顺序表 |
+| --------------- | :--: | :----: |
+| 访问            | O(n) |  O(1)  |
+| 在头部插入/删除 | O(1) |  O(n)  |
+| 在尾部插入/删除 | O(n) |  O(1)  |
+| 在中间插入/删除 | O(n) |  O(n)  |
+
+注意:
+
+虽然表面看起来复杂度都是O(n),但是链表和顺序表在插入和删除时都进行的是完全不同的操作
+链表的主要耗时操作是遍历查找,删除和插入操作本身的复杂度是 O(1)
+顺序表查找很快,主要耗时的操作是拷贝覆盖,因为除了目标元素在尾部的特殊情况,顺序表进行插入和删除时需要对操作位置之后的所有元素进行前后移位操作,只能通过拷贝和覆盖的方法进行
+
+##### 11.3.5 双链表
+
+一种更复杂的链表是双向链表或双面链表,每个节点有两个链接:一个指向前一个节点,当次节点为第一个节点时,指向空值;而另一个指向下一个节点,当次节点为最后一个节点时,指向空值
+
+##### 11.3.6 双链表的实现和操作
+
+```python
+
+```
 
 #### 11.4 栈和队列
+
+##### 11.4.1 栈
+
+![image-20210508154657925](C:/Users/Admin/AppData/Roaming/Typora/typora-user-images/image-20210508154657925.png)
+
+栈(stack),有些地方成为堆栈,是一种容器,可存入数据元素,访问元素,删除元素,他的特点在于只能允许在容器的一端(称为栈顶端指标top)进行加入数据(top)和输出数据(pop)的运算,没有了位置概念,保证任何时候可以访问、删除的元素都是此前最后存入的那个元素,确定了一种默认的访问顺序
+
+由于栈数据结构只允许在一端就行操作,因而按照后进先出(LIFO，Last In First Out)的原理运作
+
+##### 11.4.2 Python实现栈
+
+```python
+```
+
+##### 11.4.3 队列
+
+队列(queue)是只允许在一端进行插入操作,而在另一端进行删除操作的线性表
+
+队列是一种先进先出的(First In First Out)的线性表,简称FIFO,允许插入的一端为队尾,允许删除的一端为队头,队列不允许在中间部位进行操作!
+
+假设队列是 q=(a1, a2, ....... , an ),那么a1就是对头元素,而an是队尾元素,这样我们就可以在删除时,总是从a1开始,而插入时,总在队列最后,这也比较符合我们通常生活中的习惯,排在第一个的优先出列,最后来的排在队伍最后
 
 #### 11.5 二叉树和树
 
@@ -5200,6 +5276,8 @@ print(binarySearch([1, 2, 3, 4, 5], 4))
 
 ##### 11.8.1 冒泡排序
 
+![在这里插入图片描述](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/20200810193906338.gif)
+
 ```python
 # 算法步骤
 #     1)比较相邻的元素,如果第一个比第二个大,就交换他们两个
@@ -5248,6 +5326,8 @@ print(bubbleSort(ls))
 
 ##### 11.8.2 选择排序
 
+![](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/20200811095713349.jpg)
+
 ```python
 # 算法步骤
 #     1)首先在未排序序列中找到最小(大)元素,存放到排序序列的起始位置
@@ -5284,6 +5364,8 @@ print(selectSort(ls))
 ```
 
 ##### 11.8.3 插入排序
+
+![在这里插入图片描述](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/20200811114111139.jpg)
 
 ```python
 # 算法步骤
@@ -5324,6 +5406,8 @@ print(insertSort(ls))
 ```
 
 ##### 11.8.4 快速排序
+
+![在这里插入图片描述](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/20200811152355953.gif)
 
 ```python
 # 算法步骤
@@ -5667,7 +5751,37 @@ def countAndSay(n):
 ```python
 def plusone(nums):
     nums = int(''.join([str(x) for x in nums]))+1
+    
     return [int(x) for x in str(nums)]
+
+```
+
+###### 67)[二进制求和](https://leetcode-cn.com/problems/add-binary/)
+
++ 内置函数
+
+```python
+def addbinary(a, b):
+    
+    return '{0:b}'.format(int(a,2)+int(b,2))
+
+```
+
+###### 70)[爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
+```python
+def climbStairs(n):
+    # 初始化前两个数的值
+    a = 1
+    b = 2
+    
+    cur = 0
+    wheile cur < n:
+        ans = a
+        a, b = b, a+b
+        cur += 1
+        
+    return ans
 
 ```
 
