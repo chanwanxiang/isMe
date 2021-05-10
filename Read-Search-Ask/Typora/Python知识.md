@@ -5787,6 +5787,95 @@ def climbStairs(n):
 
 ##### 11.9.2 中等
 
+###### 2)[两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = None
+        
+class Solution:
+    def addTwoNumber(self, l1, l2):
+        # 定义个空链表存储返回结果
+        ans = ListNode()
+        # 链表的连接域游标添加数据
+        cur = ans
+        # 进位
+        carry = 0
+        
+        while (l1 or l2):
+            x = l1.val if l1 else 0
+            y = l2.val if l2 else 0
+            s = carry + x +y
+            carry = s//10
+            car.next = ListNode(s%10)
+            if l1 is not None:
+                l1 = l1.next
+            if l2 is not None:
+                l2 = l2.next
+        
+        #l1 l2都为空后判断是否有进位
+        if carry:
+                cur.next = ListNode(1)
+                
+        reutrn ans.next
+            
+```
+
+###### 3)[无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
++ 利用字典
+
+```python
+def lengthOfLongestSubstring(s):
+    charDict = dict()
+    ini, ans = 0, 0
+    
+    for cur in range(len(s)):
+        if s[cur] in charDict:
+            ini = max(charDict[s[cur], ini])
+        else:
+            ans = max(ans, cur -ini +1)
+            charDict[s[cur]] = cur + 1
+            
+    return ans
+
+```
+
++ 滑动窗口双指针
+
+```python
+def lengthOfLongestSubstring(s):
+    if not s:
+        return 0
+    
+    head = 0
+    tail = 1
+    answ = 1
+    
+    while tail < len(s):
+        if s[tail] not in s[head:tail]:
+            tail += 1
+        else:
+            answ = max(answ, tail - head)
+            head += s[head:tail].index(s[tail]) + 1
+        # 用于记录最长子串位于字符串最后一部分 
+        answ = max(answ, tail - head)
+        
+    return answ
+        
+    
+    
+```
+
+###### 5)[最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
+```python
+```
+
+
+
 ##### 11.9.3 困难
 
 
