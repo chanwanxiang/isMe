@@ -5546,18 +5546,19 @@ def romantoint(s):
 
 ```python
 def maxpre(strs):
-    result = ''
-    i = 0
+    answ = ''
     
+    i = 0 
     while True:
-        sets = set(string[i] for string in strs)
+        # 利用set去重判断各个字符同一索引是否相同
+        sets = set(str[i] for str in strs)
         if len(sets) == 1:
-            result += sets.pop()
+            answ += sets.pop()
             i += 1
         else:
             break
             
-    return result
+    return answ
     
 ```
 
@@ -5565,16 +5566,17 @@ def maxpre(strs):
 
 ```python
 def maxpre(strs):
-    result = ''
+    answ = ''
     
     for i in range(len(strs[0])):
-        for string in strs[1:]:
-            if len(string) <= i or strs[0][i] != string[i]:
+        # 以strs第一个元素作为标杆比较
+        for str in strs[1:]:
+            if len(str) <= i or strs[0][i] != string[i]:
                 break
             else:
-                return result += strs[0][i]
+                answ += strs[0][i]
     
-    return result
+    return answ
 
 ```
 
@@ -5871,10 +5873,60 @@ def lengthOfLongestSubstring(s):
 
 ###### 5)[最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
++ 暴力求解
+
 ```python
+def longestPalindrome(self, s: str) -> str:
+    if s == s[::-1]:
+        return s
+
+    maxl = 1
+    answ = s[0]
+
+    for i in range(len(s)-1):
+        for j in range(i+1, len(s)):
+            if j - i + 1 > maxl and s[i:j+1] == s[i:j+1][::-1]:
+                maxl = j - i + 1
+                answ = s[i:j+1]
+
+    return answ
+
 ```
 
++ 中心扩散
 
+遍历每一个索引,以这个索引为中心,利用回文串中心对称的特点,往两边扩散,看最多能扩散多远
+==注意回文串的长度可能是奇数,也可能是偶数==
+
+```python
+class Solution():
+    def longestPalinadrome(self, s):
+        if s == s[::-1]:
+            return s
+
+        maxl = 1
+        answ = s[0]
+
+        for i in range(len(s)):
+            oddpal, odmaxl = self.centerSpread(s, i, i)
+            evepal, evmaxl = self.centerSpread(s, i, i + 1)
+            # 每次找到返回最长回文子串
+            temp = oddpal if odmaxl >= evmaxl else evepal
+            if len(temp) > len(answ):
+                maxl = len(temp)
+                answ = temp
+
+        return answ
+
+    def centerSpread(self, s, left, righ):
+        # left = righ 时,此时回文中心是当前索引字符,回文字符长度是个奇数
+        # left = righ - 1 时,此时回文中心是这两个字符中间的线,回文字符长度是个偶数
+        while left >= 0 and righ < len(s) and s[left] == s[righ]:
+            left -= 1
+            righ += 1
+        return s[left + 1:righ], righ - left - 1
+    
+```
 
 ##### 11.9.3 困难
 
