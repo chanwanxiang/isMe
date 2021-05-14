@@ -502,7 +502,7 @@ if __name__ == '__main__':
 
 ##### 1.7.4 写出反转字符串的方法
 
-方法一 切片
+###### 1)切片
 
 ```python
 str = '12345'
@@ -511,7 +511,7 @@ pirnt(str[::-1])
 
 ```
 
-方法二 列表reverse方法
+###### 2)列表reverse方法
 
 ```python
 str = '12345'
@@ -523,7 +523,7 @@ print(''.join(ls))
 
 ```
 
-方法三 列表推导
+###### 3)列表推导
 
 ```python
 str = '12345'
@@ -945,7 +945,7 @@ dic = {key:value for (key, value) in iterable}
 
 ##### 1.10.4 输出一个字符串中每个字符的个数
 
-方法一 dict.get方法
+###### 1)dict.get方法
 
 ```python
 str = 'life is short I use python'
@@ -961,7 +961,7 @@ print(dic)
 
 ```
 
-方法二 dict属性
+###### 2)dict属性
 
 ```python
 str = 'life is short I use python'
@@ -978,7 +978,7 @@ print(dic)
 
 ```
 
-方法三 collections模块
+###### 3)collections模块
 
 ```python
 from collections import Counter
@@ -1429,6 +1429,8 @@ lambda 函数是一个可以接受任意多个参数(包括可选参数)并且�
 2. 匿名函数,一般用来给filter、map这样的函数式编程服务
 3. 作为回调函数,传递给某些应用,比如消息处理
 
+#### 2.6 一切皆对象
+
 ### 三. 设计模式
 
 #### 3.1 单例模式
@@ -1861,6 +1863,30 @@ is 判断的是 a 对象是否就是 b 对象,是通过 id 来判断的
 
 **多态**
 多个子类中虽然都有同一个方法,但是这些子类实例化的对象调用这些相同方法后却可以获得不同的结果,多态增加了增加了应用灵活性(多态概念依赖继承)
+
+#### 4.2 一切皆对象
+
+##### 4.2.1 Python中一切皆是对象
+
+函数和类亦是对象
+
+```python
+def info(name='mas'):
+    print(name)
+    
+class Person:
+    def __init__(self, name):
+        print(name)
+# 可以赋值给个变量
+
+# 可以添加到集合的对象
+
+# 可以作为参数传递函数
+
+# 可以作为函数的返回值
+```
+
+
 
 ### 五. 爬虫测试
 
@@ -4079,8 +4105,8 @@ ORDER BY AVG(salary);
 		等值
 		非等值
 		自连接
+		
 	sql99标准[推荐]:
-	
 	按功能分类:
 		内连接:
 			等值连接
@@ -5924,7 +5950,44 @@ class Solution():
         while left >= 0 and righ < len(s) and s[left] == s[righ]:
             left -= 1
             righ += 1
+            
         return s[left + 1:righ], righ - left - 1
+    
+```
+
+###### 6)[Z字形变换](https://leetcode-cn.com/problems/zigzag-conversion/)
+
+```python
+
+```
+
+###### 8)[字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+
+```python
+
+```
+
+###### 11)[盛最多容量的水](https://leetcode-cn.com/problems/container-with-most-water/)
+
+```python
+def maxArea(height):
+
+    lef = 0
+    rig = len(height) - 1
+    maxArea = 0
+
+    # 底x高,底在减小,高需增加得最大值
+    while lef < rig:
+        bot = rig - lef
+        if height[lef] < height[rig]:
+            hgt = height[lef]
+            lef += 1
+        else:
+            hgt = height[rig]
+            rig -= 1
+        maxArea = max(maxArea, hgt * bot)
+
+    return maxArea
     
 ```
 
