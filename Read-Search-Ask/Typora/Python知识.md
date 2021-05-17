@@ -1431,6 +1431,32 @@ lambda 函数是一个可以接受任意多个参数(包括可选参数)并且�
 
 #### 2.6 一切皆对象
 
+```python
+def info(name):
+    print(name)
+
+myfunc = info
+# myfunc('xixi')  # xixi
+
+class Person():
+    def __init__(self, name):
+        print(name)
+
+myClass = Person
+# myClass('xixi')  #xixi
+
+objlist = []
+
+objlist.append(info)
+objlist.append(Person)
+
+for item in objlist:
+    print(item('xixi'))
+    
+```
+
+
+
 ### 三. 设计模式
 
 #### 3.1 单例模式
@@ -3620,13 +3646,39 @@ DB:数据库(database):存储数据的仓库,它保存了一系列有组织的�
 DBMS:数据库管理系统(Database Management System),数据库是通过DBMS创建和操作的容器
 SQL:结构化查询语言(Structure Query Language),专门用来与数据库通信的语言
 
+```sql
+# 启动mysql服务(cmd管理员)
+net start mysql
+
+# 关闭mysql服务
+net stop mysql
+
+# 连接本地mysql服务
+mysql -uroot -p
+
+# 查看所有数据库名
+SHOW DATABASES;
+
+# 选择数据库名
+USE dataName;
+
+# 查看所有表名
+SHOW TABLES;
+
+# 解决中文乱码
+SET NAMES GBK;
+
+# 解决对齐
+CHARSET GBK;
+
+```
+
 ##### 10.2.2 DQL数据库查询语言
 
 启动mysql服务(cmd管理员)
 
 > net start mysql
->
-> net stop mysql
+>net stop mysql
 
 ###### 1)基础查询
 
@@ -5894,7 +5946,6 @@ def lengthOfLongestSubstring(s):
     return answ
         
     
-    
 ```
 
 ###### 5)[最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
@@ -5902,7 +5953,7 @@ def lengthOfLongestSubstring(s):
 + 暴力求解
 
 ```python
-def longestPalindrome(self, s: str) -> str:
+def longestPalindrome(s)
     if s == s[::-1]:
         return s
 
@@ -5957,8 +6008,56 @@ class Solution():
 
 ###### 6)[Z字形变换](https://leetcode-cn.com/problems/zigzag-conversion/)
 
-```python
++ 遍历写入
 
+```python
+def convert(s, numRows): 
+    if numRows <= 1:
+        return s
+
+    # rowlis存放二维数组
+    rowlis = [[] for i in range(numRows)]
+    # arrlis将字符写入每一行
+    arrlis = [s for i in range(numRows)]
+
+    # 标志用于判断返回和递增递减行数
+    flag = 1
+    # 行数
+    rows = 0
+    for i in range(len(s)):
+        rowlis[i].append(arrlis[rows][i])
+        rows += flag
+        # 第一次遍历行数后,之后的第一行和最后一行flag值发生变化
+        if rows == 0 or rows == numRows - 1:
+            flag *= -1
+
+    answ = []
+    for elem in rowlis:
+        answ.extend(elem)
+
+    return ''.join(answ)
+
+```
+
++ 遍历写入强化
+
+```python
+def convert(s, numRows):
+    if numRows <= 1 or numRows > len(s):
+        return s
+
+    flag = 1
+    rows = 0
+    answ = ['']*numRows
+
+    for i in s:
+        answ[rows] += i
+        rows += 1
+        if rows in [0, numRows-1]:
+            flag *= -1
+
+    return ''.join(answ)
+    
 ```
 
 ###### 8)[字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)
@@ -5971,7 +6070,6 @@ class Solution():
 
 ```python
 def maxArea(height):
-
     lef = 0
     rig = len(height) - 1
     maxArea = 0
