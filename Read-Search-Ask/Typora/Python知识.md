@@ -1431,32 +1431,6 @@ lambda 函数是一个可以接受任意多个参数(包括可选参数)并且�
 
 #### 2.6 一切皆对象
 
-```python
-def info(name):
-    print(name)
-
-myfunc = info
-# myfunc('xixi')  # xixi
-
-class Person():
-    def __init__(self, name):
-        print(name)
-
-myClass = Person
-# myClass('xixi')  #xixi
-
-objlist = []
-
-objlist.append(info)
-objlist.append(Person)
-
-for item in objlist:
-    print(item('xixi'))
-    
-```
-
-
-
 ### 三. 设计模式
 
 #### 3.1 单例模式
@@ -3646,39 +3620,13 @@ DB:数据库(database):存储数据的仓库,它保存了一系列有组织的�
 DBMS:数据库管理系统(Database Management System),数据库是通过DBMS创建和操作的容器
 SQL:结构化查询语言(Structure Query Language),专门用来与数据库通信的语言
 
-```sql
-# 启动mysql服务(cmd管理员)
-net start mysql
-
-# 关闭mysql服务
-net stop mysql
-
-# 连接本地mysql服务
-mysql -uroot -p
-
-# 查看所有数据库名
-SHOW DATABASES;
-
-# 选择数据库名
-USE dataName;
-
-# 查看所有表名
-SHOW TABLES;
-
-# 解决中文乱码
-SET NAMES GBK;
-
-# 解决对齐
-CHARSET GBK;
-
-```
-
 ##### 10.2.2 DQL数据库查询语言
 
 启动mysql服务(cmd管理员)
 
 > net start mysql
->net stop mysql
+>
+> net stop mysql
 
 ###### 1)基础查询
 
@@ -4484,17 +4432,162 @@ WHERE departments.`department_name` = 'SAL' OR departments.`department_name` = '
 	from 后面:
 		支持表子查询
 	where 或 having后面:☆
-		标量子查询(单行)
-		列子查询(多行)
+		标量子查询(单行) √
+		列子查询(多行) √
 		行子查询
 	exists后面(相关子查询):
 		表子查询
 按结果集的行列数不同:
-	标量(结果集只有一行一列)
-	列子查询(结果姐只有一列多行)
-	行子查询(结果集有多行多列)
+	标量子查询(结果集只有一行一列)
+	列子查询(结果集只有一列多行)
+	行子查询(结果集有一行多列)
 	表子查询(结果集一般多行多列)
 */
+
+
+# 一. where或having后面
+/*
+1. 标量子查询(单行子查询)
+2. 列子查询(多行子查询)
+3. 行子查询(多列多行)
+
+特点:
+1. 子查询放在小括号内
+2. 子查询一般放在条件右侧
+3. 标量子查询一般搭配单行操作符使用(> < >= <= = <>)
+   列子查询一般搭配多行操作符使用(in any/some all)
+4. 子查询的执行顺序优先于主查询执行,主查询的条件依赖子查询的结果
+*/
+
+# 标量子查询
+# 案例:谁的工资比Abel高?
+# 1. 查询Abel的工资
+SELECT salary
+FROM employees
+WHERE last_name = 'Abel';
+
+# 2. 查询员工信息满足salary>1结果
+SELECT *
+FROM employees
+WHERE salary > (
+	SELECT salary
+	FROM employees
+	WHERE last_name = 'Abel'
+);
+
+# 案例: 返回job_id与141员工相同,salary比143号员工多的员工姓名,job_id和工资
+# 1. 查询141号员工的job_id
+SELECT job_id
+FROM employees
+WHERE employee_id = 141;
+
+# 2. 查询143号员工的salary
+SELECT	salary
+FROM employees
+WHERE employee_id = 143;
+
+# 3. 查询员工姓名,job_id和工资,要求job_id=1并且salary>2
+SELECT last_name,job_id,salary
+FROM employees
+WHERE job_id = (
+	SELECT job_id
+	FROM employees
+	WHERE employee_id = 141
+) AND salary > (
+	SELECT	salary
+	FROM employees
+	WHERE employee_id = 143
+);
+
+# 案例: 返回工资最少员工的last_name,job_id和salary
+# 1. 查询公司最低工资
+SELECT MIN(salary)
+FROM employees;
+
+# 2. 查询last_name,job_id和salary,要求salary=1
+SELECT last_name,job_id,salary
+FROM employees
+WHERE salary = (
+	SELECT MIN(salary)
+	FROM employees
+);
+
+# 案例: 查询最低工资大于50号部门最低工资的部门id和其最低工资
+# 1. 查询50号部门的最低工资
+SELECT MIN(salary)
+FROM employees
+WHERE department_id = 50;
+
+# 2. 查询每个部门的最低工资
+SELECT department_id,MIN(salary)
+FROM employees
+GROUP BY department_id; 
+
+# 3. 筛选2,满足min(salary) > 1
+SELECT department_id,MIN(salary)
+FROM employees
+GROUP BY department_id
+HAVING salary > (
+	SELECT MIN(salary)
+	FROM employees
+	WHERE department_id = 50
+);
+
+# 列子查询(多行子查询)
+# 案例: 返回location_id是1400或1700的部门中的所有员工姓名
+# 1. 查询location_id是1400或者1700的部门编号
+SELECT DISTINCT department_id
+FROM departments
+WHERE location_id IN(1400,1700);
+
+# 2. 查询员工姓名,要求部门号是1列表中的某一个
+SELECT Last_name
+FROM employees
+WHERE department_id IN (
+	SELECT DISTINCT department_id
+	FROM departments
+	WHERE location_id IN(1400,1700)
+);
+
+# 案例: 返回其他部门中比job_id为`IT_PROG`部门任一工资低的员工的员工号、姓名、job_id以及salary
+# 1. 查询job_id为`IT_PROG`部门任一工资
+SELECT DISTINCT salary
+FROM employees
+WHERE job_id = 'IT_PROG';
+
+# 2. 查询员工号、姓名、job_id以及salary小于1中的任意一个
+SELECT employee_id,last_name,job_id,salary
+FROM employees
+WHERE salary < ANY(
+	SELECT DISTINCT salary
+	FROM employees
+	WHERE job_id = 'IT_PROG'
+) AND job_id <> 'IT_PROG';
+# 或
+SELECT employee_id,last_name,job_id,salary
+FROM employees
+WHERE salary < (
+	SELECT MAX(salary)
+	FROM employees
+	WHERE job_id = 'IT_PROG'
+) AND job_id <> 'IT_PROG';
+
+# 案例: 返回其他部门中比job_id为`IT_PROG`部门所有工资低的员工的员工号、姓名、job_id以及salary
+SELECT employee_id,last_name,job_id,salary
+FROM employees
+WHERE salary < ALL(
+	SELECT DISTINCT salary
+	FROM employees
+	WHERE job_id = 'IT_PROG'
+) AND job_id <> 'IT_PROG';
+# 或
+SELECT employee_id,last_name,job_id,salary
+FROM employees
+WHERE salary < (
+	SELECT MIN(salary)
+	FROM employees
+	WHERE job_id = 'IT_PROG'
+) AND job_id <> 'IT_PROG';
 
 ```
 
@@ -5946,6 +6039,7 @@ def lengthOfLongestSubstring(s):
     return answ
         
     
+    
 ```
 
 ###### 5)[最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
@@ -5953,7 +6047,7 @@ def lengthOfLongestSubstring(s):
 + 暴力求解
 
 ```python
-def longestPalindrome(s)
+def longestPalindrome(self, s: str) -> str:
     if s == s[::-1]:
         return s
 
@@ -6008,56 +6102,8 @@ class Solution():
 
 ###### 6)[Z字形变换](https://leetcode-cn.com/problems/zigzag-conversion/)
 
-+ 遍历写入
-
 ```python
-def convert(s, numRows): 
-    if numRows <= 1:
-        return s
 
-    # rowlis存放二维数组
-    rowlis = [[] for i in range(numRows)]
-    # arrlis将字符写入每一行
-    arrlis = [s for i in range(numRows)]
-
-    # 标志用于判断返回和递增递减行数
-    flag = 1
-    # 行数
-    rows = 0
-    for i in range(len(s)):
-        rowlis[i].append(arrlis[rows][i])
-        rows += flag
-        # 第一次遍历行数后,之后的第一行和最后一行flag值发生变化
-        if rows == 0 or rows == numRows - 1:
-            flag *= -1
-
-    answ = []
-    for elem in rowlis:
-        answ.extend(elem)
-
-    return ''.join(answ)
-
-```
-
-+ 遍历写入强化
-
-```python
-def convert(s, numRows):
-    if numRows <= 1 or numRows > len(s):
-        return s
-
-    flag = 1
-    rows = 0
-    answ = ['']*numRows
-
-    for i in s:
-        answ[rows] += i
-        rows += 1
-        if rows in [0, numRows-1]:
-            flag *= -1
-
-    return ''.join(answ)
-    
 ```
 
 ###### 8)[字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)
@@ -6070,6 +6116,7 @@ def convert(s, numRows):
 
 ```python
 def maxArea(height):
+
     lef = 0
     rig = len(height) - 1
     maxArea = 0
