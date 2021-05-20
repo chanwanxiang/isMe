@@ -1886,7 +1886,33 @@ class Person:
 # 可以作为函数的返回值
 ```
 
+##### 4.2.2 type、object和class关系
 
+##### 4.2.3 Python中常见数据类型
+
+==对象三个属性:id、类型和值==
+
+```python
+a = None
+b = None
+
+id(a) == id(b)
+
+```
+
+
+
+| 类型             |                 举例                  |
+| ---------------- | :-----------------------------------: |
+| None             |             全局唯一对象              |
+| 数值             |    int、float、complex(复数)、bool    |
+| 迭代类型         |             迭代器生成器              |
+| 序列类型         | list、bytes、range、tuple、str、array |
+| 映射             |                 dict                  |
+| 集合             |            set、frozenset             |
+| 上下文管理器类型 |               with语句                |
+
+#### 4.3 魔法函数
 
 ### 五. 爬虫测试
 
@@ -3620,13 +3646,34 @@ DB:数据库(database):存储数据的仓库,它保存了一系列有组织的�
 DBMS:数据库管理系统(Database Management System),数据库是通过DBMS创建和操作的容器
 SQL:结构化查询语言(Structure Query Language),专门用来与数据库通信的语言
 
+```sql
+# 启动mysql服务(cmd管理员)
+net start mysql
+
+# 关闭mysql服务
+net stop mysql
+
+# 连接本地mysql服务
+mysql -uroot -p
+
+# 查看所有数据库名
+SHOW DATABASES;
+
+# 选择数据库名
+USE dataName;
+
+# 查看所有表名
+SHOW TABLES;
+
+# 解决中文乱码
+SET NAMES GBK;
+
+# 解决对齐
+CHARSET GBK;
+
+```
+
 ##### 10.2.2 DQL数据库查询语言
-
-启动mysql服务(cmd管理员)
-
-> net start mysql
->
-> net stop mysql
 
 ###### 1)基础查询
 
@@ -3729,7 +3776,7 @@ SELECT * FROM employees WHERE department_id != 90;
 # 案例: 查询工资在10000到20000之间的员工名,工资以及奖金
 SELECT last_name,salary,commission_pct FROM employees WHERE salary >= 10000 AND salary <= 20000;
 
-# 案例4: 查询员工名字中包含字符a的员工信息
+# 案例: 查询员工名字中包含字符a的员工信息
 SELECT * FROM employees WHERE last_name LIKE '%a%';
 
 # 案例: 查询员工名中第三个字符为n,第5个字符为l的员工名和工资
@@ -3739,7 +3786,6 @@ SELECT last_name,salary FROM employees WHERE last_name LIKE '__n_l%';
 SELECT last_name FROM employees WHERE last_name LIKE '_\_%';
 
 # 案例: between and 查询员工编号在100到120之间的员工信息
-
 SELECT * FROM employees WHERE employee_id BETWEEN 100 AND 120;
 
 # 案例: 查询员工的工种编号是it_prog,ad_vp,ad_pres的员工名和工种编号
@@ -3834,7 +3880,7 @@ SELECT CONCAT(UPPER(last_name),LOWER(first_name)) AS 'Name' FROM employees;
 # 截取从指定索引处后面所有字符
 SELECT SUBSTR('李莫愁爱上了陆展元',7) AS output;
 # 截取从指定索引处指定字符长度的字符
-SELECT SUBSTR('李莫愁安上了陆展元',1,3) AS output;
+SELECT SUBSTR('李莫愁爱上了陆展元',1,3) AS output;
 
 # 案例:姓名中首字符大写,其他字符小写,然后拼接
 SELECT CONCAT(UPPER(SUBSTR(last_name,1,1)),'_',LOWER(SUBSTR(last_name,2))) AS 'Nanme' FROM employees;
@@ -3904,7 +3950,6 @@ SELECT DATE_FORMAT(NOW(),'%y年%m月%d日') AS out_put;
 SELECT last_name,DATE_FORMAT(hiredate,'%m月/%d日 %y年') AS 入职时间 FROM employees;
 
 # 其他函数
-
 SELECT VERSION();
 SELECT DATABASE();
 SELECT USER();
@@ -4432,8 +4477,8 @@ WHERE departments.`department_name` = 'SAL' OR departments.`department_name` = '
 	from 后面:
 		支持表子查询
 	where 或 having后面:☆
-		标量子查询(单行) √
-		列子查询(多行) √
+		标量子查询(单行)
+		列子查询(多行)
 		行子查询
 	exists后面(相关子查询):
 		表子查询
@@ -4874,6 +4919,16 @@ SELECT * FROM myemployees.`departments`;
 ```
 
 ###### 3)常见数据类型
+
+##### 10.2.5 MySQL执行一条查询语句内部执行过程?
+
+![image-20210519134854905](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210519134854905.png)
+
++ 客户端先通过连接器连接到MySQL服务器
++ 连接器通过数据库权限身份验证后,会先查询数据缓存是否存在(之前是否执行过相同的SQL查询),如果有会直接返回缓存中的数据,如果没有则会进入分析器
++ 进入分析器会对查询语法进行语法分析,判断该SQL是否存在语法错误,如果存在语法错误,会直接返回给客户端错误,如果正确则进入优化器
++ 优化器会对查询语句进行优化处理
++ 最终进入执行器,开始执行语句直到满足所有条件数据,进行返回
 
 #### 10.3 redis
 
@@ -6047,7 +6102,7 @@ def lengthOfLongestSubstring(s):
 + 暴力求解
 
 ```python
-def longestPalindrome(self, s: str) -> str:
+def longestPalindrome(s)
     if s == s[::-1]:
         return s
 
@@ -6102,13 +6157,81 @@ class Solution():
 
 ###### 6)[Z字形变换](https://leetcode-cn.com/problems/zigzag-conversion/)
 
-```python
++ 遍历写入
 
+```python
+def convert(s, numRows): 
+    if numRows <= 1:
+        return s
+
+    # rowlis存放二维数组
+    rowlis = [[] for i in range(numRows)]
+    # arrlis将字符写入每一行
+    arrlis = [s for i in range(numRows)]
+
+    # 标志用于判断返回和递增递减行数
+    flag = 1
+    # 行数
+    rows = 0
+    for i in range(len(s)):
+        rowlis[i].append(arrlis[rows][i])
+        rows += flag
+        # 第一次遍历行数后,之后的第一行和最后一行flag值发生变化
+        if rows == 0 or rows == numRows - 1:
+            flag *= -1
+
+    answ = []
+    for elem in rowlis:
+        answ.extend(elem)
+
+    return ''.join(answ)
+
+```
+
++ 遍历写入强化
+
+```python
+def convert(s, numRows):
+    if numRows <= 1 or numRows > len(s):
+        return s
+
+    flag = 1
+    rows = 0
+    answ = ['']*numRows
+
+    for i in s:
+        answ[rows] += i
+        rows += 1
+        if rows in [0, numRows-1]:
+            flag *= -1
+
+    return ''.join(answ)
+    
 ```
 
 ###### 8)[字符串转换整数](https://leetcode-cn.com/problems/string-to-integer-atoi/)
 
 ```python
+def myAtoi(str):
+    str = str.lstrip()
+    if len(str):
+        return 0
+
+    rslt = 0
+    i = 2 if str[0] in ['+', '-'] else 1
+    while i < len(str):
+        try:
+            rslt = int(str[:i])
+            i += 1
+        except:
+            break
+
+    if rslt < -2147483648:
+        return -2147483648
+    elif rslt > 2147483647:
+        return 2147483647
+    else:
+        return rslt
 
 ```
 
@@ -6116,7 +6239,6 @@ class Solution():
 
 ```python
 def maxArea(height):
-
     lef = 0
     rig = len(height) - 1
     maxArea = 0
@@ -6134,6 +6256,74 @@ def maxArea(height):
 
     return maxArea
     
+```
+
+###### 12)[整数转罗马数字](https://leetcode-cn.com/problems/integer-to-roman/)
+
+```python
+def intToRoman(num):
+    answ = ''
+    mapp = {'M':1000, 'CM':900, 'D':500, 'CD':400, 'C':100, 'XC':90, 
+            'L':50, 'XL':40, 'X':10, 'IX':9, 'V':5, 'IV':4, 'I':1}
+
+    para = num
+    for k, v in mapp.items():
+        flag = para // v
+        if flag > 0:
+            # 注意乘以flag个数
+            answ += k * flag
+            para -= v * flag
+
+    return answ
+
+```
+
+###### 692)[前K个高频单词](https://leetcode-cn.com/problems/top-k-frequent-words/)
+
+```python
+def topKFrequent(words, k):
+    charDict = {}
+    for i in words:
+        charDict[i] = charDict.get(i, 0) + 1
+    # 排序有多个key的话, 可以使用元祖
+    answ = sorted(charDict.keys(), key = lambda x:(-charDict[x], x))
+    return answ[:k]
+
+```
+
+###### 1442)[形成两个异或相等数组的三元组数目](https://leetcode-cn.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/)
+
+```python
+def countTriplets(arr):
+    rslt = 0
+    for i in range(len(arr)-1):
+        answ = arr[i]
+        # 找出数组里面连续i,j,k满足arr[i],arr[j],arr[k]异或和为0
+        for j in range(i, len(arr)):
+            answ ^= arr[j]
+            if answ == 0:
+                rslt += j -i
+
+    return rslt
+
+```
+
+###### 1447)[找出第K大的异或坐标值](https://leetcode-cn.com/problems/find-kth-largest-xor-coordinate-value/)
+
+```python
+def kLargestValue(matrix, k):
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if i and j:
+                matrix[i][j] ^= matrix[i][j-1] ^ matrix[i-1][j] ^ matrix[i-1][j-1]
+            elif i:
+                matrix[i][0] ^= matrix[i-1][0]
+            elif j:
+                matrix[0][j] ^= matrix[0][j-1]
+
+    answ = sorted([j for i in matrix for j in i])
+    return answ[-k]
+
 ```
 
 ##### 11.9.3 困难
