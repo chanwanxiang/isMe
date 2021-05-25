@@ -20,9 +20,9 @@ a[0] = 'b'
 方法一:
 
 ```python
-a = a+b
-b = a-b
-a = a-b
+a = a + b
+b = a - b
+a = a - b
 
 ```
 
@@ -1428,6 +1428,12 @@ lambda 函数是一个可以接受任意多个参数(包括可选参数)并且�
 1. lambda 函数比较轻便,即用即仍,适合需要完成一项功能,但此功能只在一处使用,连名字都很随意情况下
 2. 匿名函数,一般用来给filter、map这样的函数式编程服务
 3. 作为回调函数,传递给某些应用,比如消息处理
+
+##### 2.5.3 all()和zip()
+
+all()	函数用于判断给定的可迭代对象iterable中的所有元素是否都为TRUE,如果是返回TRUE,否则返回False
+
+zip()	函数用于将可迭代对象作为参数,将对象中对应的元素都打包成一个个元祖,然后由这些元祖组成的对象
 
 #### 2.6 一切皆对象
 
@@ -3581,6 +3587,7 @@ LIMIT 分页;
 6)计算所有的表达式
 7)SELECT 子句查询字段
 8)ORDER BY 子句对结果集进行排序
+9)LIMIT 分页
 
 常见DML语句
 
@@ -5089,7 +5096,6 @@ SELECT * FROM myemployees.`departments`;
 
 ```python
 # 按值查找
-
 def search(sequ, elem):
     i = 0
     while i < len(sequ)-1:
@@ -5348,6 +5354,146 @@ def remove(self, elem):
         
     return p
         
+```
+
+###### 11)合集
+
+```python
+# 定义结点
+class Node(object):
+    
+    def __init__(self, item):
+        # item存放数据元素
+        self.item = item
+        # next是下一个结点的地址
+        self.next = None
+
+# 定义链表
+class singleLinkList(object):
+
+    def __init__(self):
+        self.head = None
+
+    def isEmpty(self):
+        # 判断链表是否为空
+        return self.head is None
+
+    def length(self):
+        # 链表长度
+        curs = self.head
+        coun = 0
+        while curs is not None:
+            coun += 1
+            curs = curs.next
+        return coun
+
+    def items(self):
+        # 遍历链表
+        curs = self.head
+        while curs is not None:
+            yield curs.item
+            curs = curs.next
+
+    def add(self, item):
+        # 向链表头部添加元素
+        node = Node(item)
+        # 新结点指针指向原头部的结点
+        node.next = self.head
+        # 头部结点指针修改为新的结点
+        self.head = node
+
+    def append(self, item):
+        # 尾部添加元素
+        node = Node(item)
+        # 判断是否为空链表
+        if self.isEmpty():
+            self.head = node
+        # 不是空链表则找到尾部,将next结点指向新的结点
+        else:
+            curs = self.head
+            while curs.next is not None:
+                curs = curs.next
+            curs.next = node
+
+    def insert(self, index, item):
+        # 指定位置插入元素
+        if index <= 0:
+            self.add(item)
+        # 指定位置超过尾部,尾部插入
+        elif index > (self.length() - 1):
+            self.append(item)
+        else:
+            node = Node(item)
+            curs = self.head
+            for i in range(index - 1):
+                curs = curs.next
+            node.next = curs.next
+            curs.next = node
+
+    def remove(self, item):
+        # 删除结点
+        curs = self.head
+        pren = None
+        while curs is not None:
+            if curs.item == item:
+                if not pren:
+                    self.head = curs.next
+                else:
+                    pren.next = curs.next
+                
+                return True
+
+            else:
+                pren = curs
+                curs = curs.next
+
+    def find(self, item):
+        # 查找元素是否存在
+        return item in self.items()
+
+if __name__ == '__main__':
+    # 创建链表
+    linklist = singleLinkList()
+    # 创建结点
+    node1 = Node(1)
+    print(node1)  #<__main__.Node object at 0x00000258F5511BE0>
+    node2 = Node(2)
+    print(node2)  #<__main__.Node object at 0x00000258F5511C50>
+
+    # 将结点添加到链表
+    linklist.head = node1
+    # 将第一个结点的next指针指向下一结点
+    node1.next = node2
+
+    # 访问第一个结点的数据
+    print(linklist.head.item)       #1
+    # 访问第二个结点的数据
+    print(linklist.head.next.item)  #2
+    
+    # 向链表尾部添加数据
+    for i in [3, 4, 5]:
+        linklist.append(i)
+    print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
+
+    # 向头部添加数据
+    linklist.add(0)
+    print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
+
+    # 遍历链表数据
+    for i in linklist.items():
+        print(i)  #0, 1, 2, 3, 4, 5
+
+    # 链表数据插入数据
+    linklist.insert(2, 1.5)
+    print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
+
+    # 删除链表数据
+    linklist.remove(0)
+    print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
+
+    # 查找链表数据
+    print(linklist.find(3))  #True
+
 ```
 
 ##### 11.3.3 单链表特点
@@ -6276,6 +6422,44 @@ def intToRoman(num):
 
     return answ
 
+```
+
+###### 15)[三数之和](https://leetcode-cn.com/problems/3sum/)
+
+```python
+def threeSum(nums):
+
+    answ = []
+    if not nums or len(nums) < 3:
+        return answ
+    
+    nums.sort()
+    if nums[0] > 0:
+        return answ
+
+    for i in range(len(nums)-2):
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+
+        j = i + 1
+        k = len(nums) - 1
+        while j < k:
+            if nums[i] + nums[j] + nums[k] == 0:
+                answ.append(nums[i], nums[j], nums[k])
+                # 判断左界右界是否和下一位置重复,去除重复的解
+                while j < k and nums[j] == nums[j+1]:
+                    j += 1
+                while j < k and nums[k] == nums[k-1]:
+                    k -= 1
+                j += 1
+                k -= 1
+            elif nums[i] + nums[j] + nums[k] < 0:
+                j += 1
+            else:
+                k -= 1
+
+        return answ
+        
 ```
 
 ###### 692)[前K个高频单词](https://leetcode-cn.com/problems/top-k-frequent-words/)
