@@ -1834,6 +1834,20 @@ for i in f:
 
 子类不想原封不动地继承父类的方法,而是想作一定的修改,这就需要采用方法的重写,方法重写又称方法覆盖
 
+#### 3.4 接口设计原则
+
+**SRP 单一职责原则**
+
+**里氏替换原则**
+
+**DIP依赖倒置原则**
+
+**接口隔离原则**
+
+**迪米特法则**
+
+**OCP开闭原则**
+
 ### 四. 面向对象
 
 #### 4.1 对象
@@ -5108,7 +5122,7 @@ def search(sequ, elem):
     
 ```
 
-##### 11.2.3 python中顺序表的实现
+##### 11.2.3 Python中顺序表的实现
 
 Python中的list和tuple两种类型采用了顺序表的实现技术
 
@@ -5486,11 +5500,15 @@ if __name__ == '__main__':
     # 链表数据插入数据
     linklist.insert(2, 1.5)
     print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
+    for i in linklist.items():
+        print(i)  #0, 1, 1.5, 2, 3, 4, 5
 
     # 删除链表数据
     linklist.remove(0)
     print(linklist.items())  #<generator object singleLinkList.items at 0x00000258F548B5E8>
-
+    for i in linklist.items():
+        print(i)  #1, 1.5, 2, 3, 4, 5
+    
     # 查找链表数据
     print(linklist.find(3))  #True
 
@@ -5529,7 +5547,92 @@ if __name__ == '__main__':
 ##### 11.3.6 双链表的实现和操作
 
 ```python
+# 定义双向链表结点
+class Node(object):
+    
+    def __init__(self, item):
+        # 存放元素
+        self.item = item
+        # next指向下一个结点地址
+        self.next = None
+        # prev指向上一个结点地址
+        self.prev = None
+        
+# 定义双向链表
+class DoubbleLinkList(object):
 
+    def __init__(self):
+        self.head = None
+
+    def isEmpty(self):
+
+        return self.head is None
+
+    def length(self):
+        curs = self.head
+        coun = 0
+        while curs is not None:
+            coun += 1
+            curs = curs.next
+        
+        return coun
+
+    def items(self):
+        curs = self.head
+        while curs is not None:
+            yield curs.item
+            curs = curs.next
+
+    # 链表头部添加元素
+    def add(self, item):
+        node = Node(item)
+        # 链表为空
+        if self.isEmpty():
+            self.head = node
+        else:
+            # 新结点指针指向原头部结点
+            node.next = self.head
+            # 原头部prev指向新结点
+            self.head.prev = node
+            # head指向新结点
+            self.head = node
+
+    # 链表尾部添加元素
+    def append(self, item):
+        node = Node(item)
+        # 链表为空
+        if self.isEmpty():
+            self.head = node
+        else:
+            curs = self.head
+            while curs.next is not None:
+                curs = curs.next
+            # 新结点上一级指针指向旧的尾部
+            node.prev = curs
+            # 旧的尾部指向新的结点
+            curs.next = node
+
+    # 指定位置插入元素
+    def insert(self, index, item):
+        if index <= 0:
+            self.add(item)
+        elif index > self.length() - 1:
+            self.append(item)
+        else:
+            node = Node(item)
+            curs = self.head
+            for i in range(index):
+                curs = curs.next
+            # 新的结点向下指针指向当前结点
+            node.next = curs
+            # 新的结点向上指针指向当前结点上一结点
+            node.prev = curs.prev
+            # 当前上一结点向下指针指向node
+            curs.prev.next = node
+            # 当前结点的向上指针指向新的结点
+            curs.prev = node
+
+       
 ```
 
 #### 11.4 栈和队列
