@@ -219,7 +219,7 @@ copy 函数:b = copy.copy(a)
 
 ##### 1.5.3 \__init__和\_\_new\_\_的区别?
 
-init 在对象创建后,对对象进行初始化
+init在对象创建后,对对象进行初始化
 new 是在对象创建之前创建一个对象,并将该对象返回给 init
 
 ##### 1.5.4 Python中如何生成随机数?
@@ -1933,6 +1933,10 @@ id(a) == id(b)
 | 上下文管理器类型 |               with语句                |
 
 #### 4.3 魔法函数
+
+##### 4.3.1 什么是魔法函数
+
+4.3.2 Python数据模型对Python的影响
 
 ### 五. 爬虫测试
 
@@ -4154,7 +4158,9 @@ ORDER BY AVG(salary);
 
 ###### 6)连接查询
 
-```sql
+![image-20210526170856822](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210526170856822.png)
+
+```sqlsql
 /*
 含义:多表查询
 
@@ -4655,11 +4661,202 @@ WHERE salary < (
 	WHERE job_id = 'IT_PROG'
 ) AND job_id <> 'IT_PROG';
 
+# 行子查询(结果一行多列或者多行多列)
+# 案例: 查询员工编号最小并且工资最高的员工信息
+
+SELECT *
+FROM employees
+WHERE (employee_id,salary) = (
+	SELECT MIN(employee_id),MAX(salary)
+	FROM employees
+);
+
+# 1. 查询最小的员工编号
+SELECT MIN(employee_id)
+FROM employees;
+
+# 2. 查询最高工资
+SELECT MAX(salary)
+FROM employees;
+
+# 3. 查询员工信息
+SELECT *
+FROM employees
+WHERE employee_id = (
+	SELECT MIN(employee_id)
+	FROM employees
+) AND salary = (
+	SELECT MAX(salary)
+	FROM employees
+);
+
+# 二. SELECT后面的子查询
+/*
+仅支持标量子查询
+*/
+
+# 案例: 查询每个部门的员工个数
+SELECT d.*,(
+	SELECT COUNT(*)
+	FROM employees e
+	WHERE e.department_id = d.`department_id`
+) number
+FROM departments d;
+
+# 案例: 查询员工号=102的部门名
+SELECT (
+	SELECT department_name
+	FROM departments d
+	INNER JOIN employees e
+	ON d.department_id = e.department_id
+	WHERE e.employee_id = 102
+) 部门名;
+
+# 三. FORM后面
+# 案例: 查询每个部门的平均工资等级
+# 1. 查询每个部门的平均工资
+SELECT department_id,AVG(salary)
+FROM employees
+GROUP BY department_id;
+
+# 2. 连接1的结果集合job_grade表,筛选条件平均工资
+SELECT av_dep.department_id,av_salary,grade_level
+FROM (
+	SELECT department_id,AVG(salary) av_salary
+	FROM employees
+	GROUP BY department_id
+) av_dep
+INNER JOIN job_grades j
+ON av_dep.av_salary BETWEEN j.lowest_sal AND j.highest_sal;
+
+# 四. exists后面(相关子查询)
+/*
+语法:
+exists(完整查询语句)
+结果(0或者1)
+*/
+
+SELECT EXISTS(
+	SELECT employee_id
+	FROM employees
+	WHERE salary = 30000
+);
+
+# 案例: 查询有员工的部门名
+SELECT department_name
+FROM departments d
+WHERE EXISTS(
+	SELECT *
+	FROM employees e
+	WHERE d.department_id = e.department_id
+);
+
+# 或in
+SELECT 	department_name
+FROM departments d
+WHERE d.department_id IN (
+	SELECT department_id
+	FROM employees
+);
+
+# 案例: 查询没有女朋友的男神信息
+SELECT bo.*
+FROM boys bo
+WHERE bo.id NOT IN (
+	SELECT boyfriend_id
+	FROM beauty
+);
+
+# 或exists
+SELECT bo.*
+FROM boys bo
+WHERE NOT EXISTS(
+	SELECT boyfriend_id
+	FROM beauty b
+	WHERE bo.id = b.boyfriend_id
+);
+
 ```
 
 ###### 8)分页查询
 
+```sql
+/*
+应用场景:要显示的数据需要分页提交sql请求
+语法:
+	SELECT 查询列表
+	FROM 表
+	[JOINTYPE JOIN 表2
+	ON 连接条件
+	WHERE 筛选条件
+	GROUP BY 分组字段
+	HAVING 分组后的筛选
+	ORDER BY 排序字段]
+	LIMIT offset,size;
+	
+	offset要显示条目的起始索引(起始索引从0开始)
+	size要显示的条目个数
+特点:
+	1. limit语句放在查询语句的最后(执行上和语法上都是最后)
+	2. 要显示的页数是page,每页条目数size
+	SELECT *
+	FORM 表
+	LIMIT (page-1)*size,size;
+*/
+# 案例: 查询前五条员工信息
+SELECT *
+FROM employees
+LIMIT 0,5;
+
+# 案例: 查询第11条到第25条
+SELECT *
+FROM employees
+LIMIT 10, 15;
+
+# 案例: 有奖金的员工信息,并且工资较高的前10名
+SELECT *
+FROM employees
+WHERE commission_pct IS NOT NULL
+ORDER BY salary DESC
+LIMIT 10;
+
+```
+
 ###### 9)联合查询
+
+```sql
+/*
+union 联合 合并:将多条查询语句合并成一个结果
+
+语法:
+查询语句1
+UNION
+查询语句2
+
+应用场景:
+要查询的结果来自于多个表,且多个表没有直接的连接关系,但查询的信息一致(全局搜索)
+
+特点:
+1. 要求多条查询语句查询列数一致
+2. 要求多条查询语句查询每列类型和顺序要保持一致
+3. UNION关键字默认去重,如果使用UNION ALL可以包含重复的项
+*/
+
+# 案例1:查询部门编号大于90或者邮箱中包含a的员工信息
+SELECT *
+FROM employees
+WHERE email LIKE '%a%' OR department_id > 90;
+
+# 或
+SELECT *
+FROM employees
+WHERE email LIKE '%a%'
+UNION
+SELECT *
+FROM employees
+WHERE department_id > 90;
+
+```
 
 ##### 10.2.3 DML数据库操作语言
 
@@ -5631,7 +5828,6 @@ class DoubbleLinkList(object):
             curs.prev.next = node
             # 当前结点的向上指针指向新的结点
             curs.prev = node
-
        
 ```
 
@@ -5923,8 +6119,8 @@ print(fastSort([5, 4, 3, 2, 1]))
 
 ```python
 def twoSum(nums, target):
-        for i in range(len(nums)):
-            for j in range(i, len(nums)):
+        for i in range(len(nums)-1):
+            for j in range(i+1, len(nums)):
                 if nums[i] + nums[j] == target:
                     return [i, j]
                 
@@ -5935,11 +6131,13 @@ def twoSum(nums, target):
 ```python
 def twoSum(nums, target):
     for i in nums:
-        j = tartget - i
-        startindex = nums.index(i)
-        tempnums = [startindex+1:]
-        if j in tempnums:
-            return [startindex, startindex + tempnums.index(j)]
+        j = target - i
+
+        stainx = nums.index(i)
+        snapls = nums[stainx+1:]
+
+        if j in snapls:
+            return [stainx, stainx+snapls.index(j)+1]
         
 ```
 
@@ -6564,6 +6762,65 @@ def threeSum(nums):
         return answ
         
 ```
+
+###### 16)[最接近的三数之和](https://leetcode-cn.com/problems/3sum-closest/)
+
+```python
+def threeSumCloseest(nums, target):
+    nums.sort()
+    # 初始化answ的值
+    answ = nums[0] + nums[1] + nums[2]
+    
+    for i in range(len(nums)-2):
+        # 剪枝
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        j = i + 1
+        k = len(nums) - 1
+        while j < k:
+            snap = nums[i] + nums[j] + nums[k]
+            if abs(target-answ) > abs(target-snap):
+                answ = snap
+                
+            if target > sanp:
+                j += 1
+            elif target < snap:
+                k -= 1
+            else:
+                return answ
+                
+    return answ
+    
+```
+
+###### 17)[电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+
+```python
+def letterCombinations(digits):
+    mapping = {
+        '2': 'abc',
+        '3': 'def',
+        '4': 'ghi',
+        '5': 'jkl',
+        '6': 'mno',
+        '7': 'pqrs',
+        '8': 'tuv',
+        '9': 'wxyz'
+    }
+
+    if digits == '':
+        return []
+    
+    # 定义ans是一个空的字符列表,非空列表
+    ans = ['']
+    for num in digits:
+        ans = [i+j for i in ans for j in mapping[num]]
+
+    return ans
+
+```
+
+
 
 ###### 692)[前K个高频单词](https://leetcode-cn.com/problems/top-k-frequent-words/)
 
