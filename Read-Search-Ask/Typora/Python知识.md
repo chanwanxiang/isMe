@@ -901,7 +901,7 @@ output
 ##### 1.9.11 列表推导式
 
 列表推导式的方括号内包含以下内容
-==一个表达式，后面为一个for子句,然后是零个或多个for或 if 子句,结果是由表达式依据 for和 if子句求值计算而得出一个新列表==
+==一个表达式后面为一个for子句,然后是零个或多个for或 if 子句,结果是由表达式依据 for和 if子句求值计算而得出一个新列表==
 
 ```python
 import random
@@ -3250,7 +3250,38 @@ linux用户需要至少都属于一个组
 
 ![image-20210423115515090](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210423115515090.png)
 
++ Normal模式(上图命令模式)
 
+| 指令                 |                             说明                             |
+| -------------------- | :----------------------------------------------------------: |
+| a \| A               |                append \| append after a line                 |
+| i  \| I              |              insert     \| insert before a line              |
+| o \| O               |            open a line below \| open a line above            |
+| v  \|  V  \| ctrl +v |                  visual模式用例块状选择文本                  |
+| gi                   |           跳转文件最后一次编辑的地方并进入编辑模式           |
+| h \| j \| k \| l     |                  左 \| 下 \| 上 \| 右 移动                   |
+| w \| W               |            移动下个word\| WORD开头(之间包含空格)             |
+| e  \| E              |             移动下个word\|WORD结尾(之间包含空格)             |
+| b  \| B              |             回到上个word\|WORD开头(之间包含空格)             |
+| f{char} \| F{char}   | 同行搜索一个字符并且移动到该字符,F反向搜索前面字符(;下一个\|,上一个) |
+| 0 \| $               |                     快速移动一行行首行尾                     |
+| gg \| G              |         移动文件开开头结尾,可以使用ctrl + o 快速返回         |
+| H \| M \| L          |                  跳转屏幕开头,中间结尾部分                   |
+| ctru + u \| ctrl + f |                  上下翻页,zz把屏幕置位中间                   |
+
++ 编辑模式(上图输入模式)
+
+| 指令                 |          说明           |
+| -------------------- | :---------------------: |
+| ctrl + h             |     删除上一个字符      |
+| ctrl + w             |     删除上一个单词      |
+| ctrl + u             |      删除当前的行       |
+| ctrl + c \| ctrl + [ | 代替esc切换编辑普通模式 |
+|                      |                         |
+
+
+
++ 底线命令模式
 
 #### 9.5 时间日期
 
@@ -6076,7 +6107,29 @@ print(insertSort(ls))
 
 ```
 
-##### 11.8.4 快速排序
+##### 11.8.4 希尔排序(缩小增量排序)
+
+```python
+def shellSort(sequ):
+    
+    step = len(sequ) // 2
+    
+    while step > 0:
+        for i in range(step, len(sequ)):
+            while i > 0:
+                if sequ[i] < sequ[i-step]:
+                    sequ[i], sequ[i-step] = sequ[i-step], sequ[i]
+                else:
+                    break
+        step //= 2
+        
+    return sequ
+
+```
+
+
+
+##### 11.8.5 快速排序
 
 ![在这里插入图片描述](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/20200811152355953.gif)
 
@@ -6820,7 +6873,41 @@ def letterCombinations(digits):
 
 ```
 
+###### 18)[四数之和](https://leetcode-cn.com/problems/4sum/)
 
+```python
+def fourSum(nums, target):
+    if not nums or len(nums) < 4:
+        return []
+    
+    nums.sort()
+    answ = []
+    for a in range(len(nums)-3):
+        if a > 0 and nums[a] == nums[a-1]:
+            continue
+        for b in range(a+1, len(nums)-2):
+            if b > a+1 and nums[b] == nums[b-1]:
+                continue
+            c = b + 1
+            d = len(nums) - 1
+            while c < d:
+                sum = nums[a] + nums[b] + nums[c] + nums[d]
+                if sum == target:
+                    answ.append([nums[a], nums[b], nums[c], nums[d]])
+                    while c < d and nums[c] == nums[c+1]:
+                        c += 1
+                    while c < d and nums[d] == nums[d-1]:
+                        d -= 1
+                    c += 1
+                    d -= 1
+                elif sum < target:
+                    c += 1
+                else:
+                    d -= 1
+                    
+    return answ
+
+```
 
 ###### 692)[前K个高频单词](https://leetcode-cn.com/problems/top-k-frequent-words/)
 
