@@ -254,10 +254,10 @@ def dayofyear():
     year = input('请输入年份:') 
     month = input('请输入月份:') 
     day = input('请输入天:') 
-    date1 = datetime.date(year=int(year),month=1,day=1)
-    date2 = datetime.date(year=int(year),month=int(month),day=int(day))
+    date1 = datetime.date(year=int(year), month=1, day=1)
+    date2 = datetime.date(year=int(year), month=int(month), day=int(day))
     
-    return (date2 - date1 + 1).days
+    return (date2 - date1).days + 1
                   
 ```
 
@@ -531,6 +531,21 @@ str = '12345'
 nstr = ''.join(str(-x) for x in range(1, len(str)+1))
 
 ```
+
+###### 4)双指针交换
+
+```python
+str = list('12345')
+
+left, righ = 0, len(str)-1
+while left < right:
+    str[left], str[righ] = str[righ], str[left]
+    left += 1
+    righ -= 1
+    
+```
+
+
 
 ##### 1.7.5 将字符串"k:1|k1:2|k2:3|k3:4"，处理成 Python 字典：{k:1， k1:2， ... } ,字典里的 k 作为字符串处理
 
@@ -6958,6 +6973,3 @@ def kLargestValue(matrix, k):
 ```
 
 ##### 11.9.3 困难
-
-
-
