@@ -1046,6 +1046,37 @@ pirnt(getKey(stuinfo, '小绿'))  #3
 
 ```
 
+##### 1.10.6  写一个函数满足以下行为输出结果按照层级把同一层的属性放到一个子数组内
+
+//输入对象
+{"a":{"b":{"c":{"d":"h","j":"i","o":{"p":"q","r":"s"},"t":"u"}},"v":{"w":{"x":{"y":"z"}}}},"e":{"f":{"i":"k"},"m":"n"}}
+
+//输出结果
+[['a', 'e'], ['b', 'v', 'f', 'm'], ['c', 'w', 'i'], ['d', 'j', 'o', 't', 'x'], ['p', 'r', 'y']]
+
+```python
+def getDictKey(dictValue,answ = []):
+    keys = []
+    newdict = {}
+    flag = False
+
+    for key, value in dictValue.items():
+        keys.append(key)
+        if isinstance(value, dict):
+            newdict.update(value)
+            flag = True
+        else:
+            continue
+
+    answ.append(keys)
+
+    if flag:
+        getDictKey(newdict, answ)
+
+    return answ
+
+```
+
 #### 1.11 set
 
 set 集合,在 Python 中的书写方式的{},集合与之前列表、元组类似,可以存储多个数据,但是这些数据是不重复的
