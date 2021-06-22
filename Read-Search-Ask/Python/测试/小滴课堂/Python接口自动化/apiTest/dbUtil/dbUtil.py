@@ -23,13 +23,15 @@ import pymysql
 from warnings import filterwarnings
 
 # 忽略mysql告警信息
-filterwarnings('ignore',category=pymysql.Warning)
+filterwarnings('ignore', category=pymysql.Warning)
+
 
 class mysqlDB:
 
     def __init__(self):
         # 建立数据库连接
-        self.conn = pymysql.connect(host='127.0.0.1',port=3333,user='root',password='1234',database='xdcls')
+        self.conn = pymysql.connect(
+            host='127.0.0.1', port=3333, user='root', password='1234', database='xdcls')
         # 使用cursor方法获取操作游标,得到一个可以执行的sql语句,并且操作结果作为字典返回的游标
         self.cur = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
 
@@ -39,7 +41,7 @@ class mysqlDB:
         # 关闭连接
         self.conn.close()
 
-    def query(self,sql,state='all'):
+    def query(self, sql, state='all'):
         self.cur.execute(sql)
         if state == 'all':
             data = self.cur.fetchall()
@@ -47,7 +49,7 @@ class mysqlDB:
             data = self.cur.fetchone()
         return data
 
-    def execute(self,sql):
+    def execute(self, sql):
         # 更新删除新增
         try:
             # 使用execute操作数据库
@@ -58,6 +60,7 @@ class mysqlDB:
         except Exception as e:
             print('数据库异常{0}'.format(e))
             self.conn.rollback()
+
 
 if __name__ == "__main__":
     mydb = mysqlDB()
