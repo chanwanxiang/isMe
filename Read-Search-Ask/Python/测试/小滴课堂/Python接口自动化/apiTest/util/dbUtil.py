@@ -7,13 +7,10 @@ cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 try:
     # 使用 execute 方法执行sql查询
     cursor.execute("select * from `case`")
-
     data = cursor.fetchall()
-
     print(data)
 except Exception as e:
     print(e)
-
 finally:
     # 关闭数据库连接
     conn.close()
