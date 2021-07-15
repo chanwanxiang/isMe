@@ -1,5 +1,10 @@
 ### 一. Python基础
 
+IPython是一种基于python的交互式解释器,相较于原生python交互式环境,提供了更加强大的编辑和交互功能.
+
+>安装 pip install ipython
+>使用 ipython
+
 #### 1.1 语法
 
 ##### 1.1.1 代码中修改不可变数据类型会出现什么问题?
@@ -41,6 +46,10 @@ print 方法默认调用 sys.stdout.write 方法,即往控制台打印字符串
 input()获取用户输入,不论用户输入的是什么,获取到的都是字符串类型
 
 #### 1.2 条件与循环
+
+如果明确知道循环执行的次数或者对一个容器进行迭代,推荐使用for-in循环
+
+如果要构造不知道具体循环次数的循环结构,推荐使用while循环
 
 ##### 1.2.1 range和xrange的区别?
 
@@ -2177,6 +2186,88 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 
 ![image-20210428094704735](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210428094704735.png)
 
+#### 5.4 jenkins + jmeter 集成压力测试
+
+##### 5.4.1 安装
+
+##### 5.4.2 jmeter
+
+![image-20210712140508548](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712140508548.png)
+
+启动提示信息
+不要使用GUI运行压力测试,GUI仅用于压力测试的创建和调试,执行压力测试请不要使用GUI,试用以下命令来执行测试
+
+```
+ jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
+ 
+ 	-t : 执行测试文件所在的位置及文件名
+　　-n : 非GUI 模式执行JMeter
+　　-r : 远程将所有agent启动用在分布式测试场景下,不是分布式测试只是单点就不需要-r
+　　-l : 指定生成测试结果的保存文件, jtl文件格式
+　　-e : 测试结束后,生成测试报告
+　　-o : 指定测试报告的存放位置
+　　-o : 指定的文件及文件夹,必须不存在 ,否则执行会失败
+```
+
+配置
+
+1. 创建线程组及设置参数
+   ![image-20210712141304898](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712141304898.png)
+
+   > 线程数即模拟的用户数
+   > Ramp-Up Period即每个线程的执行时间间隔,设置为0即为并发
+
+2. 在线程组下创建HTTP请求
+
+   ![image-20210712141723965](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712141723965.png)
+
+3. HTTP请求添加运行结果分析监听器(图形结果、聚合报告、查看结果树)
+
+   > Samples	 	 本次场景中一共完成了多少事物
+   > Averag	 	    平均响应时间
+   > Median			统计响应时间中值
+   > Troughput       吞吐量,单位 事物/sec ,服务器每秒钟处理的请求数目
+
+##### 5.4.3 jenkins
+
+启动
+
+> java -jar jenkins.war
+
+关闭
+
+> localhost:8080/exit
+
+![image-20210712114117951](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712114117951.png)
+
+重启
+
+> localhost:8080/restart
+
+重新加载jenkins配置信息
+
+> localhost:8080/reload
+
+配置
+
+1. 创建一个自由风格的jenkins job任务
+
+2. 参数构建过程配置,设置脚本运行参数和脚本信息
+   ![image-20210712135430213](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712135430213.png)
+
+3. 构建脚本
+
+   ```
+   echo "删除历史日志目录"
+   rd /s/q D:\Jmeter\result
+   echo "执行脚本输出结果"
+   jmeter -n -t D:\Jmeter\script\%fileName%.jmx -l D:\Jmeter\%fileName%.jtl -e -o D:\Jmeter\result\
+   
+   ```
+
+4. HTML报告(安装Publish HTML Report)
+   ![image-20210712135826716](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210712135826716.png)
+
 ### 六. 系统编程
 
 #### 6.1 谈谈多进程、多线程以及协程理解?
@@ -3515,14 +3606,15 @@ linux用户需要至少都属于一个组
   >
   > tar -zcvf myhome.tar.gz /home/ (功能描述:将/home的文件夹压缩成myhome.tar.gz)
   >
-  > tar -zcvf a.tar.gz (功能描述:将a.tar.gz解压到当前目录)
+  > tar -zxvf a.tar.gz (功能描述:将a.tar.gz解压到当前目录)
   >
-  > tar -zcvf myhome.tar.gz -C /opt/ (功能描述:将myhome.tar.gz解压到/opt/目录下)
+  > tar -zxvf myhome.tar.gz -C /opt/ (功能描述:将myhome.tar.gz解压到/opt/目录下)
 
   | 选项 |        功能        |
   | ---- | :----------------: |
   | -z   |    打包同时压缩    |
   | -c   |  产生.tar打包文件  |
+  | -x   |    解包.tar文件    |
   | -v   |    显示详细信息    |
   | -f   | 指定压缩后的文件名 |
 
@@ -3616,7 +3708,7 @@ linux用户需要至少都属于一个组
   | sudo apt-get remove package         | 删除包                                |
   | sudo apt-cache search package       | 搜索软件包                            |
   | sudo apt-cache show package         | 获取包的相关信息,如说明、大小、版本等 |
-  | sudo apt-get -f install             | 修复安装                              |
+  | sudo apt-get -finstall              | 修复安装                              |
   | sudo apt-get remove package --purge | 删除包,包括配置文件等                 |
   | sudo apt-get upgrade                | 更新已安装的包                        |
   | sudo apt-get dist-upgrade           | 升级系统                              |
@@ -4321,7 +4413,7 @@ ORDER BY AVG(salary);
 
 ![image-20210526170856822](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210526170856822.png)
 
-```sqlsql
+```sql
 /*
 含义:多表查询
 
@@ -4655,8 +4747,8 @@ WHERE departments.`department_name` = 'SAL' OR departments.`department_name` = '
 
 ```sql
 /*
-定义:出现在其他语句中的select语句,成为子查询或内查询
-外部的查询语句,成为主查询或外查询
+定义:出现在其他语句中的select语句,称为子查询或内查询
+外部的查询语句,称为主查询或外查询
 
 分类:
 按子查询出现的位置:
@@ -6283,9 +6375,10 @@ def fastSort(sequ):
     leftSequ = [x for x in sequ if x < temp]
     # 比随机取数大的放在右序列
     rigtSequ = [x for x in sequ if x > temp]
+    tempSequ = [x for x in sequ if x == temp]
 
     # 左右序列递归方式继续排序
-    return fastSort(leftSequ) + [temp] + fastSort(rigtSequ)
+    return fastSort(leftSequ) + tempSequ + fastSort(rigtSequ)
 
 
 print(fastSort([5, 4, 3, 2, 1]))
@@ -6624,6 +6717,21 @@ def addbinary(a, b):
     return '{0:b}'.format(int(a,2)+int(b,2))
 
 ```
+
+###### 69)[x的平方根](https://leetcode-cn.com/problems/sqrtx/)
+
+```python
+def mySqrt(x):
+    left = 0
+    rith = x
+    while left <= righ:
+        mid = (left + righ) // 2
+        if mid**2 > x:
+            
+        
+```
+
+
 
 ###### 70)[爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
 
@@ -7088,3 +7196,34 @@ def kLargestValue(matrix, k):
 ```
 
 ##### 11.9.3 困难
+
+### 十二. 项目经历
+
+#### 合肥群音信息服务有限公司
+
+智能汽车事业部担任资源开发工程师一职,该项目组的职责为人机交互语音转文字对文字的关键字赋语义操作,开发流程为脚本编写,BS端平台校验(http的get请求)
+个人的工作主要包含两个方面
+一是车机导航项目需求分析、资源制作、资源自测、缺陷修复
+二是项目所有业务的缺陷统筹分发管理,包含与厂商测试部门对接缺陷修复计划、协助组员完成缺陷分析等
+
+使用的技术栈包括:git、python、linux、mysql、
+
+#### 杭州宇为科技有限公司
+
+测试工程师
+测试的目的是通过自动化或者手工测试找到产品与需求的差异性,直接目的是发现缺陷,最终目的是保证产品质量
+
+##### 面签中心(toB)
+
+是一款满足银行人员和贷款客户进行音视频通话及录制的产品,包含web端和App端
+web端既是银行坐席,包含登录、面签受理、面签审核、订单详情、数据大屏等模块
+App端既是业务员端,包含登录、订单基本信息录入、客户影像证件录入、订单列表、面签列表面签等模块
+
+##### 发券系统(toC)
+
+是一款向C端客户发放优惠券的产品,包含web端后台管理系统和小程序H5端活动页面
+发券后台管理系统主要包含项目信息活动页面设置、优惠券管理模块
+H5端包含单张领券、一键领券、我的优惠券等模块
+
+
+
