@@ -2694,7 +2694,7 @@ TCP通信过程的三个步骤:建立TCP连接通道-传输数据-断开TCP连�
 
   + 因为三次握手已经确认双方接收发送能力正常,双方都知道彼此已经准备好,而且也可以完成对双方出书序号值的确认,也就无需再第四次握手了
 
-##### 7.9.2 数据传输
+##### 7.9.3 数据传输
 
 TCP数据传输设计概念包含超时重传、快速重传、流量控制、拥塞控制等等
 
@@ -2706,18 +2706,20 @@ c.流量控制,TCP滑动窗口流量控制,TCP头字段里有一个windows字段
 
 d.拥塞控制,滑动窗口流量控制只关注发送端和接收端自身的状况,而没有考虑整个网络的通信情况.拥塞控制则是基于整个网络来考虑的,应对某一时刻网络延迟突然增加,TCP应对重传数据,导致网络负担更重,引起更大的延迟以及更多的丢包.为此引入了拥塞控制策略,具体算法包括慢启动、拥塞避免、拥塞发生、快速恢复
 
-##### 7.9.3 **四次挥手**
+##### 7.9.4 **四次挥手**
 
 1.主动关闭方发送一个fin报文,用来关闭主动方到被动关闭方的数据传输,即主动关闭方告知被动关闭方,我不再给你发送数据
 2.被动关闭方接收到fin报文后,发送一个ack报文给对方,确认序号为收到的序号+1
 3.被动关闭方发送一个fin报文,用来关闭向对方的数据传送
 4.主动关闭方接收端到fin报文,发送一个ack报文给被动关闭方,至此完成四次挥手
 
-1. 第一次挥手:客户端向服务端放松连接释放报文(FIN=1, ACK=1),主动关闭连接,同时等待服务端确认
+1. 第一次挥手:客户端向服务端发出连接释放报文(FIN=1, ACK=1),主动关闭连接,同时等待服务端确认
    + 序列号seq=x+2,及客户端上次发送报文的最后一个字节的序号+1
    + 确认号ack=y+1,及服务端上次发送报文的最后一个字节的序号+1
 2. 第二次挥手:服务端收到连接释放报文后,立即发出确认报文(ACK=1),确认号为ack=x+3
-   + 此时TCP连接处于半关闭状态,即客户端到服务端的连接    
+   + 此时TCP连接处于半关闭状态,即客户端到服务端的连接已经关闭了,但是服务端到客户端的连接还未释放,这表示客户端已经没有数据发送,但是服务端可能还要给客户端发送数据
+3. 第三次挥手:服务端向客户端发送连接释放报文(FIN=1, ACK=1),主动关闭连接,同时等待A的确认
+4. 第四次挥手:客户端收到服务端的连接释放报文后,立即发出确认报文(ACK=1)
 
 #### 7.10 说说HTTP和HTTPS区别?
 
@@ -5351,6 +5353,23 @@ WHERE department_id > 90;
 
 ```
 
+###### 10)查询总结
+
+```mysql
+# 语法
+/*
+SELECT 查询列表
+FROM 表1 别名
+连接类型 join 表2
+ON 连接条件
+WHERE 筛选
+GOURP BY 分组列表
+HAVING 筛选
+ORDER BY 排序列表
+LIMIT 起始条目索引, 条目数;
+*/
+```
+
 ##### 10.2.3 DML数据库操作语言
 
 ###### 1)插入语句
@@ -5378,7 +5397,7 @@ SELECT * FROM beauty;
 INSERT INTO beauty(id,NAME,sex,borndate,phone,photo,boyfriend_id)
 VALUES(13,'糖糖','女','1994-1-1','11111111111',NULL,2);
 
-# 方式二:可以为空的不写
+# 方式二:可以为空的字段和值不写
 INSERT INTO beauty(id,NAME,sex,borndate,phone,boyfriend_id)
 VALUES(14,'方方','女','1990-2-2','11111111111',2);
 
@@ -5397,6 +5416,7 @@ SET id=17,NAME='刘诗诗',sex='女',borndate='1991-3-3',phone='1818181818',boyf
 
 # 两种方式PK
 # 1. 方式一支持多行插入,方式二不支持
+INSERT INTO tableName(字段,....) VALUE(值,....),(值,....);
 # 2. 方式一支持子查询,方式二不支持
 
 ```
@@ -5411,7 +5431,7 @@ update 表名
 set 列=新值,列=新值,...
 where 筛选条件;
 
-2. 修改多表记录[补充]
+2. 修改多表记录[补充](级联修改)
 
 sql92语法:
 update 表1 别名,表2 别名
@@ -5463,7 +5483,7 @@ WHERE bo.`id` IS NULL;
 1. 单表删除[*]
 delete from 表名 where 筛选条件
 
-2. 多表删除[补充]
+2. 多表删除[补充](级联删除)
 语法:
 sql92语法:
 delete 表1的别名,表2的别名
@@ -5507,7 +5527,7 @@ TRUNCATE TABLE boys;
 
 #delete PK truncate[面试题]
 /*
-1. delete可以加where条件,truncate不可
+1. delete可以加where条件[LIMIT 1],truncate不可
 2. truncate删除,效率高些
 3. 假如要删除的表中有自增长列,delete删除再插入数据,自增长的列从断点开始,truncate自增长列从1开始
 4. truncate删除没有返回值,delete删除有返回值
@@ -5541,11 +5561,11 @@ DROP DATABASE IF EXISTS books;
 
 ```sql
 # 1. 表的创建
-CREATE TABLE 表名(
+CREATE TABLE [IF NOT EXIST]表名(
 	列名 列的类型[(长度) 约束],
 	列名 列的类型[(长度) 约束],
 	列名 列的类型[(长度) 约束]
-)
+);
 
 CREATE TABLE book(
 	id INT, # 编号
@@ -5629,7 +5649,106 @@ SELECT * FROM myemployees.`departments`;
 
 ```
 
-###### 3)常见数据类型
+###### 3)数据类型
+
+```mysql
+# 常见数据类型
+
+/*
+数值型:
+	整型
+	小数
+		定点数
+		浮点数
+字符型:
+	短文本:char、varchar
+	较长文本:text\blob(较长二进制的数据)
+	
+日期型:
+*/
+
+# 一. 整型
+/*
+分类:
+tinyint、smallint、mediumint、int/integer、bigint
+1        2         3         4            8
+
+特点：
+	如果不设置无符号还是有符号,默认是有符号,如果想要设置无符号,需要添加unsigned关键字
+	如果插入的数值超过整型的范围,会报outofrange异常,并插入临界值
+	如果不设置长度会有默认的长度,长度代表了显示的最大宽度,如果不够会用0填充需要搭配ZEROFILL使用
+*/
+
+# 1. 如何设置无符号和有符号
+DROP TABLE IF EXISTS intDemo;
+CREATE TABLE intDemo(
+	int1 INT(7) ZEROFILL,
+	int2 INT(7) UNSIGNED
+);
+
+# 二. 小数
+/*
+1. 浮点型
+float(M, D)
+double(M, D)
+
+2. 定点型
+dec(M, D)
+
+特点:
+	M:整数部位+小数部位
+	D:小数部位
+	如果超过范围,则插入临界值
+	
+	M和D都可省略,如果是decimal,默认dec(10, 0)
+	如果是float或者double,则会根据插入的数值的精度来决定精度
+	
+	定点型的精度较高,如果要求插入的数值精度较高如货币可以使用decimal
+	
+原则:
+	所选择的类型越简单越好,能保存数值的类型越小越好(节省空间)
+*/
+
+# 三. 字符型
+/*
+较短的文本
+char
+varchar
+
+其他:
+binary,varbinary用于保存较短的二进制文件
+ENUM用于单个枚举
+SET用于保存集合枚举
+
+较长的文本
+text
+blob(较大的二进制)
+
+特点:
+	char(M)和varchar(M),M表示最大字符数,char的M可以不写,默认为1,varchar定义时必须写入M,char固定长度字符,varchar可变长度的字符,char相比varchar更加耗费空间,但效率较高
+*/
+
+CREATE TABLE charDemo(
+	c1 ENUM('A', 'B', 'C')
+);
+
+# 四. 日期
+/*
+分类
+date	只保存日期
+time	只保存时间
+year	只保存年月
+
+datetime	保存日期+时间
+timestamp	保存日期+时间	受时区影响
+*/
+CREATE TABLE dateDemo(
+	d1 DATETIME,
+    d2 TIMESTAMP
+);
+```
+
+###### 4)常见约束
 
 ##### 10.2.5 MySQL执行一条查询语句内部执行过程?
 
@@ -6337,6 +6456,23 @@ class DoubbleLinkList(object):
 ##### 11.4.2 Python实现栈
 
 ```python
+class Stack(object):
+    
+    def __init__(self):
+        self.stack = []
+    
+    # 进栈函数
+    def push(self, item):
+        self.stack.append(item)
+    
+    # 出栈函数
+    def pop(self):
+        return self.stack.pop()
+    
+    # 取其栈顶
+    def gettop(self):
+        return self.stack[-1]
+    
 ```
 
 ##### 11.4.3 队列
@@ -7414,6 +7550,20 @@ def fourSum(nums, target):
 
 ```python
 def decodeString(str):
+    answ, nums, stack = '', 0, []
+    for i in str:
+        if i.isdigit():
+            nums = nums*10 + int(i)
+        elif i =='[':
+            stack.append((answ, nums))
+            answ, nums = '', 0
+        elif i == ']':
+            top = stack.pop()
+            answ = top[0] + answ*top[1]
+        else:
+            answ += i
+            
+    return answ
     
 ```
 
