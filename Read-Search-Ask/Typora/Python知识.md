@@ -2423,6 +2423,17 @@ if __name__ == '__main__':
 
 2.  通过集成Thread来实现多线程
 
+```python
+import time, random, threading
+
+tickets = 100
+
+class myThread(threading.Thread):
+    
+```
+
+
+
 > 关于thread.setDaemon()
 
 若在主线程中创建了子线程,当主线程结束时根据子线程daemon(设置thread.setDaemon(True))属性值的不同可能会发生下面的两种情况之一:
