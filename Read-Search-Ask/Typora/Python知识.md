@@ -2423,16 +2423,7 @@ if __name__ == '__main__':
 
 2.  通过集成Thread来实现多线程
 
-```python
-import time, random, threading
-
-tickets = 100
-
-class myThread(threading.Thread):
-    
-```
-
-
+    [threading实现购票多线程](file/threading.ipynb ' :include : type=code')
 
 > 关于thread.setDaemon()
 
