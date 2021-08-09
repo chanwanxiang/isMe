@@ -1555,7 +1555,11 @@ with 语句是由上下文管理器支撑,也就是说使用open函数创建的�
 
 #### 2.7 GIL(全局解释器锁)
 
-Python为了利用多核,支持多线程,解决多线程之间数据完整性和状态同步的最简单方法自然是加锁,于是便有了GIL这把超级大锁
+Python为了利用多核,支持多线程,解决多线程之间数据完整性和状态同步的最简单方法自然是加锁,于是便有了GIL这把超级大锁,使得同一时刻只有一个线程在CPU单核上执行字节码
+
+GIL会根据执行的字节码行数以及时间片释放GIL,GIL再遇到IO操作时会主动释放
+
+[GIL代码演示](file/gil.ipynb ':include : type=code')
 
 ### 三. 设计模式
 
@@ -2385,45 +2389,17 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 
 #### 6.1 谈谈多线程、多进程以及协程理解?
 
+==操作系统能够调度的最小单元就是线程==
+
 ###### 6.1.1 多线程编程的两种方式
 
 1.  threading 类实例化
 
-```python
-import time
-improt threading
+    [多线程实现购票](file/threading.ipynb ':include : type=code')
 
-def detailUrl(url):
-    print('DETAILURL STRAT')
-    time.sleep(2)
-    print('DETAILURL END')
-    
-def detailPage(url):
-    print('DETAIL PAGE START')
-    time.sleep(2)
-    print('DETAIL PAGE END')
-    
-if __name__ == '__main__':
-    thread1 = threading.Thread(target=detailUrl, args=('',))
-    thread2 = threading.Thread(target=detailPage, args=('',))
-    
-    thread1.setDaemon(True)
-    thread2.setDaemon(True)
-    
-    start = time.time()
+2.  通过继承Thread来实现多线程
 
-    # 指定 thread 线程优先执行
-    thread1.join()
-    thread2.join()
-    
-    # 当主线程退出,子线程被杀死   
-    print(f'last:{time.time() - start}')
-    
-```
-
-2.  通过集成Thread来实现多线程
-
-    [threading实现购票多线程](file/threading.ipynb ' :include : type=code')
+    [多线程实现购票](file/threading.ipynb ':include : type=code')
 
 > 关于thread.setDaemon()
 
@@ -2433,6 +2409,17 @@ if __name__ == '__main__':
 - 如果某个子线程的daemon属性为True,主线程运行结束时不对这个子线程进行检查而直接退出,同时所有daemon值为True的子线程将随主线程一起结束,而不论是否运行完成
 
 属性daemon的值默认为False,如果需要修改,必须在调用start()方法启动线程之前进行设置
+
+###### 6.1.2 线程间的通信
+
+线程间的通信方式
+
+1. 共享变量
+2. queue方式(消息队列)
+
+###### 6.1.3 线程间的同步
+
+
 
 #### 6.2 Python虚拟环境使用?
 
@@ -2567,11 +2554,11 @@ RARP:逆地址解析协议,是将局域网中某个主机的物理地址转换�
 
 #### 7.1 UDP总结
 
-==UDP是一种面向无连接的、不可靠的、基于数据报的传输层通信协议==,所谓`无连接`是指在通信前不必与对方先建立连接,不管对方状态如何都直接发送过去,UDP虽然不能保证数据传输的可靠性,但数据传输效率较高
+==UDP是一种面向无连接的、不可靠的、基于数据报的传输层通信协议==,所谓`无连接`是指在通信前不必与对方先建立连接,不管对方状态如何都直接将数据发送过去,UDP虽然不能保证数据传输的可靠性,但数据传输效率较高
 
 #### 7.2 TCP总结
 
-==TCP是一种面向连接的、可靠的、基于字节流的传输层通信协议==,为两台主机提供高可靠性的数据通信服务.它可以将源主机的数据无差别的传输到目标主机.当有数据要发送时,对应用进程送来的数据进行分片,以适合在网络层中传输;当接收到网络层传来的分组时,要对收到的分组进行确认,还要对丢失的分组设置超时重发等.为此TCP需要增加额外的开销,以便在数据传输过程中进行必要的控制,确保数据的可靠传输.因此TCP传输效率比较低
+==TCP是一种面向连接的、可靠的、基于字节流的传输层通信协议==,为两台主机提供高可靠的数据通信服务.它可以将源主机的数据无差别的传输到目标主机.当有数据要发送时,对应用进程送来的数据进行分片,以适合在网络层中传输;当接收到网络层传来的分组时,要对收到的分组进行确认,还要对丢失的分组设置超时重发等.为此TCP需要增加额外的开销,以便在数据传输过程中进行必要的控制,确保数据的可靠传输.因此TCP传输效率比较低
 
 TCP主要特点
 
