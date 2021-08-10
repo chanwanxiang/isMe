@@ -3972,6 +3972,14 @@ linux用户需要至少都属于一个组
 
   > ufw allow/deny xx
 
+#### 9.10 shell
+
+shell是命令解释器,是Unix操作系统的用户接口,程序从用户接口得到输入信息,shell将用户程序及其输入翻译成操作系统内核能够识别的指令并将系统内核执行完成返回的输出通过shell再呈现给用户
+
+##### 9.10.1 shell通识
+
+shell广泛用于自动化批量系统初始化程序(update、软件安装、时区设置、安全策略)、自动化批量软件部署程序(LAMP、LNMP、Tomcat、LVS、Nginx)、自动化管理应用程序(KVM、集群管理扩容、Mysql)、日志分析处理(PV、UV、200、!200、top 100、grep/awk)、自动化备份恢复程序(Mysql完全备份/增量 + Crond)、自动化信息采集及监控程序(收集系统/应用状态、CPU、MEM、DISK、NET、TCP STATUS)
+
 ### 十. 数据库
 
 #### 10.1 通识
