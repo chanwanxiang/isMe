@@ -5673,7 +5673,7 @@ tinyint、smallint、mediumint、int/integer、bigint
 特点：
 	如果不设置无符号还是有符号,默认是有符号,如果想要设置无符号,需要添加unsigned关键字
 	如果插入的数值超过整型的范围,会报outofrange异常,并插入临界值
-	如果不设置长度会有默认的长度,长度代表了显示的最大宽度,如果不够会用0填充需要搭配ZEROFILL使用
+	如果不设置长度会有默认的长度,长度代表了显示的最大宽度,如果不够左边会用0填充需要搭配ZEROFILL使用,并且默认变为无符号的整型
 */
 
 # 1. 如何设置无符号和有符号
@@ -5691,11 +5691,12 @@ double(M, D)
 
 2. 定点型
 dec(M, D)
+decimal(M, D)
 
 特点:
 	M:整数部位+小数部位
 	D:小数部位
-	如果超过范围,则插入临界值
+	如果超过范围,报OutOfRange异常,则插入临界值
 	
 	M和D都可省略,如果是decimal,默认dec(10, 0)
 	如果是float或者double,则会根据插入的数值的精度来决定精度
@@ -5747,7 +5748,235 @@ CREATE TABLE dateDemo(
 
 ###### 4)常见约束
 
-##### 10.2.5 MySQL执行一条查询语句内部执行过程?
+```mysql
+/*
+限制表中数据输入,保证表中数据的准确性和可靠性
+
+六大约束:
+	NOT NULL	非空,保证该字段的值不为空(姓名)
+	DEFAULT		默认,保证该字段有默认值(性别默认为男)
+	PRIMARY KEY	主键,用于保证该字段的值具有唯一性,并且非空(学号)
+	UNIQUE		唯一,用于保证该字段的值具有唯一性,可以为空(座位号码)
+	CHECK		检查约束(mysql中不支持)
+	FOREIGN		外键,用于限制两个表的关系,用于保证该字段的值必须来源于主表关联列的值,在从表添加外键约束,用于主表中某列的值,比如学生表的专业编号,员工表的部门编号
+	
+添加约束时机:
+	1. 创建表时
+	2. 修改表时
+	
+约束添加分类:
+	列级约束
+		六大约束语法支持,但是外键约束无效
+	表级约束
+		除了非空以及默认,其他的都支持
+
+主键约束唯一约束对比 PRIMERY KEY && UNIQUE
+	主键保证唯一性,不能为空,一个表中最多只可设置一个主键,允许多列组合
+	唯一保证唯一性,可以为空(只能一个null保证唯一),一个表中可以设置多个唯一,允许多列组合
+
+外键
+	1. 要求在从表设置外键关系
+	2. 从表外键列的类型要和主表的关联列要求一致或者兼容, 名称没有要求
+	3. 主表的关联列必须要是一个key(一般是主键或唯一)
+	4. 插入数据先插入主表,再插入从表,删除数据时,先删除从表再删除主表
+	
+列级约束表级约束对比
+	列级约束位置列的后面,语法全部支持,但是外键没有效果,不可以起约束名称
+	表级约束在所有列后面,默认和非空不支持,其他支持,可以起约束名
+*/
+CREATE TABLE 表名(
+	字段名	字段类型	约束
+)
+
+# 一. 创建表时添加约束
+
+# 1. 添加列级约束
+/*
+语法:
+	直接在字段名和类型后面追加约束类型即可(默认、非空、主键、唯一)
+*/
+CREATE TABLE studinfo(
+	id INT PRIMARY KEY, # 主键
+    studName VARCHAR(20) NOT NULL, # 非空
+    gender CHAR(1) CHECK(gender = '男' or gender = '女'), # 检查
+    seatNumb INT UNIQUE, # 唯一
+    age INT DEFAULT 18, # 默认
+    majorId INT FOREIGN KEY REFERENCES major(id) # 外键
+);
+
+CREATE TABLE major(
+	id INT PRIMARY KEY, # 关联列必须是一个key(一般是主键或唯一)
+    majorName VARCHAR(20)
+);
+
+DESC studinfo;
+
+# 查看studinfo中所有的索引, 包括主键、外键、唯一
+SHOW INDEX studinfo
+
+# 2. 添加表级约束
+/*
+语法:
+	在各个字段的最下
+	[CONSTRAINT 约束名] 约束类型(列名)
+*/
+DROP TABLE IF EXISTS studinfo；
+
+CREATE TABLE studinfo(
+	id INT,
+    studName VARCHAR(20),
+    gender CHAR(1),
+    seatNumb INT,
+    age INT,
+    majorId INT,
+    
+    CONSTRAINT pk PRIMARY KEY(id), # 主键
+    CONSTRAINT uq UNIQUE(seatNumb), # 唯一
+    CONSTRAINT ck CHECK(gender = '男' or gender = '女'), # 检查
+    CONSTRAINT fk FOREIGN KEY(majorId) REFERENCES major(id)
+);
+
+SHOW INDEX studinfo;
+
+# 通用写法
+
+CREATE TABLE studinfo(
+	id INT PRIMARY KEY,
+    studName VARCHAR(20) NOT NULL,
+    gender CHAR(1) CHECK(gender = '男' or gender = '女'),
+    seatNumb INT UNIQUE,
+    age INT DEFAULT 18,
+    majorId INT,
+    
+    FOREIGN KEY(majorId) REFERENCES major(id)
+);
+
+# 二. 修改表时添加约束
+/*
+1. 添加列级约束
+ALTER TABLE 表名 MODIFY COLUMN 字段名 字段类型 新的约束;
+2. 添加表级约束
+ATLERT TABLE 表名 ADD 新的约束(列名) [REFERENCES 表名(列名)];
+*/
+DROP TABLE IF EXISTS studinfo(
+	id INT,
+    studName VARCHAR(20),
+    gender CHAR(1),
+    seatNumb INT,
+    age INT,
+    majorId INT
+);
+
+DESC studinfo;
+
+# 添加非空、默认约束
+ALTER TABLE studinfo MODIFY COLUMN studName VARCHAR(20) NOT NULL;
+ALTER TABLE studinfo MODIFY COLUMN age INT DEFAULT 18;
+
+# 添加主键
+ALTER TABLE studinfo MODIFY COLUMN id INT PRIMARY KEY;
+ALTER TABLE studinfo ADD PRIMARY KEY(id);
+
+# 添加唯一
+ALTER TABLE studinfo MODIFY COLUMN seatNumb INT UNIQUE;
+ALTER TABLE studinfo ADD UNIQUE(seatNumb);
+
+# 添加外键
+ALTER TABLE studinfo ADD FOREIGN KEY(majorid) REFERENCES major(id);
+
+# 三. 删除表示删除约束
+# 1. 删除非空、默认约束
+ALTER TABLE studinfo MODIFY COLUMN studName VARCHAR(20) NULL;
+ALTER TABLE studinfo MODIFY COLUMN age INT;
+
+# 2. 删除主键
+ALTER TABLE studinfo DROP PRIMARY KEY;
+
+```
+
+###### 5)自增长列
+
+```mysql
+/*
+又称标识列,可以不用手动的插入值,系统提供默认的序列值
+
+特点:
+	1. 自增长列不必一定和主键搭配,但是要求和一个key搭配
+	2. 一个表中只可以有一个自增长列
+	3. 自增长列数据类型只能是数值型(一般INT)
+	4. 自增长列可以通过 SET AUTO_INCREMENT_INCREMENT = 3设置步长
+*/
+
+# 一. 创建表示设置标识列
+CREATE TABLE identity(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20)
+);
+
+SHOW VARIABLES LIKE %AUTO_INCREMENT%;
+
+# 二. 修改表时设置自增长列
+ALTER TABLE identity MODIFY COLUMN id INT PRIMARY KEY AUTO_INCREMENT;
+
+# 三. 修改表时删除自增长列
+ALTER TABLE identity MODIFY COLUMN id INT PRIMARY KEY;
+```
+
+##### 10.2.5 TCL 事物控制语言
+
+Transaction Control Language
+
+```mysql
+# 事物
+/*
+概念:
+	由单独单元的一个或一组SQL语句组成,在这个单元中,每个SQL语句是相互依赖的
+	整个单独单元作为一个不可分割的整体,如果单元中某条SQL语句一旦执行失败或者产生错误,整个单元将会回滚,所有受到影响数据将返回事物开始以前的状态;如果单元中所有的SQL语句均执行成功,则事物顺利执行
+	
+案例 转账
+A 1000
+B 1000
+
+UPDATE 表 SET A的余额 = 500;
+UPDATE 表 SET B的余额 = 1500;
+
+特点
+	事物属性(ACID)属性
+	1. 原子性(Atomicity)
+	原子性是指事物是一个不可分割的工作单位,事物中的操作要么都发生,要么都不发生
+	2. 一致性(Consistency)
+	事物必须使数据库从一个一致性状态变换到另外一个一致性状态
+	3. 隔离性(Isolation)
+	事物的隔离性是指一个事物的执行不能被其他事物干扰,即一个事物内部操作及使用的数据对并发的其他事物是隔离的,并发执行的各个事物之间不能互相干扰
+	4. 持久性(Durablity)
+	持久性是指一个事物一旦被提交,它对数据库中的数据的改变就是永久性的,接下来的其他操作和数据库故障不应该对其有任何影响
+	
+创建
+	隐式事物	事物没有明显的开启和结束标记(INSERT、UPDATE、DELETE语句)
+	显式事物	事物具有明显的开启和结束标记(前提必须先设置自动提交功能为禁用SET ATUOCOMMIT = 0;)
+	步骤1	开启事物
+	SET AUTOCOMMIT = 0;
+	START TRANSACTION; 可选
+	步骤2	编写事物语句
+	步骤3	结束事物
+	COMMIT	提交事物
+	ROLLBACK	回滚
+
+*/
+
+# MySQL中的存储引擎
+/*
+概念
+	在mysql中的数据用各种不同的计数存储在文件(或内存)中
+	
+通过 SHOW ENGINES 来查看mysql支持的存储引擎
+
+在mysql中用的最多的存储引擎有: innodb、myisam、memory等,其中innodb支持事物,而myisam、memory等不支持事物
+*/
+
+```
+
+##### 10.2.6 MySQL执行一条查询语句内部执行过程?
 
 ![image-20210519134854905](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210519134854905.png)
 
@@ -7158,7 +7387,7 @@ def reverseList(head):
         prev = curr
         curr = temp
         
-    reuturn p
+    reuturn prev
 
 ```
 
