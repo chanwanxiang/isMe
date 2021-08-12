@@ -1,4 +1,4 @@
-### 一. Python基础
+###  一. Python基础
 
 IPython是一种基于python的交互式解释器,相较于原生python交互式环境,提供了更加强大的编辑和交互功能.
 
@@ -5862,7 +5862,7 @@ CREATE TABLE dateDemo(
 
 ###### 1)概念
 
-线性表时相同数据类型的n个数据元素的有限序列
+线性表是相同数据类型的n个数据元素的有限序列
 
 > A = (a1, a2, a3, a4, a5,......, an)
 >
@@ -6015,7 +6015,7 @@ class Node(object):
         self.next = None
         
 # 构造链表
-class AlongLinkList():
+class SingleLinkList():
     # 初始化链表,默认为空
     def __init__(self, node=None):
         self.head = node
@@ -7146,6 +7146,23 @@ def climbStairs(n):
     return ans
 
 ```
+
+###### 206)[反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
+
+```python
+def reverseList(head):
+    prev, curr = None, head
+    while curr:
+        temp = curr.next
+        curr.next = prev
+        prev = curr
+        curr = temp
+        
+    reuturn p
+
+```
+
+
 
 ##### 11.9.2 中等
 
