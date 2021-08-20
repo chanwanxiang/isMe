@@ -1487,7 +1487,7 @@ Python 中一切皆对象,函数名是函数在内存中的空间,也是一个�
 ##### 2.5.1 filter、map函数和reduce函数?
 
 1)从参数来讲
-map()包含两个参数,第一个参数是一个函数,第二个是序列(列表或元组),其中,函数(即 map 的第一个参数位置的函数)可以接收一个或多个参数
+map()包含两个参数,第一个参数是一个函数,第二个(列表或元组),其中,函数(即 map 的第一个参数位置的函数)可以接收一个或多个参数
 reduce()第一个参数是函数,第二个是序列(列表或元组),但是,其函数必须接收两个参数
 
 2)从对传进来的数值作用来讲
@@ -2232,6 +2232,12 @@ search() 函数会扫描整个 string 查找匹配
 | []   | ==中括号范围表达式==的开始和结束位置,定义匹配字符范围,[\s*]表示空白字符或者\* |
 | {}   | ==大括号长度表达式==开始和结束位置,定义匹配长度,\s{3}表示匹配3个空白字符 |
 
+可以用group()方法来提取匹配到的数据
+
+```python
+re.match('www', 'www.baidu.com').group
+```
+
 ##### 5.1.3 常用正则表示
 
 | 说明     | 表示 |
@@ -2302,6 +2308,16 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 + 干扰测试:中断、来电、短信、关机、重启
 + 弱网测试、网络切换测试
 + 安装更新卸载
+
+##### 5.3.4 印象最深的缺陷?
+
+测试微信小程序中,安卓可以正常解析,IOS系统对js中的new Date()方法有格式要求,需要使用2020/02/20格式
+而在实际应用日期格式大部分都为2020-02-20,所以在苹果开发过程中需要用正则对字符串进行预处理
+
+```js
+let ordt = '2020-02-20 19:00'
+let nedt = new Date(ordt.replace(/-/g, '/')) // /g表示全局替换
+```
 
 #### 5.4 jenkins + jmeter 集成压力测试
 
@@ -2639,7 +2655,7 @@ POST 请求,POST请求会把请求的数据放置在HTTP请求包的包体中,�
 ##### 7.8.1 cookie和session的区别?
 
 1.cookie 数据存放在客户的浏览器上,session 数据放在服务器上
-2.cookie 不是很安全,别人可以分析存放在本地的 cookie 并进行 cookie 欺骗考虑到安全应当使 用 session
+2.cookie 不是很安全,别人可以分析存放在本地的 cookie 并进行 cookie 欺骗,考虑到安全应当使用 session
 3.session 会在一定时间内保存在服务器上,当访问增多,会比较占用服务器的性能考虑到减轻服务器性能方面,应当使用 cookie 
 4.单个 cookie 保存的数据不能超过 4K,很多浏览器都限制一个站点最多保存 20 个 cookie
 5.建议将登陆信息等重要信息存放为 session,其他信息如果需要保留,可以放在 cookie 中
@@ -5961,7 +5977,8 @@ UPDATE 表 SET B的余额 = 1500;
 	步骤3	结束事物
 	COMMIT	提交事物
 	ROLLBACK	回滚
-
+	
+	SAVEPOINT 设置保存点,搭配ROLLBACK使用
 */
 
 # MySQL中的存储引擎
@@ -5974,6 +5991,182 @@ UPDATE 表 SET B的余额 = 1500;
 在mysql中用的最多的存储引擎有: innodb、myisam、memory等,其中innodb支持事物,而myisam、memory等不支持事物
 */
 
+# 演示事物使用步骤
+DROP TABLE IF EXISTS account;
+CREATE TABLE account(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(20),
+    balance DOUBLE
+);
+
+INSERT INTO account(username, balance)
+VALUES('A', 1000),('B', 1000)
+
+# 开启事物
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+# 编写一组事物的语句
+UPDATE account SET balance = 500 where username = 'A';
+UPDATE account SET balance = 1500 where username = 'B';
+# 结束事物
+COMMIT; # 提交
+ROLLBACK; # 回滚
+
+SELECT * FROM account;
+
+# 演示SAVE POINT使用
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+DELETE FROM account WHERE id = 25;
+SAVEPOINT A; # 设置保存点
+DELETE FROM account WHERE id = 28;
+ROLLBACK TO A;
+
+/*
+数据库的隔离级别
+
+定义
+	一个事物与其他事物隔离的程度称为隔离级别,数据库规定了多种事物隔离级别,不同隔离级别对应不同的干扰程度,隔离级别越高,数据一致性就越好,但并发越弱
+
+对于同时运行的多个事物,当这些事务访问数据库中相同的数据时,如果没有采用必要的隔离机制,就会导致各种并发问题
+	脏读:对于两个事务T1,T2,T1读取了已经被T2更新但还没有被提交的字段之后,若T2回滚,T1读取的内容就是临时且无效的
+	不可重复读取:对于两个事务T1,T2,T1读取了一个字段,然后T2更新了该字段,之后,T1再次读取同一个字段,值就不同了
+	幻读:对于两个事务T1,T2,T1从一个表中读取了一个字段,然后T2在表中插入了一些新的行.之后,如果T1再次读取同一个表,就会多出几行
+
+数据库提供4种事物隔离级别
+ 	READ UNCOMMITED: 出现脏读、不可重复读取、幻读
+ 	READ COMMITTED: 出现不可重复读取、幻读
+ 	REPEATABLE READ: 出现幻读
+ 	SERIALIZABLE: 不会出现脏读、不可重复读取、幻读
+ 	
+ mysql中默认第三个隔离级别 REPEATABLE READ
+*/
+
+# 查看当前的隔离级别
+SELECT @@TX_ISOLATION;
+
+# 设置当前mysql连接的隔离级别
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+# 设置数据库系统的全局的隔离级别
+SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+# 视图
+/*
+定义
+	一种虚拟存在的表,行和列的数据来自定义视图的查询中使用的表,并且是在使用视图时动态生成的,只保存了sql逻辑,不保存查询的结果
+	
+应用场景(封装)
+	多个地方用到同样查询结果
+	查询结果使用的sql语句比较复杂
+*/
+# 演示视图
+CREATE VIEW myView
+AS
+SELECT studName, majorId
+FROM studinfo
+INNER JOIN major
+ON studinfo.majorId = major.id
+WHERE studinfo.majorId = 1;
+
+# 一. 创建视图
+/*
+语法
+	CREATE VIEW 视图名称
+	AS
+	查询语句;
+*/
+USE myemployees;
+
+# 查询姓名包含a字符的员工名、部门名和工种信息
+# 创建
+CREATE VIEW myv1
+AS
+SELECT last_name, department_name, job_title
+FROM employees e
+JOIN departments d on e.department_id = d.department_id
+JOIN jobs j on j.job_id = e.job_id;
+
+# 使用
+SELECT * FROM myv1 WHERE last_name LIKE %a%;
+
+# 查询各部门的平均工资级别
+# 创建视图查看每个部门平均工资
+CREATE VIEW myv2
+AS
+SELECT AVG(salary) as ag, department_id
+FROM employees
+GROUP BY department_id;
+
+# 使用
+SELECT myv2.ag, g.grade_level
+FROM myv2
+JOIN job_grades g
+ON myv2.ag BETWEEN g.lowest_sal AND g.heighest_sal;
+
+# 查询平均工资最低的部门信息
+SELECT * FROM myv2 ORDER BY ag LIMIT 1;
+
+# 查询平均工资最低部门名和工资
+CREATE myv3
+SELECT * FROM myv2 ORDER BY ag LIMIT 1;
+
+SELECT d.department_name, m.ag
+FROM departments d
+JOIN myv3 m
+ON d.department_id = m.department_id;
+
+# 二. 视图的修改
+/*
+方式一
+	CREATE OR REPLACE VIEW myv3
+	AS
+	查询语句;
+*/
+CREATE OR REPLACE VIEW myv3
+AS
+SELECT AVG(salary), job_id
+FROM employees
+GROUP BY job_id;
+
+/*
+方式二
+	ALTER VIEW 视图名称
+	AS
+	查询语句;
+*/
+ALTER VIEW myv3
+AS
+SELECT AVG(salary), job_id
+FROM employees
+GROUP BY job_id;
+
+# 三. 查看视图
+DESC myv3;
+SHOW CREATE VIEW myv3;
+
+# 四. 删除视图
+/*
+DROP VIEW 视图名称, 视图名称...;
+*/
+DROP VIEW myv1, myv2, myv3;
+
+# 创建视图emp_v1,要求查询电话号码以'011'开头的员工姓名和工资、邮箱
+CREATE OR REPLACE VIEW emp_v1
+AS
+SELECT last_name, salary, email
+FROM employee
+WHERE phone_number LIKE '011%';
+
+# 创建视图emp_v2,要求查询部门最高工资高于12000的部门信息
+CREATE OR REPLACE VIEW emp_v2
+AS
+SELECT MAX(salary) mx_dep, department_id
+FROM employees
+GROUP BY department_id
+HAVING MAX(salary) > 12000;
+
+SELECT d.* mx
 ```
 
 ##### 10.2.6 MySQL执行一条查询语句内部执行过程?
@@ -5996,6 +6189,8 @@ UPDATE 表 SET B的余额 = 1500;
 
 ### 十一. 数据结构算法
 
+《数据结构与算法》裘宗燕	《算法图解》
+
 #### 11.1 绪论
 
 ##### 11.1.1 前导课
@@ -6003,6 +6198,15 @@ UPDATE 表 SET B的余额 = 1500;
 ###### 1)编程境界
 
 写程序 - 高效地写程序 - 写高效的程序 - 设计算法 - 设计有用算法
+
+算法常用设计模式
+
++ 枚举法
++ 贪心法 根据问题信息尽可能的做出部分的解
++ 分治法 复杂问题分解为相对简单的问题
++ 回溯法 采用试探方式根据实际情况选择一个可能方向当后面的求解动作无法继续时退回到前面的步骤
++ 动态规划 
++ 分支限界
 
 ###### 2)频繁查找词组
 
@@ -7387,11 +7591,55 @@ def reverseList(head):
         prev = curr
         curr = temp
         
-    reuturn prev
+    return prev
 
 ```
 
+###### 345)反转字符串中的元音字母
 
+```python
+def reverseVowels(s):
+    dt = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+    ls = list(s)
+    
+    l, r = 0, len(s) - 1
+    while l < r:
+        if ls[l] in dt and ls[r] in dt:
+            ls[l], ls[r] = ls[r], ls[l]
+            l += 1
+            r += 1
+        elif ls[l] not in dt:
+            l += 1
+        elif ls[r] not in dt:
+            r -= 1
+            
+    return ''.join(ls)
+
+```
+
+###### 551)[学生出勤记录I](https://leetcode-cn.com/problems/student-attendance-record-i/)
+
+```python
+def checkRecord(s):
+    # 正则表达式
+    return not re.match('^.*(A.*A|LLL).*$', s)
+```
+
+```python
+# 模拟 三叶题解
+def checkRecord(s):
+    coun = 0
+    for i in range(len(s)):
+        if s[i] == 'A':
+            count += 1
+            if coun >= 2: return False
+        elif s[i] == 'L':
+            j = i
+            while j < len(s) and s[j] == 'L': j += 1
+            if j - i >= 3: return False
+            
+    return True
+```
 
 ##### 11.9.2 中等
 
@@ -7442,7 +7690,7 @@ def lengthOfLongestSubstring(s):
     
     for cur in range(len(s)):
         if s[cur] in charDict:
-            ini = max(charDict[s[cur], ini])
+            ini = max(charDict[s[cur]], ini)
         else:
             ans = max(ans, cur -ini +1)
             charDict[s[cur]] = cur + 1
@@ -7859,6 +8107,17 @@ def kLargestValue(matrix, k):
 ```
 
 ##### 11.9.3 困难
+
+#### 11.10 算法面试
+
+##### 11.10.1 德科OD
+
+1. 给定一个整型数组,请从数组中选择3个元素组成最小数字并输出(如果数组长度小于三,则选择数组中所有元素来组成最小数字)
+
+```
+```
+
+2. 服务之间交换的接口成功率作为服务调用关键质量特征,某个时间段内的接口失败率使用一个数组表示,数组中每个元素都是单位时间内失败率数值,数组中的数值为0-100的整数,给定一个数值(minAverageLost)表示某个时间段内平均失败率容忍值,即平均失败率小于等于minAverageLost,找出数组中最长时间段,如果未找到则直接返回NUL
 
 ### 十二. 工作项目经历
 
