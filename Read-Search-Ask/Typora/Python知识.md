@@ -2278,6 +2278,30 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 
 ##### 5.3.1 概念
 
+[常见概念](file/Python接口自动化.od ':include :type=code')
+
++ 黑盒测试
+
+也称功能测试,黑盒测试着眼于程序外部结构,不考虑内部逻辑,主要针对软件界面和软件功能进行测试
+在黑盒测试中,被测对象的内部结构和运作情况对测试人员是不可见的,测试人员检查程序功能是否按照规格说明书规定正常使用,是否能接收数据及产生正确的输出信息,并且满足数据库或者外部信息的完整性.也叫功能测试,市场上多数是手工测试,进阶的话就是自动化功能UI测试
+
++ 冒烟测试
+
+对软件的基本功能进行测试,针对每个版本或每次需求变更后,在正式测试前对产品或系统的一次简单的验证性测试,通过后才进行后续的其他测试
+
++ 白盒测试
+
+按照程序内部结构,逻辑驱动测试程序,用代码内部的分支,路径,条件,使程序设计的控制结构设计测试用例
+
++ 测试用例
+
+是为了特定的目的而设计的一组有测试输入、执行条件、预期结果的输出文档
+一般包含用例编号、用例标题、测试项目、用例级别、预置条件、测试输入、执行步骤、预期结果八个要素
+
++ 软件测试V模型
+
+需求分析 - 概要设计 - 详细设计 - 软件编码 - 单元测试 - 集成测试 - 系统测试 - 验收测试
+
 ##### 5.3.2 常用测试点
 
 + 上传图片地方要用小写和大写后缀名进行测试
@@ -2317,6 +2341,28 @@ scrapy框架是用纯python实现一个为了爬取网站数据、提取结构�
 ```js
 let ordt = '2020-02-20 19:00'
 let nedt = new Date(ordt.replace(/-/g, '/')) // /g表示全局替换
+```
+
+##### 5.3.5 测试环境搭建步骤
+
+```bash
+cd /usr/program/script
+echo "stop tomcat"
+# 关闭tomcat服务
+systemctl stop tomcat-fv-dev.service
+mv FaceView_ZG-1.0-SNAPSHOT.war fv-test.war
+# 移动war包到tomcat webapps目录下
+mv fv-test.war /usr/program/tomcat-fv-dev/webapps
+cd /usr/program/tomcat-fv-dev/webapps
+rm -rf fv-test
+echo "unzip war"
+unzip -oq fv-test.war -d fv-test
+rm fv-test.war
+# 重启tomcat服务
+echo "start tomcat"
+systemctl start tomcat-fv-dev.service
+echo "部署成功"
+
 ```
 
 #### 5.4 jenkins + jmeter 集成压力测试
@@ -2547,13 +2593,13 @@ let nedt = new Date(ordt.replace(/-/g, '/')) // /g表示全局替换
 
 OSI 7层参考模型![image-20210729141016919](https://cdn.jsdelivr.net/gh/chanwanxiang/imageHosting/img/image-20210729141016919.png)
 
-1. 物理层:提供原始比特流的传输通路
+1. 物理层:提供数据原始比特流的传输通路
 2. 链路层:进行逻辑链接硬件地址寻址
 3. 网络层:IP地址寻址数据结点之间传输
 4. 传输层:定义传输数据协议端口
 5. 会话层:会话管理建立终止
 6. 表示层:提供数据格式转换服务数据的安全与压缩
-7. 应用层:为操作系统或者网络服务提供访问网络的接口
+7. 应用层:为操作系统或者服务提供访问网络的接口
 
 TCP/IP 协议族
 
@@ -7641,6 +7687,23 @@ def checkRecord(s):
     return True
 ```
 
+###### 1646)[获取生成数组中的最大值](https://leetcode-cn.com/problems/get-maximum-in-generated-array/)
+
+```python
+def getMaxGenerated(n):
+    if n < 2:
+        return n
+    nums = [0] * (n+1)
+    nums[0], nums[1] = 0, 1
+    answ = 1
+    for i in range(2, n+1):
+        nums[i] = nums[i//2] + (i%2)*nums[i//2 + 1]
+    answ = max(answ, nums[i])
+    
+    return answ
+
+```
+
 ##### 11.9.2 中等
 
 ###### 2)[两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
@@ -8071,6 +8134,22 @@ def topKFrequent(words, k):
 
 ```
 
+###### 881)[救生艇](https://leetcode-cn.com/problems/boats-to-save-people/)
+
+```python
+def numRescueBoats(people, limit):
+    people.sort()
+    left, righ, answ = 0, len(people) - 1, 0
+    while left <= righ:
+        if people[left] + people[righ] <= limit:
+            left += 1
+        righ -= 1
+        answ += 1
+        
+    return answ
+
+```
+
 ###### 1442)[形成两个异或相等数组的三元组数目](https://leetcode-cn.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/)
 
 ```python
@@ -8118,6 +8197,8 @@ def kLargestValue(matrix, k):
 ```
 
 2. 服务之间交换的接口成功率作为服务调用关键质量特征,某个时间段内的接口失败率使用一个数组表示,数组中每个元素都是单位时间内失败率数值,数组中的数值为0-100的整数,给定一个数值(minAverageLost)表示某个时间段内平均失败率容忍值,即平均失败率小于等于minAverageLost,找出数组中最长时间段,如果未找到则直接返回NUL
+3. 给定一个正整数序列,再给一个正整数n,求序列中的数相加的和等于n的最长子序列
+4. 给定一个正整数数n,找出n=a*b,找出a,b.a,b为素数,没有返回-1
 
 ### 十二. 工作项目经历
 
