@@ -228,8 +228,8 @@ copy 函数:b = copy.copy(a)
 
 ##### 1.5.3 \__init__和\_\_new\_\_的区别?
 
-init在对象创建后,对对象进行初始化
-new 是在对象创建之前创建一个对象,并将该对象返回给 init(为对象分配内存, 返回对象引用)
+\_\_init\_\_在对象创建后,对对象进行初始化
+\_\_new\_\_ 是在对象创建之前创建一个对象,并将该对象返回给 init(为对象分配内存, 返回对象引用)
 
 ```python
 class MusicPlayer(object):
@@ -7245,12 +7245,11 @@ def fastSort(sequ):
     if len(sequ) < 2:
         return sequ
     # 随机取数
-    temp = sequ[0]
+    base = sequ[0]
     # 比随机取数小的放在左序列
-    leftSequ = [x for x in sequ if x < temp]
+    leftSequ = [x for x in sequ[1:] if x <= base]
     # 比随机取数大的放在右序列
-    rigtSequ = [x for x in sequ if x > temp]
-    tempSequ = [x for x in sequ if x == temp]
+    rigtSequ = [x for x in sequ[1:] if x > base]
 
     # 左右序列递归方式继续排序
     return fastSort(leftSequ) + tempSequ + fastSort(rigtSequ)
@@ -7258,6 +7257,32 @@ def fastSort(sequ):
 
 print(fastSort([5, 4, 3, 2, 1]))
 
+```
+
+```python
+def partiton(nums, l, r):
+    i, j = l, r
+    pivot = nums[l]
+    while i != j:
+        while i < j and nums[j] > pivot:
+            j -= 1
+        while i < j and nums[i] <= pivot:
+            i += 1
+        if i < j:
+            nums[i], nums[j] = nums[j], nums[i]
+    nums[l], nums[i] = nums[i], nums[l]
+    
+    return i
+
+def fastSort(nums, l, r):
+    if l >= r:
+        return
+    
+    base = partition(nums, l, r)
+    fastSort(nums, l, base-1)
+    fastSort(nums, base+1, r)
+    
+    
 ```
 
 #### 11.9 力扣
@@ -7441,6 +7466,21 @@ def isvalid(str):
 ###### 21)[合并有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```python
+def mergeTwoList(l1, l2):
+    base = ListNode(0)
+    move = base
+    while l1 and l2:
+        if l1.val <= l2.val:
+            move.next = l1
+            l1 = l1.next
+        else:
+            move.next = l2
+            l2 = l2.next
+        move = move.next
+    move.next = l1 if l1 else l2
+    
+    return base.next
+
 ```
 
 ###### 26)[删除有序数组重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
@@ -7686,6 +7726,61 @@ def checkRecord(s):
             
     return True
 ```
+
+###### 1221)[分割平衡字符串](https://leetcode-cn.com/problems/split-a-string-in-balanced-strings/)
+
+```python
+# 贪心:局部最优解到全局最优解
+def banlanceStringSplit(s):
+    i, j, answ = 0, 0, 0
+    for x in s:
+        if x == 'L':
+            i += 1
+        else:
+            j += 1
+        if i == j:
+            answ += 1
+            
+    return answ
+
+```
+
+```python
+# 数实现简易栈
+def banlanceStringSplit(s):
+    base, answ = 0, 0
+    for x in s:
+        if x == 'L':
+            base += 1
+        else:
+            base -= 1
+        if not base:
+            answ += 1
+            
+    return answ
+
+```
+
+###### 1480)[一维数组的动态和](https://leetcode-cn.com/problems/running-sum-of-1d-array/)
+
+```python
+def runningSum(nums):
+    for i in range(1, len(nums)):
+        nums[i] += nums[i-1]
+        
+    return nums
+
+```
+
+```python
+def runningSum(nums):
+    return list(accumulate(nums))
+
+# accumulate函数功能是对传进来的iterable对象逐个进行某个操作,默认是累加,返回的是一个可迭代对象,需要强制类型转换成所需
+
+```
+
+
 
 ###### 1646)[获取生成数组中的最大值](https://leetcode-cn.com/problems/get-maximum-in-generated-array/)
 
@@ -8100,6 +8195,31 @@ def fourSum(nums, target):
 
 ```
 
+###### 165)[比较版本号](https://leetcode-cn.com/problems/compare-version-numbers/)
+
+```python
+def compareVersion(version1, version2):
+    v1 = version1.split('.')
+    v2 = version2.split('.')
+    i, j = len(v1), len(v2)
+    
+    n = max(i, j)
+    
+    if i < n:
+        v1.extend([0]*(n-i))
+    if j < n:
+        v2.extend([0]*(n-j))
+        
+    for i in range(n):
+        if int(v1[i]) > int(v2[i]):
+            return 1
+        elif int(v1[i]) > int(v2[i]):
+            return -1
+        
+    return 0
+
+```
+
 ###### 394)[字符串解码](https://leetcode-cn.com/problems/decode-string/)
 
 ```python
@@ -8186,6 +8306,53 @@ def kLargestValue(matrix, k):
 ```
 
 ##### 11.9.3 困难
+
+##### 11.9.4 剑指offe
+
+###### 22)[链表中倒数第k个结点](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+```python
+def getKthFromEnd(head, k):
+    curr, leng = head, 0
+    while curr:
+        leng += 1
+        curr = curr.next
+    for i in range(leng - k):
+        head = head.next
+        
+    return head
+
+```
+
+快慢指针
+
+```python
+def getKthFromEnd(head, k):
+    slow, fast = head, head
+    while k > 0:
+        fast = fast.next
+        k -= 1
+    while fast != None:
+        fast = fast.next
+        slow = slow.next
+        
+    return slow
+
+```
+
+###### 45)[把数组排成最小的数](https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/)
+
+```python
+def minNumber(nums):
+    strNum = [str[x] for x in nums]
+    for i in range(len(nums)-1):
+        for j in range(len(nums)-1-i):
+            if int(strNum[j] + strNum[j+1]) > int(strNum[j+1] + strNum[j]):
+                strNum[j], strNum[j+1] = strNum[j+1], strNum[j]
+                
+    return ''.join(strNum)
+
+```
 
 #### 11.10 算法面试
 
