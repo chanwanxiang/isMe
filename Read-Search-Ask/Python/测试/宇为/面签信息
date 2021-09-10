@@ -12,6 +12,15 @@ fv-dev : signtest环境
     order_number                订单详细信息表
     sys_config_group            系统个性化配置分组表
 
+日志
+    /usr/program/tomcat-fv-dev/logs/catalina.out
+
 signTest环境 : admindlm yuwei@123456
 面签正式环境 : admin Yu.Wei@54321
 宇银视环境 : admin icbc@123
+
+{
+    '业务员':   ywceshi Ab@123456
+    '普通面签': loopCs  Ab@123456
+    '公证面签': Gzer    Ab@123456
+}
