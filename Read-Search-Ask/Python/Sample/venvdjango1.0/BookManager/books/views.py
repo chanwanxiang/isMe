@@ -230,8 +230,17 @@ class HomeView(View):
 =======
     contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
-    name = request.META['HTTP_NAME']
-    print(name,contenttype)
+    # name = request.META['HTTP_NAME']
+    # print(name,contenttype)
 
+<<<<<<< HEAD
     return HttpResponse('deteail')
 >>>>>>> 90c643c (keep coding)
+=======
+    # HttpResponse
+    # content           只传递字符串,不要传递对象字典数据
+    # statue            HTTP statues code must be an integer frmo 100 to 599
+    # content-type      语法形式为大类/小类的MIME类型,形如text/html,text/css,text/javascript,application/json,image/png,image/gif等
+
+    return HttpResponse('deteail',status=200)
+>>>>>>> 6bb9653 (keep coding)
