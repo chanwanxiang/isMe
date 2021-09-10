@@ -1,5 +1,9 @@
 from django.conf.urls import url
+<<<<<<< HEAD
 from books.views import index,detail,setCookie,getCookie,setSession,getSession,BookView,CenterView,HomeView
+=======
+from books.views import index,detail
+>>>>>>> 90c643c (keep coding)
 
 urlpatterns = [
     # name给url起名,可以通过name找到这个路由
@@ -10,6 +14,7 @@ urlpatterns = [
     # 分组获取正则数据,关键字参数
     # http:127.0.0.1/categoryid=?
     url(r'^(?P<categoryid>\d+)/(?P<bookid>\d+)/$',detail),
+<<<<<<< HEAD
     url(r'^setCookie/$',setCookie),
     url(r'^getCookie/$',getCookie),
     url(r'^setSession/$',setSession),
@@ -21,3 +26,6 @@ urlpatterns = [
     url(r'^center/$',CenterView.as_view()),
     url(r'^main/$',HomeView.as_view()),
 ]
+=======
+]
+>>>>>>> 90c643c (keep coding)

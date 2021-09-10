@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse,JsonResponse
 from books.models import BookInfo
 from django.urls import reverse
+<<<<<<< HEAD
 from django.shortcuts import redirect
+=======
+>>>>>>> 90c643c (keep coding)
 import json
 
 # Create your views here.
@@ -61,6 +64,7 @@ def detail(request,categoryid,bookid):
     # print(data)
 
     # 请求头
+<<<<<<< HEAD
     # contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
     # name = request.META['HTTP_NAME']
@@ -223,3 +227,11 @@ class HomeView(View):
         }
 
         return render(request,'main.html',context=context)
+=======
+    contenttype = request.META['CONTENT_TYPE']
+    # POSTMAN添加name参数
+    name = request.META['HTTP_NAME']
+    print(name,contenttype)
+
+    return HttpResponse('deteail')
+>>>>>>> 90c643c (keep coding)
