@@ -2463,6 +2463,7 @@ echo "部署成功"
 
     [多线程实现购票](file/threading.ipynb ':include : type=code')
 
+<<<<<<< HEAD
 ```python
 import time, random, threading
 
@@ -2474,6 +2475,8 @@ class myThread(threading.Thread):
 
 
 
+=======
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
 > 关于thread.setDaemon()
 
 若在主线程中创建了子线程,当主线程结束时根据子线程daemon(设置thread.setDaemon(True))属性值的不同可能会发生下面的两种情况之一:

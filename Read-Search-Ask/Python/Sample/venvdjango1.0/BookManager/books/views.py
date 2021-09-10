@@ -4,12 +4,16 @@ from books.models import BookInfo
 from django.urls import reverse
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from django.shortcuts import redirect
 =======
 >>>>>>> 90c643c (keep coding)
 =======
 from django.shortcuts import redirect
 >>>>>>> a312f01 (keep coding)
+=======
+from django.shortcuts import redirect
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
 import json
 
 # Create your views here.
@@ -69,6 +73,9 @@ def detail(request,categoryid,bookid):
 
     # 请求头
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
     # contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
     # name = request.META['HTTP_NAME']
@@ -231,6 +238,7 @@ class HomeView(View):
         }
 
         return render(request,'main.html',context=context)
+<<<<<<< HEAD
 =======
     contenttype = request.META['CONTENT_TYPE']
     # POSTMAN添加name参数
@@ -249,3 +257,5 @@ class HomeView(View):
     return redirect('http://www.baidu.com')
     return HttpResponse('deteail',status=200)
 >>>>>>> 6bb9653 (keep coding)
+=======
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7

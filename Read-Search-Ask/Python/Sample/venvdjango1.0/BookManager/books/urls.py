@@ -1,9 +1,13 @@
 from django.conf.urls import url
 <<<<<<< HEAD
+<<<<<<< HEAD
 from books.views import index,detail,setCookie,getCookie,setSession,getSession,BookView,CenterView,HomeView
 =======
 from books.views import index,detail
 >>>>>>> 90c643c (keep coding)
+=======
+from books.views import index,detail,setCookie,getCookie,setSession,getSession,BookView,CenterView,HomeView
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
 
 urlpatterns = [
     # name给url起名,可以通过name找到这个路由
@@ -15,6 +19,9 @@ urlpatterns = [
     # http:127.0.0.1/categoryid=?
     url(r'^(?P<categoryid>\d+)/(?P<bookid>\d+)/$',detail),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
     url(r'^setCookie/$',setCookie),
     url(r'^getCookie/$',getCookie),
     url(r'^setSession/$',setSession),
@@ -26,6 +33,9 @@ urlpatterns = [
     url(r'^center/$',CenterView.as_view()),
     url(r'^main/$',HomeView.as_view()),
 ]
+<<<<<<< HEAD
 =======
 ]
 >>>>>>> 90c643c (keep coding)
+=======
+>>>>>>> 047ea4b4850b83389fc953cc877af170b01fc8a7
